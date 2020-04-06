@@ -1,0 +1,17 @@
+user-agent: mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.7.12)gecko/20050915 firefox/1.0.7 (ax)
+build identifier: mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.7.12)gecko/20050915 firefox/1.0.7 (ax)
+firefox currently supports wide number stand alone e-mail applications (including thunderbird client), e-mail link clicked firefox.
+best knowledge still support web based e-mail clients g-mail fashion.
+idea one prefers use web based e-mail account, option configure firefox log web based e-mail account open compose new message window.
+understand may require colaboration popular web based e-mail services gmail aim mail, think would worth benifit.
+reproducible: always
+something like webmailcompose extension?
+enhancement requests like marked dups bug 11459, think that's wrong.
+far tell, bug 11459 combination design flaw specific seamonkey tangentially related enhancement request also applies firefox, nothing happening there.
+sad mailto: links work webmail users, especially since webmail popular.
+webmail services help give users programs alter system mailto: behavior (e.g. unofficial \"g-mailto\" official \"gmail notifier\"), firefox users download webmailcompose extension, think would better option firefox itself.
+going block this, would good generically feeds well, may wait gecko 1.9
+using mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.9.1) gecko/20090615
+firefox/3.5
+fixed?
+indeed.

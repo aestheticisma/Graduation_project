@@ -1,0 +1,73 @@
+1. open large grayscale image choice (e.g. larger 2000*2000 pixels, maybe scan result scanner)
+2. use \"tools/color tools/threshold\" apply threshold choosen arbitrarily.
+tool pretty fast.
+3. 8bit grayscale image, actually consists color values \"0\" color values \"255\".
+
+converting 1bit black&white image fast operation (replacing 0 (8bit) 0 (1bit) replacing 255 (8bit) 1 (1bit)), not:
+4. choose \"image/mode/indexed...\", there:
+4.1 colormap: \"use black white (1-bit) palette)\" (this fastest option possible)
+4.2 dithering: \"none\" (this fastest option possible)
+4.3 hit \"ok\"
+5. conversion work, take many seconds.
+example image \"2460*3483\", takes 34 seconds computer (while applying threshold tool, basically same, needs maybe 2 seconds).
+slow speed acceptable interactive image processing, slowness necessary all.
+indeed slow, confirm bug report.
+is, however, workaround.
+found little experimentation use \"optimal palette\" option step 4.1, conversion occurs flash, literally fraction second me.
+happens, think, use option, time algorithm reaches stage actually converting image, built color histogram \"knows\" exactly two colors image, assign colors directly, without test whether black white best match pixel.
+existence workaround, going lower severity, *is* something looked into.
+created attachment (id=38911) [details]
+image 1bit conversion either slow buggy (with gimp 2.2.4)
+that's odd.
+tried use suggested workaround happy conversion fast one expect.
+however, conversion plainly wrong, produced image black (the input image nearly white).
+i'm attaching test case image. may related bug.
+following atached image:
+1. choose \"image/mode/indexed...\", there:
+1.1 colormap: optimal palette (wether 2 oder 256 colors, matter)
+1.2 dithering: \"none\" (but think matter)
+interesting -- clearly generation optimal palette done correctly image.
+different issue, going open different bug report -- using image example, mind.
+case, i've found solution original problem, think.
+found simple change gives major speedup converting grayscale images mono palette.
+least fast threshold tool, i'm going resolve bug fixed.
+still slow rgb images, though.
+committed branches:
+2005-03-18 bill skaggs &lt;weskaggs@primate.ucdavis.edu&gt;
+* app/core/gimpimage-convert.c: converting grayscale mono, treat palette gray rather rgb, giving tenfold speedup.
+fixes bug #170801.
+new problem described bug #170825
+i'd pleased used test case image. :-)
+thank fixing bug fast, need wait next release.
+(building windows would rather messy, try patient...)
+i'm interested seeing patch.
+can't attach revision gimpimage-convert.c contains fix?
+revision 1.156. patch:
+--- gimpimage-convert.c 27 feb 2005 14:03:50 -0000 1.155
++++ gimpimage-convert.c 18 mar 2005 17:34:34 -0000 1.156
+@@ -4057,7 +4057,6 @@ initialize_median_cut (gimpimagebasetype
+}
+(palette_type == gimp_web_palette ||
+- palette_type == gimp_mono_palette ||
+palette_type == gimp_custom_palette)
+{
+switch (dither_type)
+thanks.
+that's interesting.
+expect yield poorer results though, extent (probably obviously darker, lighter, mid-greys, damaged gamma), greyscale colour-matching error-quantifying comparatively non-perceptually-uniform space (that's half reason faster, though big quality difference greyscale source rgb source).
+side-by-side comparisons done?
+hope so, though could anyone cares.
+think anyone done side-by-side comparisons.
+differences, strong i'm really going lose sleep.
+note analysis comment #1 correct;
+'optimal' palette finder first pass see already suitable number colours, knows skip expensive quantization dithering stages.
+'mono' palette option even bother start pre-pass could possibly pay extra effort entire image pure black pure white, expected comparatively rare occurance.
+&gt; 'mono' palette option even bother start pre-pass could possibly pay extra effort entire image pure black pure white, expected comparatively rare occurance.
+think operation rare, getting \"optimal distribution black white\" grayscale images (for example: want generate faximilies receiver actually able read), use
+\"threshold\" operation, \"convert 1bit\" operation actually adjust internal memory requirements.
+least me, chain operations rather frequent.
+&gt; \"convert 1bit\" operation actually adjust internal memory requirements.
+mean gimp's internal memory requirements wasting time -- indexed images 8/16bpp internally (the greyscale images), saving memory (instead may using quite lot more, various
+reasons).
+mean openoffice's internal memory requirements.
+10 20 fax pages one ooo document, quite makes difference wether 8bit 1bit.

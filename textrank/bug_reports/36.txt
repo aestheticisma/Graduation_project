@@ -1,0 +1,59 @@
+version: (using kde 4.1.2)
+installed from: compiled sources
+amarok version 1.94
+moving large amount files collection, amarok2 opens file dialog every single file moves.
+reproduce:
+make directory would like music collection stored.
+go amarok2 set new collection area included.
+then, right-click local collection, select organise select new destination files.
+even core 2 duo 2 gb ram could handle 16,000 file dialogs, crashed whole system hard, requiring reboot.
+please either:
+1) move files sequentially,
+2) display file dialog?
+sorry, can't reproduce this.
+tried, information shown progress bar nowhere else.
+i'm copying tracks local sql collection.
+assume same?
+using amarok move files?
+still opens file dialog every file \"organising\"
+checked again.
+following options ticked organise files option.
+use cover art folder icons
+ignore \"the\" artist names
+group file type
+replace spaces underscores
+restrict ascii
+vfat safe filenames
+overwrite destination
+might one options trigger this, combination.
+weird.
+started messing around ticked, problem went away.
+also unable reproduce it.
+able reliably reproduce bug.
+use files tab amarok, click directory want move files from, select move collection.
+select following:
+use cover art folder icons
+ignore \"the\" artist names
+group file type
+replace spaces underscores restrict ascii
+vfat safe filenames
+overwrite destination
+makes lots file transfer windows me, every time.
+-evert-
+still can't reproduce this.
+using copying using amarok's filebrowser, organising collection browser?
+install amarok (compiled, packages etc) platform using
+using amarok's file browser.
+think so, anyways.
+click files tab.
+noticed get lots file moving dialogs options ticked.
+right moving files collection overwrite destination unticked get file dialogs then.
+downloaded source amarok 1.94, compiled gcc 4.2.3
+using sorcerer linux, software system hand-optimized locally compiled.
+-evert-
+svn commit 881542 seb:
+fix boolean logic caused progress info shown overwriting tracks collection copy.
+bug: 174533
++2 -0 changelog
++1 -1 src/collection/sqlcollection/sqlcollectionlocation.cpp
+websvn link: http://websvn.kde.org/?view=rev&revision=881542

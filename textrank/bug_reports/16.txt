@@ -1,0 +1,69 @@
+according havoc:
+need struct fields widget, please file bug report, never required use widget.
+accordingly, took look places latest pygtk wrappers directly access widget data attributes provide needed functionality.
+found 43 examples, identified table below.
+(of course, may pygtk use expose.)
+data attributes accessed directly provide python programmer.
+assume means would also accessed directly c programmer.
+gtk_adjustment lower
+gtk_adjustment page_increment
+gtk_adjustment page_size
+gtk_adjustment step_increment
+gtk_adjustment upper
+gtk_adjustment value
+gtk_bin child
+gtk_check_menu_item active
+gtk_clist columns
+gtk_clist focus_row
+gtk_clist row_list
+gtk_clist rows
+gtk_clist selection
+gtk_color_selection_dialog cancel_button
+gtk_color_selection_dialog colorsel
+gtk_color_selection_dialog help_button
+gtk_color_selection_dialog ok_button
+gtk_combo entry
+gtk_combo list
+gtk_curve num_points
+gtk_dialog action_area
+gtk_dialog vbox
+gtk_font_selection_dialog action_area
+gtk_font_selection_dialog apply_button
+gtk_font_selection_dialog cancel_button
+gtk_font_selection_dialog fontsel
+gtk_font_selection_dialog main_vbox
+gtk_font_selection_dialog ok_button
+gtk_gamma_curve curve
+gtk_gamma_curve gamma
+gtk_gamma_curve gamma_dialog
+gtk_gamma_curve gamma_text
+gtk_gamma_curve table
+gtk_list selection
+gtk_notebook tab_pos
+gtk_style black
+gtk_style white
+gtk_text_buffer tag_table
+gtk_toggle_button draw_indicator
+gtk_widget allocation
+gtk_widget parent
+gtk_widget style
+gtk_widget window
+thanks, helpful.
+bogus already accessor functions, believe:
+gtk_bin child
+gtk_check_menu_item active
+gtk_text_buffer tag_table
+also, deprecated widgets.
+many probably functions for.
+adding api keyword, putting future milestone.
+considering accessor functions, might also want consider raising api bit higher level.
+example, combo widget probably value-changed signal direct access underlying entry list widgets deprecated higher level functions written combo widget get necessary functionality.
+since gtklist widget already deprecated, stuff going break applications someday anyway.
+kidding breakability combo box: already pretty much broken gtk-- (c++ binding), use different implementation (deprecated) list, basically makes impossible access list data.
+change gtk+ api allow access list items function would make whole lot usable.
+suggestion:
+make list combo glist.
+would also make working combo easier...
+sure there's good way handling arbitary widgets associated text without creating sort listitem
+(deprecated) replacement...
+ongoing gseal work finally taking care this.

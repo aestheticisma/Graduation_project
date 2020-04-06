@@ -1,0 +1,65 @@
+time (2 months? more?, remember) problem:
+--&gt; drag drop folder location other, cpu use thunderbird process 50%.
+--&gt; even folder empty
+--&gt; occurs subfolder move inside local folders
+--&gt; occurs folder move inside pop account (for example moving inbox-&gt;test draft-&gt;test
+--&gt; occurs moving folder pop account (for example moving accouta --&gt; inbox --&gt; test accountb --&gt; inbox --&gt;test ... butin case, design, folder copied, moved --&gt; seems
+delete problem
+facts
+============
+- memory change move time ... high level cpu use
+- delete key right-click delete (so move trash) got bad result
+- renaming folder take long time
+- checking pop account take resources ... 10 20\" high cpu resource checking mail, slowing lot windows applications
+- thing rss folders ...
+hardware software information
+=================================
+computer: dell latitude d820 laptop, core 2 duo 2ghz, 2go ram, 100go hd 7200rpm
+os: windows vista business
+thunderbird: tb nightly 2.0.0.10pre (2007111403) ... problem occurs since long time
+profile: profile.ini modified profile files d:\\thunderbird\\jmr.profil.
+emails account store d:\\thunderbird\\ (13 pop account + 69 rss feeds)
+d:\\thunderbird: 2.3go
+bigger file: 384mo
+configuration: pop folder (inbox, etc ...) rules filters lot mails subfolder local folder directory
+i've check bugzilla similar bug, event mozillazine forum, never seen something like
+additional information: running safe mode: problem
+ohoh ... thus bug seems related 10000 temp files temp folder: tmprules-xxx.dat
+i've deleted --&gt; filters works bug seems solved removing
+bad news: new tmprules begin appairs ...
+so, bug dup bug 362539
+*** bug marked duplicate bug 362539 ***
+guess really low perf behaviour coming tb parsed 10000 rules files received mail ...
+thing moving folder, parsed 10000 rules files see updated move
+(in reply comment #2)
+&gt; ohoh ... thus bug seems related 10000 temp files temp folder: tmprules-xxx.dat
+&gt;
+&gt; i've deleted --&gt; filters works bug seems solved removing
+&gt;
+&gt; bad news: new tmprules begin appairs ...
+&gt;
+&gt; so, bug dup bug 362539
+&gt;
+&gt; *** bug marked duplicate bug 362539 ***
+&gt;
+bug duplicate bug 362539.
+reason:
+1) although underlying cause may same, symptoms two bugs different.
+2) since description attached bug 362539 include symptoms bug, properly include reported problem.
+3) users search problem, bug closed, probably find description.
+find bug 362539 since include symptoms top level.
+hence find circumvention.
+4) therefore, please re-open bug report.
+5) please attempt amend description bug 362539.
+please leave decision, well closure, one bugzilla 'monitors'
+know whether appropriate and, so, cleanly, without obscuring user access information.
+right ...
+bug depends 362539 dupe
+(in reply comment #5)
+&gt; right ... bug depends 362539 dupe
+&gt;
+thank you.
+adding \"tmprules-n.dat\" bug summary, ease search & understanding bug.
+(it looks long. please modify appropriate one.)
+resolved fixed bug 375292 fixed branch 1.8 trunk
+*** bug 410739 marked duplicate bug. ***

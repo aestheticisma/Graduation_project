@@ -1,0 +1,50 @@
+would usefull add \"swap\" button quickly change aspect ratio portrait landscape.
+needed extracting portrait landscape photo.
+since sign going happen 2.4, bumping target future.
+*** bug 355694 marked duplicate bug. ***
+i'm going reset 2.4 expect implement soon.
+easier much faster user interface: swap portrait landscape based mouse movement.
+already move mouse make selection.
+likely something approximately right ratio.
+that's closer portrait, portrait get used, otherwise landscape get used.
+another way explain this:
+user makes selection, select landscape mode horizontal mouse movement greater vertical mouse movement, otherwise select portrait mode.
+that's one less confusing button occupying screen space.
+that's one less button press.
+work faster, less hand/finger/wrist pain.
+albert, completely misunderstood this.
+point able flip aspect ratio created rectangle selection.
+really? found alberts comment spot on.
+basically would eliminate need kind button, since x 1/x would work equivalently gui.
+see much point able flip aspect *after* creation rectangle.
+placement resulting rectangle would need readjusting anyways (what fixed point rectangle flipping?) sounds much natural able switch orientation on-the-fly creating rectangle.
+i'm reporter wish.
+sven right, meant would usefull swap option creation rectangle selection.
+\"by hand\" often case :
+i've landscape photo contains interesting flower example.
+want print photo proportions original, portrait format, adapted flower.
+1. first \"take shhot aspect ratio\" selecting original landscape photo.
+2. freeze aspect ratio (with appropriate checkbox)
+3. shrink rectangle permit rotated 90â°
+4. \"rotate\" taking calculator, calculating 1/[aspect ratio], putting hand
+5. i've perfect portrait zone wich adapt freely flower; i'm happy :)
+know adding toolbutton problem, really think i'm one sort cropping photo.
+thanks interest !
+bruno
+agree albert's idea makes sense.
+gimp assume landscape portrait orientation automatically depending whether rectangular area swept user wider higher.
+might problematic aspect ratio nearly, exactly square, even user could control proper aspect exaggerating motion larger two directions.
+swap button maintained 2.3.12, register initial point used sweep rectangular area use anchor rather upper-left corner used.
+likely first point selected user desired point upper-left corner unless happens started.
+stated elsewhere, would also great aspect ratio automatically set initial aspect image loaded.
+might provide \"lock\" button force current aspect ratio retained upon subsequent loading images times someone wants crop series pictures proportions.
+maybe current fix button could toggle switched \"lock\" (lock aspect ratio - current behavior) \"set\" (automatically set aspect ratio new image locks it) \"auto\"(the set behavior combined behavior suggested albert) \"none\".
+said this, appreciate toggle button all. thanks.
+making depend user's mouse action discoverable.
+way user find swap aspect ratio.
+way.
+might make sense determine initial aspect ratio way.
+still needs button swap it.
+comment #7 exactly usage scenario this.
+implemented trunk seems work reasonably well.
+closing fixed.

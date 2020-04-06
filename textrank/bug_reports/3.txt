@@ -1,0 +1,91 @@
+i've noticed frequently trigger rotate gesture accidentally, usually scrolling.
+gestures improved since original landing (when triggering wrong gesture really easy), articular gesture still problematic.
+basic reasoning highly disruptive switched another tab expecting it.
+happens, know happened notice entirely different page, that's randomly left right (1 tabs) page thought on.
+i'm think rotate gesture switching tabs nearly useful, discoverable, good fit gestures are.
+so, given problem, disable 3.5.
+[i'd also open tweaking make much harder trigger accidentally, dunno that's possible.]
+see also bug 461376.
+play around browser.gesture.twist.* about:config temporary workaround.
+justin, odd thing find trigger zoom frequently tab rotate ... far far frequently.
+also find firefox, osx.
+wonder much us vs. odd timings causing misreads trackpad osx.
+think i've never accidentally switched tab rotate gesture.
+actually i'd probably decrease default threshold tab switching.
+i've triggered zoom repeatedly too;
+usually fix right away quick browse though content-prefs.sqlite shows ~20 sites zoom settings know set.
+that's probably zoom subtle effect (for 1 step, relative distraction accidental tab switch causes).
+playing different browser.gesture.twist settings, i've found twisting tabs often resulted triggering zoom.
+probably twist awkward gesture make, especially quarter-turn...
+around point, fingers want spread join, ends read pinch.
+guess that's part i'm really fond gesture, would soon turn off.
+i'll try running threshold 40, suspect there's unavoidable conflict making easy use purpose, yet hard invoke accidentally.
+i've using swipe left/right change tabs cmd-left/right go back/forward, rotate change tabs well accidentally triggered it.
+maybe rotating technique ;)
+i'm right handed position index finger 7oclock ring finger 1oclock.
+rotate right end 8/2oclocks.
+first time came contact tab switching via gesture accidentally.
+sure happened, appeared another tab figure why.
+tab-switching gesture right obvious feels unexpected hit it.
+mardak: way written code, disabling gesture pref-flip, right?
+blocking decision mulling, probably take though.
+yup, able unset default value twist prefs:
+-pref(\"browser.gesture.twist.right\", \"browser:nexttab\");
+-pref(\"browser.gesture.twist.left\", \"browser:prevtab\");
+would setting value empty-string (\"\") work, something similar?
+would nice leave prefs visible want use them.
+since implemented win7 multitouch screens please sure disable windows.
+(in reply comment #10)
+&gt; since implemented win7 multitouch screens please sure disable windows.
+fine me; though i'd bit wary windows users hit problem multitouch trackpads...
+rob says hardware/drivers exist today, common problem.
+keep eye problems issues touchscreens, andt rob demoing touchscreen would appear harder trigger.
+maybe windows 7 better discriminating gestures.
+otoh big deal disable globally.
+safari use it, rob confirmed ie use windows 7.
+bug rotate, want consider pinching too?
+take out, we'll swipe up/down jump top/bottom swipe left/right back/forward default.
+(in reply comment #12)
+&gt; bug rotate, want consider pinching too?
+maybe; certainly noted people accidentally hitting gesture too.
+though think separate decision: rotate unnatural gesture switching tabs (nothing else uses way), high penalty accidentally triggering.
+pinching natural gesture page zoom (and widely used/known), low penalty accidentally triggering.
+think people would consider bug claimed support multitouch, pinch anything.
+so, i'd strongly lean towards removing rotate. pinchy would've wanted way.
+(in reply comment #12)
+&gt; bug rotate, want consider pinching too?
+&gt;
+&gt; take out, we'll swipe up/down jump top/bottom swipe left/right back/forward default.
+pinch definitely left win7.
+tracking turned get nice zoom in/zoom effect.
+also nearly impossible trigger without definitive pinch two fingers screen.
+want consider disabling pinch, please file separate bug, conflate.
+fwiw, i'm nearly keen disabling one, fairly-to-surely likely wontfix bug.
+go ahead ... try ;)
+created attachment (id=376850) [details]
+v1
+anything os x twisting.
+alternatively, people tried upping threshold twist?
+would make less likely accidentally trigger.
+noticed something interesting os x's gesture detection.
+- use 2 hands (1 finger each) place one top one bottom, moving top finger registers normal mouse move moving bottom finger registered twist.
+suppose heuristic assume top finger used scrolling.
+- also, fingers close edge, treat rotate. still move pointer edge.
+get patch reviewed - think want remove rotate gesture windows osx.
+created attachment (id=378424) [details]
+v2
+windows osx.
+(from update attachment 378424 [details])
+uir+r=beltzner
+http://hg.mozilla.org/mozilla-central/rev/d19424342b43
+give empty commands twist gestures, nothing, still show prefs about:config.
+http://hg.mozilla.org/releases/mozilla-1.9.1/rev/3329a3997d7b
+verified fixed trunk 1.9.1 builds os x windows like:
+mozilla/5.0 (macintosh; u; intel mac os x 10.5; en-us; rv:1.9.2a1pre) gecko/20090525 minefield/3.6a1pre id:20090525031110
+mozilla/5.0 (macintosh; u; intel mac os x 10.5; en-us; rv:1.9.1pre) gecko/20090526 shiretoko/3.5pre id:20090526031155
+back this, would chance getting...
+browser.gesture.swipe.left.shift added set browser:prevtab
+
+browser.gesture.swipe.right.shift added set browser:nexttab
+made change, must admit finding firefox almost 'alien' use multi-touch machines!
+https://bugzilla.mozilla.org/show_bug.cgi?id=502500

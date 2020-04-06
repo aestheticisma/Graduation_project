@@ -1,0 +1,31 @@
+mattn noticed problem wip patch bug 469443 applied.
+typing search box, sometimes search-suggestion entries would displayed divider (where entries previous matching searches are).
+problem nssearchsuggestions.js passing wrong previousresult form history.
+instead previous form history search result, suggestautocompleteresult result (which contains union form-history search-suggest entries).
+so, form history refines results time, actually add *more* entries data leaks suggestions result form history result, thus looks like divider drawn wrong place.
+bug visible 469443, nsformfillcontroller::startsearch tries qi provided result nsiautocompletesimpleresult.
+search-suggestion result implements nsiautocompletresult (no \"simple\"), qi fails, historyresult nee previousresult becomes null, thus satchel new search every time.
+eg:
+1) type \"b\" search field.
+2) form history finds 1 entry (\"blah\"), search-suggestions finds \"baaa\", \"bloop\", \"bzzz\", autocompete menu shows order divider \"blah\" \"baaa\".
+3) type \"l\" search field (\"bl\")
+4) starthistorysearch()'s previous result contains [\"blah\", \"baaa\", \"bloop\", \"bzzz\"], satchel filters [\"blah\", \"bloop\"] match new \"bl\" search string
+5) nssearchsuggestions's onreadystate() change called updated search suggestions, builds new list results, sees form history result *two* entries.
+created attachment (id=380567) [details] patch v.1 (wip)
+fixes problem, quite correct...
+type \"a&lt;backspace&gt;b\", satchel trying use results \"a\" search \"b\" search, nothing found.
+suspect nssearchsuggestions needs throw away old form history result search string changes like this, i'm entirely sure responsible so, maybe satchel smarter throwing away previous result previous result's search string common prefix.
+[that seems handled somewhere else normal form field entries, oddly enough.]
+created attachment (id=383211) [details] patch v.2
+ah. so, there's ._formhistoryresult suggestautocompleteresult wrapper (used combine form history search suggestions), also ._formhistoryresult suggestautocomplete (the service itself, used hold onto form history result search suggestion available).
+simple fix discard service's form history result copy startsearch() called null previous result.
+otherwise trying use old form history result longer applies search string.
+(from update attachment 383211 [details])
+perhaps rename one _fhresult reduce confusion?
+(in reply comment #3)
+&gt; (from update attachment 383211 [details] [details])
+&gt; perhaps rename one _fhresult reduce confusion?
+good point.
+renamed one wrapper _formhistresult.
+fhresult seemed maybe bit short.
+pushed http://hg.mozilla.org/mozilla-central/rev/097598383614

@@ -1,0 +1,56 @@
+about:mozilla page rc2 right-aligned, ltr directionality instead rtl.
+result, dot end sentence right side instead left, parentheses around \"10th edition\" line right side.
+also think quote source left side.
+perhaps page take css intl.css, localisers override classes add class set direction.
+actually would like add yet another entry intl.css fix aboutmozilla.xhtml.
+pike, think it?
+behavior also affect internal pages.
+* about:plugins
+pages get rtl:
+* about:crashes
+* about:robots - open issues. see bug 427029
+pages translated, about:cache, about:credits about:buildconfig stay ltr.
+about:mozilla page used file language pack, allowing localizer control look.
+moving language pack created problem.
+file dom/chrome/global.dtd control direction control entity locale.dir.
+can, actually, support rtl using something like &lt;body dir=&locale.dir;&gt;.
+created attachment (id=324147) [details]
+patch
+patch.
+tested hebrew locale.
+please let know prefer 'body{direction:&locale.dir;}' instead current '&lt;body dir=\"&locale.dir;\"&gt;'.
+w3c prefers markup css:
+http://www.w3.org/international/questions/qa-bidi-css-markup
+\"because directionality integral part document structure, markup used set directionality document chunk information, identify places text unicode bidirectional algorithm alone insufficient achieve desired directionality.\"
+(in reply comment #6)
+&gt; w3c prefers markup css:
+actually i'm sure using css.
+idea something like 'body{direction:&locale.dir;;}' valid.
+me, trunk solution separate entity pages, work around bugs like bug 427029.
+localize page ship, would set dir ltr rtl.
+that's solution 1.9 branch, though, re-use locale.dir global.dtd.
+imho. gavin, think?
+(in reply comment #8)
+&gt; me, trunk solution separate entity pages, work around bugs like bug 427029.
+
+&gt; localize page ship, would set dir ltr rtl.
+&gt; that's solution 1.9 branch, though, re-use locale.dir global.dtd.
+sounds fine me, guess...
+really need worry \"rtl locale that's falling back en-us\" though?
+ideally could take patch worry localizers update various different attributes based
+localization state, rely completing localization work make look decent.
+words, bug 427029 edge case given nature about:robots \"optional\" status localizers?
+seems like could live looking perfect rtl locales localized rather adding complexity.
+well, depends disciplined folks are.
+could make call per page, like case robots page, might make sense open window translating it, neterror pages probably less.
+could even get extreme per div ;-).
+i'm adding another screenshot bug 427029.
+axel, gavin - welcome comment issue right there.
+far 1.9.0.1 deadline.
+please approve1.9.0.1.
+thank you.
+please get landed mozilla-central getting approval 1.9.0.x.
+(from update attachment 324147 [details])
+please re-request approval getting landed mozilla-central.
+i'm really sold taking given \"cosmetic\" anything else...
+http://hg.mozilla.org/index.cgi/mozilla-central/rev/d12488eef3f5

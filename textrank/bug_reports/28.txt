@@ -1,0 +1,25 @@
+version: 0.9.0 (using kde 3.3.0, gentoo)
+compiler: gcc version 3.3.3 20040412 (gentoo linux 3.3.3-r6, ssp-3.3.2-2, pie-8.7.6)
+os: linux (i686) release 2.6.8-gentoo-r3
+since kopete multimessenger idea metacontacts etc think neccessary display network contact online (because matter), makes even sense people several different accounts irc nicks keeping track quite clutter contact list, would simply like option turn displaying tiny icq/irc/etc icons right (or wherever choose be) display name, hope done time soon, thanks kopete great app!
+i'd like option exactly opposite ! :-)
+fact, contact list organised [kopetestatusicon][contactname][protocolicon].
+well, i'd like way tell kopete display [protocolicon][contactname].
+fact, best way would allow css customisation contact list, message windows :-)
+already considering adding feature next version kopete; technical technological problems preventing it.
+however, may time implement kde3.4.
+september 29, 2004 04:07 pm, richard smith wrote:
+&gt; ------- already considering adding feature next version kopete; technical technological problems preventing it.
+&gt; however, may time implement kde3.4.
+richard, hinting going render list view inside khtml widget?
+would hella cool, also hella complicated.
+wednesday 29 september 2004 9:13 pm, jason keirstead wrote:
+&gt; richard, hinting going render list view inside khtml widget?
+option i'm considering, sure.
+current contact list code quite flexible - flexible enough allow throw together drag-and-drop style editor it, least.
+needs discussion anything gets coded.
+richard
+something think 4.1
+think many people would interested showing this.
+maybe option could added (if enought demand) disable it.
+fixed trunk (svn commit 946606) kde 4.3, trunk user define contact list layout hide icons change order.

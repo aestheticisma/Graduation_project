@@ -1,0 +1,58 @@
+user-agent: mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.7b)gecko/20040316
+build identifier: mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.6)gecko/20040206 firefox/0.8
+needs way open sidebar resources, history bookmarks, window.
+convenient single history window take screen real estate open history whichever window i'm currently browsing.
+like ctrl-b ctrl-h features mozilla would like carried over.
+know bug 178199 discusses ctrl-b (wontfix perhaps ctrl-shift-b) particular i'm talking depending side bar all.
+really hate sidebars would want able disable place windows would migrate firefox.
+since roadmap focus standalone apps \"a conservative,sustaining engineering fashion\" type support mozilla/seamonkey, think \"seamonkey parity\" form established.
+thanks.
+reproducible: always
+steps reproduce:
+bookmark manager window already exists, bug 178199 covers giving better keyboard shortcut alt,b,m.
+see bug adding history window.
+something like about:history?
+similar about:config - full page tree search/filter field top.
+really need menu toolbar buttons like bookmarks manager.
+like bm unlike sidebar, would sortable columns: name, url, last visited, first visited, number visits, etc.
+would \"power-user\" supplement simple history sidebar.
+sure, sidebar needs things fixed like searching urls, that, think fine uses - exactly sidebars - quick way access something without leaving/obscuring current page.
+about:history page would nicely fill gap left advanced end.
+whole new history window probably overkill, page could easily opened window tab.
+i'm brainstorming, could probably even add search shortcut ability could type something like
+about:history?extensions open history page filter pages \"extensions.\"
+compare:
+chrome://browser/content/history/history-panel.xul
+chrome://browser/content/bookmarks/bookmarkspanel.xul
+chrome://browser/content/bookmarks/bookmarksmanager.xul
+about:config
+reporter,
+sure asking whole new history window, ability open sidebar history window.
+latter case, open chrome url new window.
+component fields probably need updated.
+i'm really looking two things:
+1. separate window keep going back window open multiple windows window.
+chrome://browser/content/history/history-panel.xul would meet need.
+2. able see sort history.
+seamonkey offers tabs title, location, last visited, first visited, hostname, referrer, visit count.
+needed least first four helpful.
+plus, i'd like able open easily, /-\\h.
+please add mozilla history window firefox!
+think one things that's missing inferior browsers like microsoft internet explorer.
+mozilla history window perfect!
+(in reply comment #3)
+&gt; i'm really looking two things:
+&gt;
+&gt; 1. separate window keep going back window open multiple windows window.
+&gt; chrome://browser/content/history/history-panel.xul would meet need.
+&gt;
+&gt; 2. able see sort history. seamonkey offers tabs title, location, last visited, first visited, hostname, referrer, visit count.
+&gt; needed least first four helpful.
+firefox sure seem like total product decent history.
+ehm, enhanced history manager, extension nicely.
+http://forums.mozillazine.org/viewtopic.php?p=1749502#1749502
+agree firefox history limited best.
+i'm amazed way knowing url date history entry is.
+mozilla history excellent since could re-trace browsing using timestamp find collections pages visited.
+history (in life browsing) useful context.
+option see order page visited?

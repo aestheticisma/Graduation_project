@@ -1,0 +1,57 @@
+pref thought extensions wanted completely replace session restore functionality.
+worked somehow tab mix plus, we've several issues people ending session restore tab mix plus disabled (see bug 435055 duplicates).
+furthermore, several code points also break session restore disabled (such list recently closed tabs).
+instead adding try-catch-blocks wherever use session restore, i'd much rather encourage extensions authors override nssessionstartup nssessionstore provide api functionality (or implementing dummy-api making sure they've correctly replaced known consumers).
+would also make lives extension authors simpler far can't sure session store component actually works (through whatever implementation).
+note privacy concerned users still able disable writing sessionstore.js browser.sessionstore.resume_from_crash pref.
+created attachment (id=332726) [details]
+remove pref
+note: bug 448725 wontfixed fixed
+created attachment (id=333820) [details]
+remove (buggy) note api comments
+(from update attachment 332726 [details])
+problem patch session data still stored memory app running, removing pref, there's way disable that.
+users want recently-closed-tabs menu, others want session tracks stored memory all.
+(in reply comment #4)
+&gt; users want recently-closed-tabs menu,
+that's browser.sessionstore.max_tabs_undo for: setting 0 effectively disables feature.
+&gt; others want session tracks stored memory all.
+again, save data memory, anyway, we?
+i'd rather introduce different pref different means cater privacy sensitive users half-baked cut-it-all pref afaict far produced issues solved.
+(in reply comment #5)
+&gt; again, save data memory, anyway, we?
+fair point. i'm sure.
+&gt; i'd rather introduce different pref different means cater privacy sensitive users half-baked cut-it-all pref afaict far produced issues solved.
+yes, agreed pref ideal purpose.
+max_tabs_undo=0 + resume_from_crash=false fine now, proper \"private browsing\" supported.
+(from update attachment 332726 [details])
+&gt;+ // xxxzeniko should't disable item disable
+&gt;+ // tabbrowser-multiple items - consistency?
+&gt;+ this.mundoclosetabmenuitem.hidden =
+&gt;+ cc[\"@mozilla.org/browser/sessionstore;1\"].
+&gt;+ getservice(ci.nsisessionstore).
+&gt;+ getclosedtabcount(window) == 0;
++1
+r=me
+(in reply comment #7)
+&gt; +1
+that's bug 350731.
+care convince mconnor he's wrong? ;-)
+pushed 17120:e712e96d7861 17121:adb1ef78dd21.
+onemen: patch significantly affects tab mix plus:
+instead disabling sessionstore, replace shipping component implements api.
+able keep component minimal, though, call code whenever api used.
+make lives people using sessionstore api (such session manager) somewhat simpler, use api without worry much implementation behind it.
+want offer option switching implementation, see e.g. ignore-history component torbutton extension overwrite component original still available internally (so either pass api calls forward handle yourself).
+sounds like impact extension authors documented mdc
+problem.
+current tabmix dev-build already disable sessionstore
+currently one problem , disable restore restart.
+add pref this, way it?
+(in reply comment #12)
+&gt; currently one problem , disable restore restart.
+got several options that:
+* set prefs browser.sessionstore.resume_from_crash browser.sessionstore.resume_session_once false early possible make sure browser.startup.page 3.
+* delete file sessionstore.js early possible (e.g. profile-after-change notification dispatched).
+* firefox 3.1: respond sessionstore-state-read notification setting subject's data member empty string (cf. bug 448741 comment#6).
+use case i'm missing?

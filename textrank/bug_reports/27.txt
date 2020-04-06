@@ -1,0 +1,55 @@
+version: svn (using devel)
+os: linux
+installed from: compiled sources
+amarok2-svn like new contextview , found new bottom bar managing applets annoying , covers parts applets sometimes , like lyrics one , miss part it.
+could handy appear desappear onmouseover.
+thanks
+real solution make cover applets, make appear/disappear mouse over.
+dont understand point, dan... make cover applets?
+thats problem solve :)
+toolbar like panel kde, gets area draw (a strut window manager terms).
+applets consider space toolbar takes play in, rather end top it.
+well move window desktop down, panel cover it.
+still understand...
+right, new windows placed desktop get placed panel, maximizing windows put panel either.
+need explicitely place window panel, considder bug possible (but that's debate about).]
+panel obfuscate applets default.
+fully agree dan here, also fully admit slightest clue implement technically :)
+really think wrote makes lot sense, feasible.
+created attachment (id=32462) [details]
+amarok-svn toolbar overlap
+dan meaning this.. screen better words sometimes :-)
+know looks like, 've staring day. btw, screenshot outdated :)
+still see else guys plan visualize it.
+want border applet area, instead hitting panel directly, ends border?
+mean, applets *will* logically location panel---all applets user fit screen time---so else show it?
+applet end toolbar begins.
+applets larger viewable area, there's applet it, lower applet get smaller sizehint, resize necessary active applet (and therefore one screen)
+basically, applet continue screen, end panel.
+disagree :) describing different use-case cv general, distinctly different original idea developed.
+fact, think another bug we've already discussion (with mark), come irc.
+anyway, something fixed, rather change needs discussed people like e.g. leinir.
+regardless this, problem \"applets falling end screen\" mitigated able resize applets.
+can't tell screenshot attached bug intended.
+way see final line two lyrics applet.
+major bug.
+bug shown fact cannot yet resize applets, also set default sizes sanely.
+reporting bug non-completed feature ;)
+infact wish! ;-)
+course :) thought point feature yet completed - polish that's gone ù…ately could seem like indication feature completion, would seem prudent course inform ùhat case :)
+think dependent able resize freely all...
+time, sizegrip resizing ends bottom right corner, such, would inaccessable reguardless whether free sizing not.
+bug applet can't made smaller, part applet completely inaccesible.
+fully agree dan aswell.
+understand confusion doesnt matter applet resizable not.
+quote dan:
+\"the applet end toolbar begins.
+applets larger viewable area, there's applet it, lower applet get smaller sizehint, resize necessary active applet (and therefore one screen)\"
+that's expected behaviour used playlist aswell.
+track items dont overlap lower toolbar, they?
+*** bug 174221 marked duplicate bug. ***
+fixed 2.1.1, done locally.
+found probably fixed trunk :-)
+leo confirm that?
+could close this....
+yep, sorry forgot close pushed.

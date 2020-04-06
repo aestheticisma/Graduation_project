@@ -1,0 +1,46 @@
+hi martin,
+installation teneo entry \"ant home entries (default)\" classpath page preferences-&gt;ant-&gt;runtime empty (though child entries tree node visible).
+addition get lot nullpointerexceptions .log \"malformed url\" message open preference page.
+stack show participation teneo.
+tested complete new eclipse (rcp version) installation (m20080221-1800 ) emf, gef gmf features installed empty workspace.
+installation looked \"ant home entries\" entry fine.
+installation teneo vanished.
+disabling teneo plugin entry visible again.
+gr. manfred
+hi manfred,
+seems strange behavior installing teneo interfere rest eclipse installation.
+teneo really set plugins change plugins.
+remove .log file restart eclipse -clean option attach resulting .log file bugzilla?
+addition versions eclipse, emf, etc. using?
+also attach screendump strange thing see preferences/ant?
+plugin/feature information say something special? find here:
+help/software updates/manage configuration
+note view button hide non-loaded features/plugins.
+see plugins fail load?
+depending version eclipse see details plugin failed load.
+gr. martin
+created attachment (id=95747) [details]
+log-file errors opening ant runtime preferences
+created attachment (id=95748) [details]
+ant runtime preferences screenshot
+created attachment (id=95749) [details]
+configuration software updates/mangage configuration
+hi martin,
+made complete new configuration today added new feature update manager.
+perhaps case belongs core team eclipse?
+gr.
+manfred
+hi martin,
+see .log-file forgot -clean flag.
+it, .log-file differs setting shown.
+messages including curious \"invalid perference page: cache\" same.
+gr. manfred
+hi manfred,
+yes really think caused teneo.
+moved issue platform project.
+post topic platform newsgroup (with link bugzilla)?
+maybe know right away what's wrong.
+gr. martin
+behaviour vanish teneo version i200805200858.
+believe consolidation used libraries.
+set set resolution fixed.

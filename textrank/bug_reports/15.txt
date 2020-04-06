@@ -1,0 +1,98 @@
+using current gvfs svn nautilus 2.22.0, dnd directory proftpd server nautilus returns file available error.
+trying delete directory.
+copying directory using mirror lftp works correctly
+get too.
+yup
+*** bug 524421 marked duplicate bug. ***
+we're getting opensuse too, seems happen kinds ftp servers.
+opensues bug
+https://bugzilla.novell.com/show_bug.cgi?id=382360
+caused broken backends.
+attempts open copy/move directory fail g_io_error_is_directory.
+gio functions nautilus rely that.
+fix gvfs-smb trunk gnome-2-22 branch.
+working ftp fix right now.
+created attachment (id=111807) [details]
+gvfs-ftp-read-directory.patch
+proposed patch.
+introducing new system handling error 550 messages based benjamin's idea.
+far simple check target directory implemented.
+please review patch, especially like keeping references gvfsbackendftp processed file ftpconnection object easiest way it.
+patch gets gist want, looks ugly places.
+here's think solve those:
+idea error handlers implemented simple ftp_connection_send() commands, set errors automatically.
+is_directory handler would look something like this:
+static void
+error_550_is_directory (ftpconnection *conn, const ftpfile *file)
+{
+guint response = ftp_connection_send (conn, response_pass_500, \"cwd %s\", file);
+(response == 550)
+{
+g_set_error (&conn-&gt;error, g_io_error, g_io_error_is_directory, _(\"file directory\"));
+}
+else (status_group (response) == 5)
+{
+ftp_connection_set_error_from_response (conn, response);
+}
+}
+we'd bunch error handlers named error_550_$error_we_check() like error_550_not_found error_550_permission_denied ftp sending magic figure specific things.
+writing code, occured might want new flag \"response_pass_550\" 550 error code, would help quite cases make function look like this:
+static void
+error_550_check_directory (ftpconnection *conn, const ftpfile *file)
+{
+guint response = ftp_connection_send (conn, response_pass_550, \"cwd %s\", file);
+(response == 550)
+{
+g_set_error (&conn-&gt;error, g_io_error, g_io_error_is_directory, _(\"file directory\"));
+}
+}
+also think want seperate ftp_connection_send_and_check function, job special 550 checks, there's lot cases needed.
+code would roughly look like this:
+typedef void (* ftp550handler) (ftpconnection *conn, const ftpfile *file);
+static void
+ftp_connection_check_file (ftpconnection *conn, const ftp550handler *handlers, const ftpfile *file)
+{
+(*handlers && !ftp_connection_in_error (conn))
+{
+handlers (conn, file);
+handlers++;
+}
+}
+static guint
+ftp_connection_send_and_check (ftpconnection *conn, responseflags flags, const ftp550handler *handlers, const ftpfile *file, const char *format, ...) g_gnuc_printf (5, 6)
+{
+va_list varargs;
+guint response;
+/* check there's 550 handling used - allow bad use api */
+g_return_val_if_fail (flags & | == 0, 0);
+g_return_val_if_fail (handlers != null, 0);
+g_return_val_if_fail (file != null, 0);
+va_start (varargs, format);
+response = ftp_connection_sendv (conn,
+flags | response_pass_550, format, varargs);
+va_end (varargs);
+(response == 550)
+{
+ftp_connection_check_file (conn, handlers, file);
+response = 0;
+}
+return response;
+}
+also solves problem 550 handling move response codes, looks bit unfortunate api wise.
+get rid adding members ftpconnection struct, especially belong there.
+smaller things:
+- function called \"error_550_check_directory\".
+that's somewhat bad choice name, know checks whether file directory.
+- please change default error code 550 g_io_error_failed.
+\"operation failed\" sounds much better \"file unavailable\".
+tells us miss 550 checks: whenever get \"failed\" :)
+- patch includes \"list -a\" change bad directory listings.
+created attachment (id=112474) [details]
+gvfs-ftp-read-directory-2.patch
+modified patch, fixing issues noted previous comment.
+quick review patch looks pretty much like imagined it.
+forget it: error_550_is_directory() checks 250, 550.
+commited slightly modified patch trunk stable 2.22 branch.
+fixes recursive copy directory structure nautilus.
+delete issue reported first post might related bug #528347, client apps using gio/gvfs unable see dot-files blocking directory removal empty.
+otherwise deleting whole directory structure works fine nautilus backend reports g_io_error_not_empty correctly.

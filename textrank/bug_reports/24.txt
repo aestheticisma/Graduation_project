@@ -1,0 +1,90 @@
+user-agent: mozilla/5.0 (macintosh; u; ppc mac os x mach-o; en-us;rv:1.8b2) gecko/20050528 firefox/1.0+
+build identifier: mozilla/5.0 (macintosh; u; ppc mac os x mach-o; en-us;rv:1.8b2) gecko/20050528 firefox/1.0+
+folders pane thunderbird lists e-mail accounts local folders allow select several folders once.
+instance able click james folder select it, shift-click john folder select without deselecting james folder, drag *both* friends folder.
+currently one time.
+reproducible: always
+steps reproduce:
+1. click local folder
+2. shift-click different local folder
+actual results:
+first folder deselected.
+expected results:
+kept selected.
+possibly there's difference shift command-clicking (on mac).
+shift click perhaps select everything clicked folder currently selected folder.
+command-clicking normally selects folders explicitly click on.
+possibly conventions platforms multiple selections.
+multiple selections possible,
+automated message, id \"auto-resolve01\".
+bug comments long time.
+statistically, found bug reports confirmed second user three months
+highly unlikely source fix code.
+input important us, resources limited asking help focussing efforts.
+still reproduce problem latest version product (see obtain copy) or, feature requests, present latest version still believe implement it, please visit url bug (given top mail) add comment effect, giving reproduction information it.
+problem longer, need take action.
+bug changed way next two weeks, automatically resolved.
+thank help matter.
+latest beta releases obtained from:
+firefox: http://www.mozilla.org/projects/firefox/
+thunderbird: http://www.mozilla.org/products/thunderbird/releases/1.5beta1.html
+seamonkey: http://www.mozilla.org/projects/seamonkey/
+*** bug 310352 marked duplicate bug. ***
+suite bug 50767.
+highly-desirable opinion.
+would like see implemented easier management rss subscriptions.
+*** bug 366757 marked duplicate bug. ***
+would love see closed, also dragging folder pane much faster.
+*** bug 398712 marked duplicate bug. ***
+pretty basic stuff.
+bit showstopper migrating outlook users thunderbird since heavy users often tons folders organise emails.
+importing mail dumps folders local folders can't re-organised inbox without going one-by-one, silly.
+latest trunk multiple folders selected completely benefit it: drag drop 1 folder moved, cm shows 3 entries (open, open new tab, properties) even useless ;) (nothing happens / empty tab).
+mozilla/5.0 (windows; u; windows nt 5.1; en-us; rv:1.9.1b2pre) gecko/20081030 lightning/1.0pre shredder/3.0b1pre
+blockingâ€‘thunderbird3 ?
+multiple selection either useful possible all.
+adjusting description.
+marking regression 2.0 select one folder time.
+would great someone went made context commands work should, least make commands unavailable work anyway.
+blocking-tb3+ least get minimal fix in.
+magnus, care bug?
+sure, though someone want's take grabs.
+*** bug 481159 marked duplicate bug. ***
+i'll put m5 since active right
+created attachment (id=374607) [details]
+proposed fix
+items think make sense multi select:
+get messages
+servers, newsgroups/feeds
+open
+though question item *at all*
+open new tab
+unsubscribe
+newsgroups
+delete
+would useful, confirmation dialogs js, multiple delete models etc gave disabled multi selection
+compact
+mark folder/s read
+mark newsgroup/s read
+---
+notes:
+- hitting delete ng unsubscribe broken (confirmunsubscribe vs confirmunsubscribe)
+- new saved search enabled news - create one
+- moving away getselectedmsgfolders() gfoldertreeview.getselectedfolders()
+still (maybe another bug...):
+- fix tools menu folder commands
+- drag'n'drop (disable multi?)
+---
+phil: got bandwidth this?
+(from update attachment 374607 [details])
+looks good me, except
+&gt;+ * compacts either folders accounts given folders belong to, accounts currently selected folders.
+that's hard enough parse even without stray \"either or\" ;)
+(from update attachment 374607 [details])
+sounds good description
+going add checkin-needed keyword probably want fix nits first
+changeset: 2593:2f6ef8daa83e
+http://hg.mozilla.org/comm-central/rev/2f6ef8daa83e
+-&gt;fixed
+note testers: landed commands folder context menu work multiple folders, shown (and enabled).
+there's lot different possible combinations folders/servers different kinds possible would good people could make sure cases work them.

@@ -1,0 +1,50 @@
+open new image,
+create layer much bigger image, different aspect ratio.
+draw something drawable (using colors)
+make selection selecting parts drawing
+use channel mixer.
+selection looks wrong plugin, plugin even crash.
+due fact selection mask taken gimp_drawable_get_thumbnail_data () preview code.
+layer image different size, streched differently.
+clearly bad, *should* doing?
+preview follow shape selection bounds, image, drawable?
+big image, use crop tool right, bottom right bottom, click resize.
+active picture little layer.
+using tool preview give one pixel (or less ;) ) preview instead good one.
+compute intersection layer active picture could solution...
+far see, two reasonable options, either require substantial amount fixing aspect preview code plugins use it.
+(1) show entire drawable aspect preview, mask changes using current selection.
+(2) show part drawable lying within selection bounds.
+clear better.
+bumping 2.4 since likely get fixed 2.2
+bumping future since likely get fixed 2.4.
+setting back 2.4 milestone since crash should, possible, looked 2.4 release.
+fixing might make api changes necessary.
+need look soon possible.
+would help lot someone could attach example xcf file bug report shows problem.
+created attachment (id=89354) [details]
+bug156905.xcf.bz2 - layer bigger image
+following assertion failed using channel mixer layer.
+(channel_mixer:6701): libgimpwidgets-critical **: gimp_preview_area_mask: assertion `mask != null' failed
+channel mixer use gimpzoompreview (not gimpaspectpreview)?
+seems like gimpzoompreview gimpaspectpreview problems steps reporter's comment taken.
+one nasty track down.
+example image dimensions 377*233, selection starts x=125, y=97 extends lower right corner image.
+preview code calls gimp_drawable_get_sub_thumbnail selection mask following coordinates:
+src_x: 117, src_y: 89, src_w: 268, src_h: 152
+unsurprisingly fails, since src_x+src_w bigger selection mask width.
+source coordinates seem wrong originate gimp_zoom_preview_get_source_area(), yet tracked down.
+created attachment (id=117704) [details]
+gimpzoompreview handle layer offsets
+patch fix gimpzoompreview handle layers offsets selections.
+area displayed preview intersection layer selection.
+objections, could commit patch.
+gimpaspectpreview selection mask applied thumbnail whole drawable (selection intersect partialy drawable area).
+please commit this.
+make sense patch 2 [details].4 point.
+please trunk only.
+2008-09-02 aurimas juå¡ka &lt;aurisj@svn.gnome.org&gt;
+&gt;-------* libgimp/gimpzoompreview.c (gimp_zoom_preview_draw_buffer),
+&gt;-------(gimp_zoom_preview_set_drawable): fixed gimpzoompreview handle
+&gt;-------layers offsets display intersection layer selection
+&gt;-------in preview. (bug #156905)

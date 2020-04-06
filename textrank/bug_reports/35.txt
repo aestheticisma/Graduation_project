@@ -1,0 +1,52 @@
+version: (using devel)
+installed from: compiled sources
+os: linux
+using nightly builds project neon, kdebase version 20080617+svn821478-0neon1
+seem problems zoom view.
+layout activities properly.
+steps reproduce:
+1. zoom out.
+2. add activity.
+newly added activity shown, top left corner screen.
+3. zoom in.
+4. zoom out.
+activities shown, order added, whitespace around them.
+another activity added, happens again, zoom twice get 3 activities show.
+opensuse, kde 4.1 beta 2.
+i'm using nvidia binary drivers btw, nvidia geforce 6600 gt.
+found \"offset\" activity overview changes double click second activity.
+probably happens adding activity.
+point, possible anymore use drag&drop move first activity.
+zooming out, selecting first, zooming fixes it.
+yeah, regression crept ago, bugging lot.
+we've actually got multiple bugs report, it'd nice separate (but leave minute).
+1) adding/switching activity makes view jump suddenly another place (it's trying make sure activity visible, stupid it)
+2) dragging view around see activities longer works (regression! worked woc)
+actually, dragging around view work *except right adding activity*.
+know functionality filed report.
+adding activity makes view jump another place, also placement new activity seems arbitrary.
+bug = add activity focuses view new activity zoom level changes
+well then, let's make title bit clearer
+think add activity option (and zoom out) removed 4.1 final.
+bug quite big, plus there's clear way delete activity.
+also,performance zoomed slow hell.
+report issues already reported thought others pretty obvious.
+get wrong, great idea, current status makes confusing, useless buggy :s
+performace fine me.
+using nvidia?
+already people making use multiple activities, we're going take away them.
+it'd really really nice bug could fixed somehow, though.
+&gt; bug quite big
+huge crashes machine, loses dat, etc, right?
+molehill, stop making mountain.
+&gt; current status makes confusing, useless buggy
+use it.
+gotten many reports people like using day day work.
+suppose desire see set problems hidden overrides productivity?
+we'd taken approach 4.0 we'd even behind.
+svn commit 838477 chani:
+new activity added, move necessary show seems fix dragging view around :)
+bug: 164545
+please backport.
++7 -1 view.cpp
+websvn link: http://websvn.kde.org/?view=rev&revision=838477

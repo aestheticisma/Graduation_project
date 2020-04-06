@@ -1,0 +1,194 @@
+user-agent: mozilla/5.0 (x11; u; linux x86_64; fr-fr; rv:1.8.1.13) gecko/20080311 iceweasel/2.0.0.13 (debian-2.0.0.13-1)
+build identifier: 0.8 (2008033118)
+calendar subscribed longer exists, lightning try indefinitely reach use 100% cpu. this, despite 404 results receives.
+reproducible: always
+steps reproduce:
+1. create calendar server
+2. subscribe via lightning
+3. quit thunderbird
+4. erase calendar server
+5. relaunch thunderbird
+actual results:
+propfind executed resource, resulting 404 error code.
+option parent directory occurs, 200 result.
+loop continues new propfind...
+expected results:
+would expect lightning stop trying reach calendar collection
+soon receives 404 result.
+trace happens (obtained tcpflow):
+propfind /sogo/dav/wsourdeau/calendar/1d52ae6b-8564-0001-6a40-17b089902560/
+http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+host: localhost
+user-agent: mozilla/5.0 (x11; u; linux i686 (x86_64); fr; rv:1.8.1.12)
+gecko/20080213 lightning/0.8 thunderbird/2.0.0.12
+accept: text/xml
+accept-language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+accept-encoding: gzip
+,deflate
+accept-charset: utf-8,*;q=0.1
+keep-alive: 300
+connection: keep-alive
+content-length: 86
+content-type: text/xml; charset=utf-8
+depth: 0
+&lt;d:propfind xmlns:d=\"dav:\"&gt;
+&lt;d:prop&gt;
+&lt;d:resourcetype/&gt;
+&lt;/d:prop&gt;
+&lt;/d:propfind&gt;
+http/1.0 401 authorization required
+content-length: 0
+www-authenticate: basic realm=\"sogo-0.9\"
+propfind /sogo/dav/wsourdeau/calendar/1d52ae6b-8564-0001-6a40-17b089902560/
+http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+host: localhost
+user-agent: mozilla/5.0 (x11; u; linux i686 (x86_64); fr; rv:1.8.1.12)
+gecko/20080213 lightning/0.8 thunderbird/2.0.0.12
+accept: text/xml
+accept-language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+accept-encoding: gzip
+,deflate
+accept-charset: utf-8,*;q=0.1
+keep-alive: 300
+connection: keep-alive
+content-length: 86
+content-type: text/xml; charset=utf-8
+depth: 0
+authorization: basic hidden
+&lt;d:propfind xmlns:d=\"dav:\"&gt;
+&lt;d:prop&gt;
+&lt;d:resourcetype/&gt;
+&lt;/d:prop&gt;
+&lt;/d:propfind&gt;
+http/1.0 404 found
+content-length: 85
+content-type: text/html
+object found: wsourdeau =&gt; calendar =&gt;
+1d52ae6b-8564-0001-6a40-17b089902560
+propfind /sogo/dav/wsourdeau/calendar/1d52ae6b-8564-0001-6a40-17b089902560/
+http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+host: localhost
+user-agent: mozilla/5.0 (x11; u; linux i686 (x86_64); fr; rv:1.8.1.12)
+gecko/20080213 lightning/0.8 thunderbird/2.0.0.12
+accept: text/xml
+accept-language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+accept-encoding: gzip
+,deflate
+accept-charset: utf-8,*;q=0.1
+keep-alive: 300
+connection: keep-alive
+content-length: 86
+content-type: text/xml; charset=utf-8
+depth: 0
+authorization: basic hidden
+&lt;d:propfind xmlns:d=\"dav:\"&gt;
+&lt;d:prop&gt;
+&lt;d:resourcetype/&gt;
+&lt;/d:prop&gt;
+&lt;/d:propfind&gt;
+options /sogo/dav/wsourdeau/calendar/ http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+host: localhost
+user-agent: mozilla/5.0 (x11; u; linux i686 (x86_64); fr; rv:1.8.1.12)
+gecko/20080213 lightning/0.8 thunderbird/2.0.0.12
+accept: text/xml
+accept-language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+accept-encoding: gzip,deflate
+accept-charset: utf-8,*;q=0.
+1
+keep-alive: 300
+connection: keep-alive
+http/1.0 404 found
+content-length: 85
+content-type: text/html
+object found: wsourdeau =&gt; calendar =&gt;
+1d52ae6b-8564-0001-6a40-17b089902560
+http/1.0 401 authorization required
+content-length: 0
+www-authenticate: basic realm=\"sogo-0.9\"
+options /sogo/dav/wsourdeau/calendar/ http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+host: localhost
+user-agent: mozilla/5.0 (x11; u; linux i686 (x86_64); fr; rv:1.8.1.12)
+gecko/20080213 lightning/0.8 thunderbird/2.0.0.12
+accept: text/xml
+accept-language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+accept-encoding: gzip,deflate
+accept-charset: utf-8,*;q=0.
+1
+keep-alive: 300
+connection: keep-alive
+options /sogo/dav/wsourdeau/calendar/ http/1.1
+x-webobjects-server-protocol: http/1.1
+x-webobjects-remote-addr: 127.0.0.1
+x-webobjects-remote-host: 127.0.0.1
+x-webobjects-server-name: localhost
+x-webobjects-server-url: http://localhost
+....
+[ad finitum]
+using display source destination ip/port tcpflow, notice lightning side always different port, leads think many connections occuring time.
+problem occurs saferefresh() called caldavcalendar.js.
+there, following condition:
+(!this.mctag || !this.mfirstrefreshdone) {
+var refreshevent = this.preprefresh();
+this.getupdateditems(refreshevent, achangeloglistener);
+return;
+}
+this.mfirstrefreshdone false since calendar removed, never got chance complete call getcalendardata() checkdavresourcetype() (see https://bugzilla.mozilla.org/show_bug.cgi?id=463961 one...).
+so, we'll enter infinite loop getupdateditems() calls right beginning checkdavresourcetype() since calendar marked disabled.
+but, checkdavresourcetype() check 404 error code.
+have:
+var str = convertbytearray(aresult, aresultlength);
+(!str) {
+dump(\"caldav: failed determine resource type\");
+thiscalendar.completecheckserverinfo(achangeloglistener,
+
+components.interfaces.calierrors.dav_not_dav);
+return;
+} else (thiscalendar.verboselogging()) {
+dump(\"caldav: recv: \" + str);
+}
+rather something like:
+var str = convertbytearray(aresult, aresultlength);
+(!str || acontext.responsestatus == 404) {
+dump(\"caldav: failed determine resource type\");
+thiscalendar.completecheckserverinfo(achangeloglistener,
+
+components.interfaces.calierrors.dav_not_dav);
+return;
+} else (thiscalendar.verboselogging()) {
+dump(\"caldav: recv: \" + str);
+}
+cause checkdavresourcetype() (incorrectly) continue processing, cause call completecheckserverinfo() success code again, call saferefresh(), creating infite loop cached calendars.
+created attachment (id=363577) [details]
+proposed fix
+bug critical order avoid endless loop also order avoid generating _tons_ http requests caldav server (up 10-20 per second).
+(from update attachment 363577 [details])
+looks good, r=philipp.
+i've added another completecheckserverinfo since calling request.responsestatus sort request error causes throw.
+caught above, use break earlier.
+pushed comm-central &lt;http://hg.mozilla.org/comm-central/rev/7e4da21b2924&gt;
+-&gt; fixed

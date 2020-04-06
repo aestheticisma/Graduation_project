@@ -1,0 +1,50 @@
+please describe problem:
+going file-&gt;acquire-&gt;screenshot windows port development build gimp 2.3.11, firstly two different entries \"screen shot\" \"screenshot\" secondly, functionality grab portion screen broken.
+option \"select region grab\" user chooses \"screen shot.\"
+however, option exists dialogue box appears user selects :screenshot.\"
+however, functionality work, even selecting long delay period.
+instead, whole screen captured time.
+expecting mouse cursor onscreen change \"crosshairs\" something similar allow select region required.
+steps reproduce:
+1. launch gimp 2.3.11 development windows windows 2000 platform.
+2. got file-&gt;acquire-&gt;screenshot. (note two different entries \"screen shot\" \"screenshot\".)
+3. tick \"select region grab.\"
+4. set delay.
+5. click \"grab.\"
+actual results:
+whole screen captured time.
+expected results:
+ability select portion screen would available, probably via mouse click-and-drag functionality.
+happen every time?
+yes.
+information:
+(i presume two entries screenshots submenu order test old new code, way noted case issue.)
+d. le sage
+apf
+hobart, tasmania
+know port screenshot plug-in windows incomplete.
+what's bug-report about?
+want contribute missing bits want us disable plug-in windows platform?
+waiting volunteer implement missing functionality year now.
+perhaps time drop support win32 platform completely.
+sven,
+bug report alert case know broken.
+obviously aware incomplete.
+perhaps disable prevent questions users.
+programmer cannot implement functionality.
+trying part reporting issues you.
+complained short volunteers are.
+case, perhaps good idea drop support win32 consolidate making sure *nix implementation good possible.
+supporting win32 probably draining resources away.
+iirc tor working this.
+apf, using development version.
+course incomplete even broken features there.
+user, using stable release.
+tor said impossible implement look feel x11 screenshot plug-in windows platform.
+suggested stick winsnap win32.
+2006-10-27 sven neumann &lt;sven@gimp.org&gt;
+* configure.in
+* plug-ins/common/plugin-defs.pl
+* plug-ins/common/makefile.am: reverted changes 2006-04-06 build screenshot plug-in optionally again.
+fixes bug #364852.
+* plug-ins/common/mkgen.pl: reverted addition 'extralibs' parameter introduced screenshot plug-in only.

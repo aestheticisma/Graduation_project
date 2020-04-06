@@ -1,0 +1,136 @@
+version: (using kde kde 3.1kde 1.2)
+installed from: suse rpmssuse rpms
+sniff allows find locations selected function called.
+kdevelop already allows 'grep foo(' context menu class treeview.
+feature work would good job since:
+1. finds calls function name belonging different class
+2. find calls functions whitespaces function name left bracket foo-&gt;bar ();
+3. distinguish overloaded functions
+would nice know kdevelop version!
+
+subject: re: find callers functions
+version 2.1.3. sorry feature newer version kdevelop (3.0) nothing changelog suggests that.
+-rudiger
+--- amilcar carmo lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+&gt; ------- receiving mail because: -------
+&gt; reported bug, watching reporter.
+&gt;
+&gt; http://bugs.kde.org/show_bug.cgi?id=61263
+&gt; a.lucas@tu-bs.de changed:
+&gt;
+&gt; |removed |added
+&gt;
+----------------------------------------------------------------------------
+&gt; component|general |classview
+&gt;
+&gt;
+&gt;
+&gt; ------- additional comments a.lucas@tu-bs.de 2003-07-15 10:57
+&gt; -------
+&gt; would nice know kdevelop version!
+sorry, kdevelop 2.x longer development.
+strongly advised update latest cvs version kdevelop3, code name gideon, take look at:
+http://www.kdevelop.org/index.html?filename=branches_compiling.html
+details need.
+find problem need help please send mail mailing list:
+http://www.kdevelop.org/index.html?filename=mailinglist.html
+drop us line channel #kdevelop server irc.kde.org using ksirc, example.
+please use cvs version compile way easily patch bug found.
+kdevelop3 open develop2 projects.
+so, goto \"project -&gt; open project ... \" select \"kdevelop 2 project files\" \"filter:\".
+run kdevelop3 kdevelop2 time computer without problems.
+migrating breeze. :)
+p.s. : kdevelop team closed 452 reported confirmed bugs since release kdevelop2.1.3
+bad news kdevelop3 currently 120 reported bugs :(
+subject: re: find callers functions
+unfortunatelly behind huge firewall.
+would kind send tarball ruediger.koch@db.com ?
+thanks lot
+-rudiger
+--- amilcar carmo lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+&gt; ------- receiving mail because: -------
+&gt; reported bug, watching reporter.
+&gt;
+&gt; http://bugs.kde.org/show_bug.cgi?id=61263
+&gt; a.lucas@tu-bs.de changed:
+&gt;
+&gt; |removed |added
+&gt;
+----------------------------------------------------------------------------
+&gt; version|unspecified |2.1.3
+&gt;
+&gt;
+&gt;
+&gt; ------- additional comments a.lucas@tu-bs.de 2003-07-15 12:01
+&gt; -------
+&gt; sorry, kdevelop 2.x longer development.
+&gt;
+&gt; strongly advised update latest cvs version kdevelop3, code name gideon, take look at:
+&gt; http://www.kdevelop.org/index.html?filename=branches_compiling.html
+&gt; details need.
+&gt; find problem need help please send mail mailing list:
+&gt; http://www.kdevelop.org/index.html?filename=mailinglist.html
+&gt; drop us line channel #kdevelop server irc.kde.org using ksirc, example.
+&gt; please use cvs version compile way easily patch bug found.
+&gt;
+&gt; kdevelop3 open develop2 projects.
+&gt; so, goto \"project -&gt; open project ... \" select \"kdevelop 2 project files\" \"filter:\".
+&gt; run kdevelop3 kdevelop2 time computer without problems.
+&gt; migrating breeze. :)
+&gt;
+&gt; p.s. : kdevelop team closed 452 reported confirmed bugs since release kdevelop2.1.3
+&gt; bad news kdevelop3 currently 120 reported bugs :(
+ftp://ftp.kde.org/pub/kde/unstable/snapshots/kdevelop.tar.bz2
+subject: re: find callers functions
+let first say, really impressed gideon.
+shows lot potential!
+excellent work far.
+really looking forward stable releases.
+specific feature looking still present, although grep works, long looking pointers foo-&gt;doit(); foo.doit() found.
+coworkers master regular expressions.
+them, \"find callers\" item simply requested without intimidating dialog sporting arcane regex would close ideal.
+menu item class view - context menu function.
+regex
+(\\.|\\-&gt;|::)[\\t ]*\\&lt;%s\\&gt;[\\t ]*\\(
+getting close.
+finds function definition \"\\fn classname::doit(), however - may filter second pass.
+would also find bar::doit() even bar nothing foo, - nobody perfect.
+-rudiger
+--- amilcar carmo lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+&gt; ------- receiving mail because: -------
+&gt; reported bug, watching reporter.
+&gt;
+&gt; http://bugs.kde.org/show_bug.cgi?id=61263
+&gt;
+&gt;
+&gt;
+&gt;
+&gt; ------- additional comments a.lucas@tu-bs.de 2003-07-15 17:17
+&gt; -------
+&gt; ftp://ftp.kde.org/pub/kde/unstable/snapshots/kdevelop.tar.bz2
+guess feature talking like 'find usage' feature works intellij idea (java ide), so, good.
+want add here, behaviour one could add implelemnting feature.
+along 'find usage' feature wich produce list places project like 'grep' do, would nice 'hightlight usage' feature wich hightlight usage function variable currect file produce windows.
+binded shortcut handy.
+look works:
+- user presses alt+shift+f7 (e.g.)
+- gideon hightligh usage currenlty selected funciton/variable (or one cursor selected)
+- user got response, make his/her mind clear usage
+- user press esc hightligh turned off.
+comming.
+stay tunned!
+call tree/graph viewer
+\"find usage\" - can't c users \"function call tree\" view - either organised caller callee.
+used standard part ides borland, substituted class viewer - say 'replaced' since class viewer replacement call graph view !
+forgive kdev 3.0/gideon ...
+*** bug confirmed popular vote. ***
+doxygen includes similar information.
+call graph (unfortunately) lacks called-by graph.
+would also nice feature clever enough understand c++ scoping rules, e.g. call within foo::bar() boo() could call foo::boo() boo() function within namespace previously specified \"using namespace\".
+grep provide enough intelligence find matches.
+however bad start use c++ ast complex.
+get voters bit excited: basic experimental use-highlighter implemented kdevelop4 last days.
+afaik currently highlights usages variables, extending much problem.
+comming kdevelop4.
+fixed kdevelop4
+take look \"code navigation\" blog www.kdevelop.org details

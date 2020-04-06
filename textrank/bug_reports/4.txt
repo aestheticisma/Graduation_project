@@ -1,0 +1,44 @@
+problem:
+method folderdescription#createexistentresourcefromhandle(iresource,iprogressmonitor) checks folder already exists returns immediately so.
+cases folderdescription members existing moment, members created.
+use case:
+assume want create folder file folder use two operations this.
+know necessary use two operations configuration complex example code.
+ifolder folder = ... // must exist
+createfolderoperation op1 = new createfolderoperation(folder,...);
+ifile file = folder.getfile(...); // must exist
+createfileoperation op1 = new createfileoperation(file,...);
+op1.execute(...);
+op2.execute(...);
+execution op2 create file stated createexistentresourcefromhandle returns immediately parent folder file created op1.
+imho createexistentresourcefromhandle must check members folderdescription created.
+checked code ganymede release problem exist too.
+reason cannot execute op1 creating op2?
+basic problem workspace file structure changed since first created operation, change described operation longer valid.
+&gt;is reason cannot execute op1 creating op2?
+not.
+meantime found workaround code think inconvenient someone must know op2 created execution op1.
+api gave hint so!
+maybe build folderdescription could delayed execution op2.
+think cases ops nothing common e.g. created executed different plug-ins.
+i'll mark one m4.
+think needs happen javadoc better describes lifecycle operations, isvalid() method tightened operation becomes invalid workspace changes longer match recorded state.
+intention classes stay synch workspace changes happen independently shared, sequential workspace history.
+moving target m6 shipped.
+fixed head &gt;20090416.
+order understand better ramifications might actually fixing bug vs. better documenting limitations usage, started implementing trial fix problem reported.
+pretty straightforward rearrange code create child resources (the file) even parent exists since operation created.
+however, problems occur later try undo operation.
+since operation \"remembered\" folder exist first created, undo create file operation tries also delete folder.
+means truly fix bug, we'd change operations resource descriptions constantly updated deal changes occurred.
+still believe better document clearly intentions api are.
+i've updated javadoc abstractresourcesoperation, createfileoperation, createfolderoperation.
+addition, created stricter validity check createfileoperation operation return invalid status portions resource tree already exist.
+created workspaceoperationstest.test250125() simulate condition.
+createfileoperation valid createfolderoperation run, time file operation knows invalid.
+&gt; addition, created stricter validity check createfileoperation operation return invalid status portions resource tree already exist.
+meant say is...
+created stricter validity check createfileoperation operation return invalid status portions resource tree *that exist operation created* already exist time execution.
+expected/allowed containment tree already exists op executed, long also existed op created.
+verified via automated test cases run build.
+also verified source inspection

@@ -1,0 +1,46 @@
+created attachment (id=87317) [details]
+error report
+i'm using swt library, ran \"hello world\" example:
+import org.eclipse.swt.widgets.*;
+public class swtexperiment {
+public static void main (string [] args) {
+display display = new display ();
+shell shell = new shell(display);
+shell.open ();
+(!shell.isdisposed ()) {
+(!display.readanddispatch ()) display.sleep ();
+}
+display.dispose ();
+}
+}
+swt fails load, always exits java exited due signal 4 (sigill).
+see window flash open, immediately crashes.
+nothing logs.
+open resulting jar jar launcher get crash report attached.
+also, ditched new version tried 3.2.2 worked
+mac, running os x 10.5.2, successfully ran hello world example, command line, using swt r3.4 m6.
+try version see fails you?
+also, run java -version let us know prints?
+output java -version
+java version \"1.5.0_13\"
+java(tm) 2 runtime environment, standard edition (build 1.5.0_13-b05-241)
+java hotspot(tm) client vm (build 1.5.0_13-121, mixed mode, sharing)
+i'm running mac os x 10.4.11, still tiger.
+ran r3.4 m6 (including swt-debug.jar) i'm getting issue, seeing frame crashing sigill.
+adding steve increase visibility.
+launching app?
+launch command line, using -xstartonfirstthread option?
+(http://www.eclipse.org/swt/faq.php#carbonapp)
+i'm running leopard w/o problems.
+i'll try tiger.
+sorry, could reproduce tiger either.
+tried running eclipse, command line, exporting project runnable jar eclipse.
+crashes.
+please provide detailed instructions creating project running code.
+created using xcode 2.5 tiger.
+tried using eclipse would build source reason, thats ended xcode.
+command line arguments except -cp swtexperiment.jar swtexperiment, pertain this.
+tried adding -xstartonfirstthread option everything worked fine.
+crashing, everything wonderful.
+option do?
+http://www.eclipse.org/swt/faq.php#carbonapp

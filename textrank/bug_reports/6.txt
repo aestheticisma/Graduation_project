@@ -1,0 +1,31 @@
+according javadoc platform.getresourcestring(bundle,string), method deprecated one use nls class bundlefinder.find().
+able find nls class find bundlefinder class.
+javadoc correct?
+hint find bundlefinder class would help.
+nls class seem provide functionality platform.getresourcestring does, assuming bundlefinder would job need.
+please provide information find bundlefinder improve javadoc.
+think replacement functionality ever implemented.
+pascal, added bunch comments like platform ver. 1.92.
+current plans act (and actions done last 2 years) think need remove comments - make rather confusing javadoc.
+21 \"xxx\" comments removed javadoc acted upon.
+adding m7 milestone remind remove comments.
+(in reply comment #1)
+&gt; think replacement functionality ever implemented.
+&gt; pascal, added bunch comments like platform ver. 1.92.
+&gt; current plans act (and actions done &gt; last 2 years) think need remove comments - make rather confusing javadoc.
+&gt; 21 \"xxx\" comments removed javadoc acted upon.
+
+saying support using getresourcestring droppped, replacement available?
+concerns wtp code uses method, sure plenty adopters currently using function well.
+method platform.getresourcestring(bundle,string) deprecated time;
+comments added implementation code bug report, javadoc platform class.
+please adjust target milestone, point closed milestone past.
+bug 247983 tagged methods:
+-getresourcebundle(bundle)
+-getresourcestring(bundle, string)
+-getresourcestring(bundle, string, resourcebundle)
+*** bug 247983 marked duplicate bug. ***
+removed incorrect comments platform class.
+collided, made changes.
+difference moved comments internalplatform.
+also deprecated platform#endsplash since replaced iapplicationcontext#applicationrunning().

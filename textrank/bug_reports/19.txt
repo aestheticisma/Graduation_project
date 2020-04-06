@@ -1,0 +1,56 @@
+group title taken account window-eyes 4.5.
+group title pronouced radio buttons controls.
+not, bug since blid users cannont know group content dealing about.
+interesting.
+window-eyes jaws read group title group single child obvious name, example, text list combo box.
+neither screen reader read group title groups set radio buttons check boxes, say.
+(or, assume, surrounding something obvious label read instead, like button, child control takes focus).
+several dialogs - notably, search find/replace dialogs, groups radio/checkbox children.
+screen readers read group titles dialogs.
+bring attention screen reader developers.
+now, extreme, sort-of useable work-around window-eyes tell read every control newly-opened dialog.
+with:
+global -&gt; verbosity -&gt; activated... entire window dialog
+ccing frank lin.
+2 examples eclipse dialogs group title read:
+1) click flashlight (search) tool main toolbar.
+click tabs notebook.
+pages \"scope\" group.
+pages \"search for\" group \"limit to\" group.
+none titles read jaws.
+2) open editor file, select edit -&gt; find/replace... (or type ctrl+f) get find/replace dialog.
+\"direction\", \"scope\", \"options\" group titles never read.
+think best thing would read one radio checkbox controls gets focus (i.e. dialog activated, user tabs new group clicks control another group.
+today, frank lin tested jaws 5.0, 5.1 6.0 beta, found dialogue flashlight find/replace edit group titles spoken correctly.
+created attachment (id=14333) [details]
+grouptests.java
+working me, either make problem clear enough, jaws settings set set.
+installed jaws 5.1, installation process, asked wanted keep settings previous jaws version.
+said \"no\", want jaws 5.1 \"out-of-the-box\". settings jaws 5.1, surprises.
+attach little code snippet shows problem simply.
+copy attachment snippets directory, refresh snippets project, select grouptests.java, run -&gt; java application.
+hear tab down/up arrow \"green\" \"blue\", depending focus.
+want hear \"foreground - green\" \"background - blue\".
+created attachment (id=14443) [details]
+grouptests.java
+sorry - bugzilla defaulted saving java file octet-stream, useful.
+attaching again, specifying type \"text\".
+please ignore previous attachment get new one.
+carolyn, sorry, used code snippet indeed hear group box names along individual radio buttons.
+using jaws 5.1.383.
+also using jaws 5.10.383, still hear \"foreground\" \"background\".
+must different settings somehow.
+attach default.jcf (i believe \"straight factory\".
+javaw.jcf.
+maybe figure setting set set.
+created attachment (id=15052) [details]
+c:\\jaws510\\settings\\enu\\default.jcf
+investigation, determined problem happens windows xp javaw.exe.manifest installed jre/bin (this tells winxp use winxp common controls - version 6.0 - instead win2k common
+controls - version 5.x).
+problem solved jaws.
+window class object reassigned internally jaws.
+fix reflected jaws version 6.0 due shortly.
+verified works jaws 6.0.
+thank-you, frank!
+*** bug 51963 marked duplicate bug. ***
+close

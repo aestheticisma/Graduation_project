@@ -1,0 +1,52 @@
+please describe problem:
+try export reports contain graphs gnucash creates empty html file.
+also clear export html files.
+first time ran export triped save .jpg created html file named foo.jpg
+steps reproduce:
+1. gnucash go reports create report contains graph
+2. report window click export
+3. save export \"foo.html\"
+actual results:
+empty html file saved
+expected results:
+html file nice graph
+happen every time?
+yes
+information:
+yes, that's true -- current graphing code, uses graphical library \"guppi\" dead project, produce on-screen diagrams *and* print postscript, cannot export diagrams pictures embedded html-file.
+words, print diagrams postscript export html.
+going change gnome2 port completed, need switch different graphical library anything related changed.
+see http://gnomesupport.org/wiki/index.php/gnucashportingstatus porting status.
+definitely keep reminder.
+able coax anything giving us png; gog supports svg export, too.
+looks like gtkhtml support saving &lt;object /&gt; data.
+sucks ass.
+still valid version 2.0.4 opensuse 10.2.
+real problem able export reports.
+tagged 'enhancement' anymore, brought higher.
+what's status this?
+thank you.
+(in reply comment #4)
+&gt; still valid version 2.0.4 opensuse 10.2.
+&gt; real &gt; problem able export reports.
+&gt; tagged 'enhancement' anymore, brought higher.
+&gt; what's status this?
+there's change this.
+wonder recent gtkhtml supports getting &lt;object /&gt;s, recent gog makes trivial create png.
+case, hesitate so, i've raised severity normal -- minor part component (reports, export, graphs) work.
+(fwiw, fred, going get fixed faster normal enhancement.)
+confirm using gnucash 2.0.5 ubuntu 7.04, feisty fawn...and confirm frustrating....
+2.2.8, still needed feature... frustration also confirmed.
+gtkhtml provides callback encounters &lt;object&gt; tag, gnc-html calls gog create image gdkpixbuf embed web page.
+webkit port, &lt;object&gt; callback.
+therefore, gnc-html-webkit pre-parses html string, finds &lt;object&gt; tag, calls gog parameter values &lt;object&gt; create gdkpixbuf, converts pixels png/base64 embeds html &lt;img&gt; original
+&lt;object&gt; was.
+result graph displays webkit.
+addition, gnc-html-webkit saves html passed webkit handles export writing html file.
+fix targetted 2.4.
+also convert gnc-html-gtkhtml use two features (convert graph embedded &lt;img&gt; export rather
+getting gtkhtml it) can't build 2.4 webkit.
+turns gtkhtml (at least version ubuntu 9.04) support inline images.
+therefore, possible using webkit.
+gnucash-1.8.x series longer developed.
+may keep enhancement request reminder, though.

@@ -1,0 +1,104 @@
+version: (using devel)
+installed from: compiled sources
+os: linux
+time ago ctrl+c stops work
+2.1 konsole (kde 4.0.80+r762060 trunk)
+reproduce:
+sleep 10 press ctrl+c
+use ctrl+z; kill %1; fg
+problem here.
+another thing imho releated: konsole \"window cursor\" get anymore focus (the cursor gets filled white).
+issues appeared days ago..
+info: use completion, c-c works (i.e. type \"ptabtab\", bash tallying possible completions, c-c stops process returns prompt).
+bug possibly konsole, yesterday can't use c-[s-]v paste app (including konsole), c-l clear screen (in konsole, gajim pidgin).
+grepping ~/.xssession-errors yields one \"error\" search krunner runner.
+get new konsole too, works progs like strace, others like ruby (which works fine vt).
+issue makes working konole really hard..
+always need kill jobs another konsole...
+lot people asking issue irc.
+cannot reproduce here.
+&gt; get new konsole too, works progs like strace, others like ruby (which works fine vt).
+bizarre.
+cannot think behavior might depend running terminal.
+&gt; lot people asking issue irc.
+running konsole kde 4.0 branch trunk?
+&gt; running konsole kde 4.0 branch trunk?
+could winding kdebase/apps/konsole back revisions see problem disappears.
+get far kde 4.0.0 tagging likely somewhere else.
+running trunk. noticing days.
+working around \"ctrl-z kill %1\"...
+*** bug 156320 marked duplicate bug. ***
+&gt; running trunk. noticing days.
+cannot reproduce, need know revision introduced bug.
+use svn -r &lt;revision&gt; change kdebase/apps/konsole/src earlier revision.
+confirm problem.
+first revision happens 760614:
+http://websvn.kde.org/?view=rev&revision=760614
+i'm running trunk.
+ctrl+c svn example compile job.
+can't ctrl+c dselect (or btdownloadcurses ...)
+switch konsole window, cursor filled ctrl+c works, type something passes konsole _and_ cursor became fillled i'm able use ctrl+c
+ie, switch konsole
+press &lt;space&gt; (to get cursor filled)
+press ctrl+c (will work now)
+always work, cursor became filled, ctrl+c work
+ctrl+c works bash read prompt (even non-filled cursor)
+robert, confirm paolo said: happens first 760614 revision (porting kprocess).
+also noticed warning session.cpp's session::sendsignal() function:
+#warning \"todo: send right signal here, qprocess::kill() always sends sigkill\"
+blindly tried replace _shellprocess-&gt;kill() _shellprocess-&gt;terminate(), help, gave :)
+maybe even piece code causes problem (although seems quite related).
+maybe ideas.
+able reproduce bug machine work, although home work machines run debian/testing (but different hardware).
+i'm puzzled cause :)
+reproducable here, home, test ideas any.
+&gt; also noticed warning session.cpp's session::sendsignal() function:
+called end terminal session kill main shell process.
+otherwise konsole touch processes directly - sends key presses enter terminal.
+&gt; although home work machines run debian/testing
+words, versions common software?
+&gt; (but different hardware)
+use type cpu?
+suppose could 32bit / 64bit difference?
+ah, no, seems unrelated :)
+this:
+void pty::lockpty(bool lock)
+{
+#warning \"todo: support locking pty\"
+//if (lock)
+//suspend();
+//else
+//resume();
+}
+sure too...
+&gt; words, versions common software?
+well, currently not, forgot updated home machine debian/sid, recall seeing bug upgraded.
+mmmm... 100% sure though. 90% ;)
+&gt; use type cpu?
+&gt; suppose could 32bit / 64bit difference?
+yep.
+use intel core duo
+&gt; sure too...
+no, called ctrl+s ctrl+q pressed.
+try changing interrupt key sequence something else see makes difference.
+example, change interrupt key ctrl+y
+stty intr /-\\y
+try strace, sleep, make etc. use ctrl+y instead ctrl+c kill them.
+chatting ossi bringed another interesting usecase:
+fact: ctrl-c work konsole
+next step: launch xterm launch strace -ttt -o konsole.trace konsole --nofork
+started konsole app, 'make' breaks ok!
+wonders :)
+strace fixes things :)
+changing /-\\c /-\\y situation /-\\y /-\\c:
+e.g. /-\\y breaks 'strace', 'make'
+&gt; strace fixes things :)
+two things though, running konsole strace also --nofork argument.
+sure making difference, need to:
+1. run \"konsole --nofork\" (without strace) see problem still there.
+2. start konsole normally (with arguments), attach strace (using strace -ttt -p &lt;pid konsole&gt;) see problem still there.
+problem disappears 1 2, changing interrupt sequence effect like dmitry reported.
+idea look code, set breakpoints, etc...?
+fixed svn commit #771570.
+\"fix ctrl+c killing applications users' systems.
+reset signal handlers default (sig_dfl) child process forking\"

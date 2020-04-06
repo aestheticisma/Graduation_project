@@ -1,0 +1,85 @@
+currently apps use gnome_help functions show help files, gnome_help part deprecated gnome_help
+see also gnome goal proposal
+http://live.gnome.org/action/show/gnomegoals/removegnomeopengnomehelp
+created attachment (id=105668) [details]
+patch adding gtk_show_uri gtk_show_help gtk+
+gtk_show_help function missing |return ret;|.
+forgot add new funcs gtk/gtk.symbols .
++ * modify terms gnu lesser general public
++ * license published free software foundation; either
++ * version 2 license, (at option) later version.
+\"lesser gpl version 2\".
+lesser gpl version 2.1 (or library gpl version 2).
+somehow feel gtk_show_help() gnome oriented included form.
+told gtk_show_uri() work nicely major supported platforms.
+hwoever case gtk_show_help().
+since functionality gtk_show_help() easily implemented top gtk_show_uri(), sufficient provide gtk_show_uri() now.
+created attachment (id=105671) [details]
+updated patch. adding ret gtk symbols
+christian, copied license files gtk+.
+opened 5 6 files same.
+guess better idea change licenses one go
+what's consensus this?
+commit gtkshow.c gtk+ remove gtk_show_help?
+update patch remove gtk_show_help() start with.
+created attachment (id=106302) [details]
+patch removing gtk_show_help
+one maintainers decided patch? thanks
+gtk_show_uri allows null parent, multi-head safe.
+take mandatory gdkscreen argument since function care less parent widget beyond screen?
+make parent set mandatory.
+gtkwidget *parent saves calling gtk_widget_get_screen everytime gtk_show_uri
+what's opinion others?
+think parent mandatory, situations
+may parent all.
+mandatory parent would bad, ross explained comment #11.
+imo best solution change function take gdkscreen instead parent widget.
+hurt much call gtk_widget_get_screen().
+created attachment (id=107888) [details]
+updated gtk_show_uri patch using gdkscreen input
+thanks comments.
+comments?
+ping. patch applied?
+one maintainers make decision patch.
+thanks
+comments:
+- wrt parent issue, think function accept null there.
+forced call gdk_widget_get_screen() annoyance, gdkapplaunchcontext handles unset screen already.
+- documentation needs go detail kind 'uri' function accepts.
+standard this, unfortunately, gnome-vfs-&gt;gio transition unearthed number problems due this.
+- i'd interested function mounts volume opening it.
+e.g. panel needs (see bug 529243 ).
+could separate function, gtk_uri_show could take flags.
+created attachment (id=109974) [details]
+updated patch. gdkscreen null
+matthias, thanks review.
+i've updated patch first two comments.
+third comment (the auto mounting).
+would gtk_show_uri need extra flags this?
+could add code tries mount necessary.
+patch bug 529243 uses libgnomeui/gnome-password-dialog.h can't used gtk+
+want do?
+commit patch (quite apps could reduce dependency libgnomeui friends already) later add mounting part
+matthias: forced call gdk_widget_get_screen good thing avoids multiscreen bugs.
+gdkapplaunchcontext handles it, say, sounds like ought fixed too.
+really way gdk/gtk layer know screen used.
+ok, bug report gotten silly.&lt;/monty-python&gt;
+99% use cases, user interacts widget, result, program wants show uri screen widget.
+99% remaining 1% use cases, program opinion screen show uri (eg, gnome-open), going pass null parent regardless whether parent gtkwidget gtkscreen.
+(or mandatory gtkscreen case, would always call gdk_screen_get_default().)
+given 10-line function, seems silly make interface less convenient 99% users cover additional 0.01% use cases.
+assuming actually programs need show uris specific screens correspond live widget, developers programs cut paste gtk_show_uri source change accordingly.
+accordingly.
+jaap: way handle mounting gtk+ use gtkmountoperation.
+i'm 100% happy single-function header gtkshow.h, really better alternative.
+probably ok commit form now, we'll figure mounting later.
+thanks review. committed
+2008-05-25 jaap a. haitsma &lt;jaap@haitsma.org&gt;
+reviewed by: matthias clasen
+* gtk/makefile.am:
+* gtk/gtk.h:
+* gtk/gtk.symbols:
+* gtk/gtkshow.c: (gtk_show_uri):
+* gtk/gtkshow.h:
+add gtk_show_uri make showing uris really easy.
+fixes bug #514396

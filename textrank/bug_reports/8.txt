@@ -1,0 +1,82 @@
+javadoc iadaptermanager.computeclassorder(class):
+returns class search order given class.
+search order class definition class x extends implements a, b follows:
+- target's class: x
+- x's superclasses order object
+- breadth-first traversal target class's interfaces order returned getinterfaces (in example, superinterfaces b superinterfaces)
+comment perfectly clear.
+particular, complete example explicitly listing exact order example classes interfaces returned.
+came slightly richer example:
+interface extends m, n
+interface b extends
+class implements c,
+class x extends implements a, b
+[the declarations interfaces c, d, m, n, trivial.]
+order classes interfaces returned adaptermanager.computeclassorder(x) is:
+class x
+interface
+interface b
+interface
+interface n
+interface
+class
+interface c
+interface
+class java.lang.object
+conflicts javadoc. class x first thing returned, *not* followed \"x's superclasses order object\".
+followed breadth-first list x's interface hierarchy\", *then* followed x's superclass y, followed breadth-first list y's interface hierarchy; on, java.lang.object.
+also, javadoc reads contradiction:
+breadth-first traversal target class's interfaces order returned getinterfaces
+vs.
+example, superinterfaces b superinterfaces
+actually happens *does* feel like \"breadth-first\" search;
+would accurately described \"a superinterfaces b superinterfaces\".
+maybe i'm reading wrong....
+might worth discussing \"preferred\" behavior: behavior described javadoc behavior implemented adaptermanager.
+ways classes first, followed interfaces might make sense current implementation....
+but, whole \"backward-compatibility\" thing worry about....
+right counts.
+implementation match spec, contradiction spec itself.
+question it.
+- contradiction, think stick breadth-first search, delete parenthetic comment example (\"a superinterfaces b superinterfaces\")
+- spec matching behaviour, instinct \"fix\" spec match implementation, avoid risk breaking clients.
+would subtle change could affect clients unpredictable ways.
+hand really compelling reasons change implementation match spec, i'd curious hear them.
+research found implementation match spec febuary 20, 2004, change implementation.
+time spec part api.
+spec later added api (iadaptermanager#computeclassorder) without checking implementation still matched.
+i'm going archeology see figure changed lookup order.
+would interesting know triggered change behavior.
+guess question whether superclasses take precedence interfaces defined lower hierarchy, i.e. implementation take precedence specification?
+see arguments either way; guess would probably come side giving specification precedence.
+so, guess argue interfaces could precede classes?
+argh...why even ask? :-)
+anyway, use cases moment argue one way other.
+curiosity got better me, years wondering, \"just platform resolve adapter return?\" :-)
+looks like change made inadvertently large batch changes add support adapters extension point (bug 32498).
+think since change introduced accidentally, clear violation long-standing specification, i'm leaning towards fixing implementation.
+noticed spec also mention interfaces target class' superclasses.
+think corrected spec read:
+* &lt;ul&gt;
+* &lt;li&gt;the target's class: x
+* &lt;li&gt;x's superclasses order &lt;code&gt;object&lt;/code&gt;
+* &lt;li&gt;a breadth-first traversal target class's interfaces order returned &lt;code&gt;getinterfaces&lt;/code&gt; (in example, x superinterfaces superinterfaces) &lt;/li&gt;
+* &lt;/ul&gt;
+note comment changed \"x superinterfaces y...\" opposed \"a superinterfaces b...\".
+thus clarifies interfaces superclasses considered, fixing contradiction specification interface search order.
+created attachment (id=122293) [details]
+fix v01
+created attachment (id=122297) [details]
+test case
+test case using richer example
+fix tests released head.
+sounds reasonable.
+one tiny nit-pick though.
+last entry bullet list reads:
+breadth-first traversal class's interfaces order returned &lt;code&gt;getinterfaces&lt;/code&gt; (in example, x superinterfaces superinterfaces) &lt;/li&gt;
+might accurate say:
+breadth-first traversal class's interfaces order returned &lt;code&gt;getinterfaces&lt;/code&gt; (in example, x's superinterfaces y's superinterfaces)
+since x actually included \"traversal\".
+thanks.
+good point, released clarification head.
+thanks again.

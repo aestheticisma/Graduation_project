@@ -1,0 +1,18 @@
+releng test dnf last couple builds. running locally occasionally see crashes browsertests suspect crashes cause dnf.
+created attachment (id=135853) [details]
+pushing fix rc2, risky make change rc1 now.
+rc1 we'll comment crashing tests tests run properly.
+seen bug affect usability eclipse, running swt test suite.
+problem strategy use release pools periodically (in readanddispatch, createwidget, etc) able run test suites, releases main thread pool created device stored thread local dictionary.
+pool removed thread local dictionary got reused next time display created.
+new strategy release main thread pool device count goes zero.
+obviously, something low level needs much testing get.
+get test build run verify tests pass/no crashes/no oom/etc?
+also, two day test pass version swt includes change.
+created attachment (id=136083) [details]
+new fix
+new fix simpler, make sure pool thread dictionary always valid, way another display created use released pool.
+problem pool released early.
+call in, cannot released top stack pool.
+tests showing problem put back (just head).
+fixed &gt; 20090515

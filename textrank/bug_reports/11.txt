@@ -1,0 +1,41 @@
+images rescaled gimp always defaults linear scaling.
+sometimes want bunch images cubic scaling.
+would handy scale dialog remembered last setting always present one.
+default interpolation routine choosen preferences dialog.
+thought would easier remembered last setting, way newbie search trough preferences, handy want scale set images different way normally
+jaap right.
+know preferences setting saw bug report.
+applies general options user set without going preferences dialog: remember last setting, need entry preferences dialog.
+would need entry whether save last used setting, users want this.
+michael, agree extra entry whether save setting yes no.
+would clutter interface even more.
+still need entry preferences need extra entry scale dialog whether save last used setting.
+always remembering last setting conceptually far easiest new users.
+furthermore think really problem change setting (in case also click save setting).
+times change setting.
+agree convenient able set default value place used (e.g., image-&gt;scale dialog) instead open preferences find corresponding option.
+useful familiar options available preferences.
+however, disagree proposal last setting automatically become default: set default cubic (i might change lanczos soon) expect used time.
+time time, scale bitmap image without interpolation.
+want become new default give bad results scale another image two days later.
+way change default scale dialog (which probably good idea), require explicit action user.
+could button like \"set default\" checkbox \"remember setting\" next \"interpolation type\" dropdown list.
+&gt;&gt;jaap right. know preferences setting saw bug report.
+lol, too.
+think suggestion \"set defaults\" button good all-round solution satisfies camps.
+see bug request deal scaling units (percent/pixel) way.
+http://bugzilla.gnome.org/show_bug.cgi?id=357424
+think \"set defaults\" button would clutter ui.
+change remember settings across dialog invocations.
+closing fixed.
+(please reopen strongly disagree, please without non-ugly suggestion gui)
+2006-10-14 michael natterer &lt;mitch@gimp.org&gt;
+remember settings scale resize dialogs images layers.
+fixes bug #164995, bug #316392, bug #357424.
+* app/dialogs/scale-dialog.h: removed gimpscalecallback typedef.
+* app/dialogs/dialogs-types.h: added here.
+* app/dialogs/image-scale-dialog.[ch]: made imagescaledialog struct private, return gtkwidget* image_scale_dialog_new() use gimpscalecallback public api.
+* app/actions/actions-types.h: #include \"dialogs/dialogs-types.h\"
+* app/actions/image-commands.c: changed according image scale dialog changes. remember scale dialog's unit (if \"percent\") interpolation type across dialog invocations.
+also remember resize dialog's unit (if \"percent\").
+* app/actions/layers-commands.c: remember scale resize dialog stuff image-commands.c

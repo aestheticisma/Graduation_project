@@ -1,0 +1,93 @@
+version: (using kde devel)
+installed from: compiled sources
+identation works fine.
+but:
+let's see example:
+hello1
+hello2
+hello3
+go cursor hello2 press ctrl-i, hello2 moved even right.
+right (and expected) behaviour hello moved left right hello1.
+(compare behaviour tab xemacs)
+eyes, really needs fixed.
+thanks!!!
+martin
+oh dear, formatting lost.
+imagine, hello2 moved bit right, like \\t front it.
+martin
+hmm, would hello2 move left?
+saying align 'closest' tab boundary?
+tabspace 8 characters
+........hello
+...........hello2
+ctrl-i hello2 move left 3 away left boundary 5 away right one?
+kate, ctrl-i semantics always unconditionally insert 'positive' indent.
+positive meaning right.
+bug wrt editors ...
+hi,
+hello2 moved left, aligned line above.
+martin
+martin kã¶bele 2003-10-25 09:30:53 -------
+let try again:
+let's say code
+something
+{
+........hello1();
+...........hello2();
+........hello3();
+}
+go cursor line hello2, hello2 moved left,
+1.) identation +8 spaces block, beginning opening parentheses (amount spaces depends configuration course).
+2.) hello1 specifies block shall aligned.
+martin
+right, looking 'align' action.
+'wishlist' since kate really (see below).
+unconditional indent left right.
+want hello2 move left go tools hit 'unindent' move left tab stop.
+'indent' move position 16, next tab stop right.
+alternatively try 'clean indentation' see aligns misaligned blocks code you.
+even misaligned blocks code time can.
+*** bug 71479 marked duplicate bug. ***
+*** bug 75951 marked duplicate bug. ***
+available cvs.
+currently works use 'cstyle' auto-indenter.
+default shortcut ctrl + tab (controlled tab) align current line block text select according normal c/c++ conventions.
+see also bug 40656 information warning.
+work things inside parenthesis, like parameter lists conditionals?
+i'd like emacs:
+( foo == 1 &&
+bar == 2 ) {
+doit();
+}
+case second condition aligned first one, according normal stuff.
+parameter list handling like:
+int foo(
+int bar,
+char *baz,
+struct sizzle *gee
+)
+{
+...
+}
+case closing parenthesis aligned opening one.
+yes, first example works expected.
+second example kinda works right now.
+parameter lists aligned like expect needs reference character 'int foo (' line judge col align that.
+also, closing parenthesis aligned opening one.
+really problem you, open another wishlist item appropriate examples.
+great, thanks lot!!
+one little bug though:
+. . foo();
+. . bar();
+cursor line foo() bar(), line tabs made yet press shortcut new align, cursor move foo().
+rest works nicely!
+thanks guys!
+maybe re-open bug since think feature incomplete, open new bugreport this.
+thanks
+martin
+regards foo-bar problem, intentional.
+want indent empty lines would leave quite bit useless leading spaces selecting large regions hitting align -- also much slower skip lines formatting entire document.
+guess could make that's case aligning _block_ text though --
+i'll see do.
+cannot get feature work.
+working kde4 beta2?

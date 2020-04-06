@@ -1,0 +1,85 @@
+version: svn (using devel)
+compiler: gcc 4.3.2 gentoo
+os: linux
+installed from: compiled sources
+navigate, using file browser, song collection select \"move collection\", ensure new file name old file name, song renamed (not renamed), deleted.
+fix make sure songs moved collection removed \"move collection\" operation.
+patch below.
+created attachment (id=28078) [details]
+bug fix
+patch jason a. donenfeld &lt;jason@zx2c4.com&gt;
+patch fixes bug checking song collection removing move operation.
+potential problem may fail remove collection moving track one collection another.
+record, patch incorrect applied.
+created attachment (id=28083) [details]
+semi correct patch
+patch jason a. donenfeld &lt;jason@zx2c4.com&gt;
+patch fixes problems patch gets heart issue: \"kio::file_copy\"ing src dest erase file.
+patch checks see kurls identical attempting copy.
+logic used elsewhere modified file, chosen keep convention.
+however, still suffers problem: kurls point location different string paths, example /home/user/music/artist/song.mp3 /home/user/music/artist//song.mp3, test fail. therefore, patch needs fix comparison problem, ready applied.
+jason, use kurl::cleanpath() fix this.
+see here:
+http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classkurl.html#05eaea3296e3778f04014bd943ac894a
+created attachment (id=28087) [details]
+fixed final flaw
+mark - thanks suggestion.
+patch solves patch's problems.
+patch jason a. donenfeld &lt;jason@zx2c4.com&gt;
+\"kio::file_copy\"ing src dest erase file, patch checks see kurls identical, cleaning urls, attempting copy.
+since max author wrote collection code (including copying/moving), i'm going wait approval patch committing, lest make oversight.
+sebr - sounds good.
+commit myself, hopefully, svn commit access soon enough.
+(sysadmins usually pretty fast, no?)
+can't test moment, i've got couple comments reading bug report patch:
+look api documentation, using kio::file_copy source destination url sounds like bug kdelibs.
+think actually happening.
+moving filebrowser, sqlcollectionlocation notice dealing file already collection, therefore use special code stops removing files source collection.
+bit surprised patch even works (does it?).
+collectionlocation removing source files (because *moving* files) copy operation, probably files actually deleted.
+max,
+initial thought too...
+really problem removing source moving.
+fully mapped flow, saw section never even gets called sourcelocation = 0 (if coming
+file another collection).
+logic part works fine, m_tracksremovedbydestination correctly populated processed.
+thing removal code never called sourcelocation = 0.
+generally copying moving file delete file; i've seen behavior languages commands, kio appear exception.
+patch fact work.
+something still may suspicious, though.
+jason, sure filecollectionlocation::removetrack get called?
+checked code starts move operation filebrowser, creates filecolelctionlocation.
+
+therefore sourcelocation always 0, file copied (and deleting file whehn copying moving onto *is* bug), *collectionlocation* call removetrack source location part workflow.
+aaaaa hah! job never assigned, slotjobfinished never called, slotjobfinished never called, slotcopyoperationfinished never called, slotcopyoperationfinished never called, slotfinishcopy never
+called, slotfinishcopy never called, removesourcetracks never called, removesourcetracks never called, remove never called, remove never called, qfile::remove never called.
+happen though.
+works, right: something screwy going on.
+slotcopyoperationfinished get called independently slotjobfinished? supposed work way?
+no, slotcopyoperationfinished called actually copy tracks.
+that's bug.
+ok. see works now.
+new patch coming soon.
+created attachment (id=28094) [details]
+adds movedbydestination collectionlocation
+ignoreddestinations removed, longer pertinent, since used flow job event.
+movedbydestination added collectionlocation, since something collectionlocations potentially need account for.
+slotcopyoperationfinished called job created.
+since m_removesources protected part collectionlocation, collections cannot move copy set m_removesources false constructor.
+like this, i'm able commit now.
+i'm guessing suggestions.
+probably make map private add another protected accessor function.
+go route, also make protected accessor functions virtual add proper comment documentation.
+svn commit 876841 jdonenfeld:
+prevents deleting song moving organizing original path name making sure source
+destination different [re]moving.
+functionality also potentially extended collectionlocations, base class public functions keep track things.
+also cleans logic flow quite bit.
+bug: 173341
++29 -2 collectionlocation.cpp
++18 -3 collectionlocation.h
++27 -44 sqlcollection/sqlcollectionlocation.cpp
++1 -6 sqlcollection/sqlcollectionlocation.h
++5 -5 support/filecollectionlocation.cpp
++0 -5 support/filecollectionlocation.h
+websvn link: http://websvn.kde.org/?view=rev&revision=876841

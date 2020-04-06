@@ -1,0 +1,39 @@
+community voted for. \r\nexamples include double-click-drag select multiple words, triple-click, extensible hyperlink support spell checking. \r\nwe also improve current search/replace dialog. \r\n[platform text, platform ui,swt]
+&gt;we also improve current search/replace dialog.
+minimal improvements like able resize dialog.
+completely redesign dialog e.g. provide firefox-like search unless contributed patch.
+things look at:
+-- ctrl-backspace work text editor widgets (try fields search dialog text fields plugin.xml editor)
+-- support seaching multiline text alow replace multiline text
+-- improve usability search dialog.
+namely, replace direction radio buttons additional buttons like \"find previous\", \"replace previous\".
+would make getting back accidentally skipped search match much easier.
+&gt;-- ctrl-backspace work text editor widgets (try fields search dialog text fields plugin.xml editor)
+please file separate bug reports, e.g. control pde editor - thanks.
+&gt;-- ctrl-backspace work text editor widgets (try fields search
+problem jdt ui started map text editor's editing commands onto text, combo widgets using textfieldnavigationhandler.
+would possible push parts textfieldnavigationhandler platform text provide dialogs around editor think general issue since users also expect navigation commands work
+wizards, ctrl+h search pages etc.
+can't adopted jface depend text editor plug-ins.
+solve this, jface adopt/define editing commands used along widgets would provide navigation handler(s).
+file bug report platform ui describe problematic.
+please add cc-list. thanks.
+(in reply comment #0)
+&gt; extensible hyperlink support
+would prefer extensive hyperlink support much lower (ideally styledtext widget not, jface level).
+ui forms would like port formtext styledtext.
+styledtext added many key features 3.2 time frame hyperlink support last one need order port.
+dejan, allone ;-)
+feel free add comments bug 156219.
+one text land bug 88293.
+i'd like throw bug 145959 (forgive apply text editors):
+windows, multi-line text boxes used e.g. run-&gt;arguments dialog support return key two ways:
+[return]: add cr/lf current text box
+[ctrl-return]: send return key parent dialog (similiar executing default action).
+&gt;i'd like throw bug 145959 (forgive apply text editors):
+nothing forgive ignore ;-)
+plan item covers platform text.
+place feature platform swt.
+completed i20070327-0800.
+hoping drag source code 3.2, perhaps they'll get 3.3.
+course, optional would man run ahead horseless carriage red flag.
