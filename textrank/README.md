@@ -1,6 +1,6 @@
 ### Package:
-codecs textrank4zh nltk
-需要下载nltk.stopwords
+* codecs textrank4zh nltk
+* 需要下载nltk.stopwords
 
 ### Results
 | Acc | Pr | Re | F1 |
