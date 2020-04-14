@@ -9,5 +9,5 @@
 | 方法 | 创建时间 | 更新时间 | 进度 |
 | - | - | - | - |
 | [1.Textrank(调用textrank4zh)](textrank/) | 2020-4-06 | 2020-4-06 | 待优化 |
-| [2.Glove+Textrank](glove+textrank/) | 2020-4-14 | 2020-4-14 | 待优化 |
+| [2.词向量+Textrank](glove+textrank/) | 2020-4-14 | 2020-4-14 | 待优化 |
 
