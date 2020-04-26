@@ -1,0 +1,18 @@
+ The releng test have been DNF for the last couple builds. Running locally we occasionally see crashes in the BrowserTests so we suspect these crashes to be the cause of the DNF.
+ Created an attachment (id=135853) [details]
+ Pushing this fix for RC2, as it's too risky to make this change for RC1 now.
+ For RC1 we'll comment out the crashing tests so that the other tests can run properly. 
+ We have NOT seen this bug affect the usability of Eclipse, only the running of the SWT test suite.
+ The problem is that the strategy we use to release pools periodically (in readAndDispatch, createWidget, etc) to be able to run the test suites, releases the main thread pool created be Device and stored in a thread local dictionary.
+ The pool was not removed from the thread local dictionary and got reused the next time a display was created.
+ The new strategy is to only release the main thread pool when the device count goes to zero.
+ Obviously, something this low level needs as much testing as it can get. 
+ Can we get a test build run to verify all tests pass/no crashes/no OOM/etc? 
+ Also, you should be doing the two day test pass on a version of SWT that includes the change.
+ Created an attachment (id=136083) [details]
+ new fix
+ The new fix is simpler, we just make sure the the pool in the thread dictionary is always valid, that way when another display is created it will not use a released pool.
+ There was a further problem where the pool was released too early. 
+ If we are in call in, we cannot released the top of the stack pool.
+ The tests that where showing this problem have been put back (just in HEAD).
+ Fixed &gt; 20090515

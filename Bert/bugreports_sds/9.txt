@@ -1,0 +1,17 @@
+ User-Agent:       Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12)Gecko/20050915 Firefox/1.0.7 (ax)
+ Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12)Gecko/20050915 Firefox/1.0.7 (ax)
+ Firefox currently supports a wide number of stand alone e-mail applications (including it's own Thunderbird client), when an e-mail link is clicked on in Firefox.  
+ To the best of my knowledge it still does not support web based e-mail clients such as g-mail in this fashion.
+ The idea is that if one prefers to use a web based e-mail account, they should have the option to configure firefox to log into that web based e-mail account and open a compose new message window.
+ I understand this may require some colaboration with the popular web based e-mail services such as gmail and aim mail, but I think it would be worth the benifit.
+ Reproducible: Always
+ Something like the WebmailCompose extension?
+ Other enhancement requests like this have been marked as dups of bug 11459, but I think that's wrong.  
+ As far as I can tell, bug 11459 is a combination of a design flaw specific to Seamonkey and a tangentially related enhancement request that also applies to Firefox, and nothing is happening there.
+ It's sad that mailto: links don't work for most webmail users, especially since webmail is so popular.
+ Webmail services can help give users programs that alter system mailto: behavior (e.g. the unofficial \"G-Mailto\" and the official \"Gmail Notifier\"), and Firefox users can download the WebmailCompose extension, but i think it would be better if this were an option in Firefox itself.
+ Not going to block on this, would be good to have this generically for feeds as well, but this may have to wait for Gecko 1.9
+ Using Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1) Gecko/20090615
+ Firefox/3.5
+ Is this not now fixed?
+ Indeed.

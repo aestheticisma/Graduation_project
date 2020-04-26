@@ -1,0 +1,56 @@
+ Group title is not taken into account by Window-Eyes 4.5.
+ The group title should be pronouced before radio buttons or other controls.
+ It is not, this is bug since blid users cannont know what the group content is dealing about.
+ Interesting. 
+ Both Window-Eyes and JAWS will read a Group title IF the Group has a single child that does not have an obvious name, for example, a text or a list or a combo box.
+ But neither screen reader will read a Group title if it groups a set of radio buttons or check boxes, say. 
+ (Or, I assume, if it is surrounding something that has an obvious label to read instead, like a button, and if the child control takes focus).
+ We have several dialogs - notably, the search and find/replace dialogs, that have groups with radio/checkbox children. 
+ The screen readers do not read the group titles in these dialogs.
+ I will bring this to the attention of the screen reader developers.
+ For now, an extreme, but sort-of useable work-around in Window-Eyes is to tell it to read every control in a newly-opened dialog. 
+ You can do this with:
+ Global -&gt; Verbosity -&gt; Activated... Entire Window if Dialog
+ CCing Frank and Lin.
+ Here are 2 examples of eclipse dialogs where a group title is not read:
+ 1) Click on the flashlight (Search) tool in the main toolbar. 
+ Click on any of the tabs in the notebook. 
+ All of the pages have a \"Scope\" group. 
+ Some of the pages have a \"Search For\" group or a \"Limit To\" group. 
+ None of these titles are read by JAWS.
+ 2) Open an editor on any file, and then select Edit -&gt; Find/Replace... (or type ctrl+F) to get the Find/Replace dialog. 
+ The \"Direction\", \"Scope\", and \"Options\" group titles are never read.
+ I think the best thing would be if these were read when one of the radio or checkbox controls gets focus (i.e. when the dialog is activated, and when the user tabs to a new group or clicks on a control in another group.
+ Today, Frank and Lin tested with JAWS 5.0, 5.1 and 6.0 beta, we found both the dialogue from flashlight and Find/Replace from the Edit group titles are spoken correctly.
+ Created an attachment (id=14333) [details]
+ GroupTests.java
+ It is not working for me, so either I didn't make the problem clear enough, or you have some JAWS settings set that I do not have set. 
+ I just installed JAWS 5.1, and in the installation process, it asked if I wanted to keep settings from my previous JAWS version. 
+ I said \"No\", because I want my JAWS 5.1 to be \"out-of-the-box\". So I have NO settings in my JAWS 5.1, so no surprises.
+ I will attach a little code snippet here that shows the problem very simply.
+ Copy the attachment into your snippets directory, refresh your snippets project, select GroupTests.java, and Run -&gt; Java Application. 
+ What I hear when I tab or down/up arrow is \"green\" or \"blue\", depending on who has focus.
+ What I want to hear is \"Foreground - green\" and \"Background - blue\".
+ Created an attachment (id=14443) [details]
+ GroupTests.java
+ Sorry - Bugzilla defaulted to saving the java file as octet-stream, which isn't very useful. 
+ I am attaching it again, and specifying type \"text\". 
+ Please ignore the previous attachment and get this new one.
+ Carolyn, Sorry, but I used your code snippet and I do indeed hear the group box names along with the individual radio buttons.  
+ I am using JAWS 5.1.383.
+ I am also using JAWS 5.10.383, and I still don't hear \"Foreground\" or \"Background\". 
+ we must have different settings somehow.
+ I will attach my default.jcf (I believe that it is \"straight from the factory\". 
+ I do not have a javaw.jcf. 
+ Maybe we can figure out what setting you have set that I don't have set.
+ Created an attachment (id=15052) [details]
+ C:\\JAWS510\\SETTINGS\\enu\\Default.JCF
+ After further investigation, we determined that the problem only happens on Windows XP with the javaw.exe.manifest installed in jre/bin (this tells WinXP to use the WinXP common controls - version 6.0 - instead of the Win2K common 
+ controls - version 5.x).
+ This problem is solved in JAWS.  
+ The window class for this object has been reassigned internally in JAWS.  
+ This fix will be reflected in JAWS version 6.0 which is due out shortly.
+ Verified that this now works in JAWS 6.0.
+ Thank-you, Frank!
+ *** Bug 51963 has been marked as a duplicate of this bug. ***
+ close

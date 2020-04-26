@@ -1,0 +1,56 @@
+ the about:mozilla page in RC2 is right-aligned, but has LTR directionality instead of RTL. 
+ as a result, the dot at the end of the sentence is on the right side instead of the left, and both the parentheses around the \"10th edition\" line are on the right side.
+ i also think the quote source should be on the left side. 
+ perhaps the page should take CSS from intl.css, where localisers can override some of the classes or add a class to set direction.
+ Actually I would like not to add yet another entry in intl.css but to fix it in aboutMozilla.xhtml. 
+ Pike, can we think about it? 
+ Same behavior also affect other internal about pages.
+ * about:plugins
+ pages that get RTL:
+ * about:crashes
+ * about:robots - Has some open issues. See bug 427029
+ Pages that not translated, such as about:cache, about:credits and about:buildconfig should stay LTR.
+ the about:mozilla page used to be a file in the language pack, allowing the localizer to control it's look. 
+ moving this out of the language pack created this problem.
+ the file dom/chrome/global.dtd control has direction control with the entity locale.dir. 
+ We can, actually, support RTL using something like &lt;body dir=&locale.dir;&gt;.
+ Created an attachment (id=324147) [details]
+ patch
+ Here is my patch. 
+ Tested on Hebrew locale.
+ Please let me know if you prefer 'body{direction:&locale.dir;}' instead of the current '&lt;body dir=\"&locale.dir;\"&gt;'.
+ the W3C prefers markup and not CSS:
+ http://www.w3.org/International/questions/qa-bidi-css-markup
+ \"Because directionality is an integral part of the document structure, markup should be used to set the directionality for a document or chunk of information, or to identify places in the text where the Unicode bidirectional algorithm alone is insufficient to achieve desired directionality.\"
+ (In reply to comment #6)
+ &gt; the W3C prefers markup and not CSS:
+ Actually I'm not sure how we can do it using CSS.
+ I have no idea if something like 'body{direction:&locale.dir;;}' is a valid. 
+ To me, the trunk solution for this is to have a separate entity for each of those pages, to work around bugs like bug 427029.
+ Once you localize a page we ship, you would then set the dir from ltr to rtl.
+ That's not a solution for the 1.9 branch, though, there we should just re-use locale.dir from global.dtd.
+ IMHO. Gavin, what do you think?
+ (In reply to comment #8)
+ &gt; To me, the trunk solution for this is to have a separate entity for each of those pages, to work around bugs like bug 427029.
+  
+ &gt; Once you localize a page we ship, you would then set the dir from ltr to rtl.
+ &gt; That's not a solution for the 1.9 branch, though, there we should just re-use locale.dir from global.dtd.
+ Sounds fine to me, I guess... 
+ do we really need to worry about the \"RTL locale that's falling back to en-US\" though? 
+ Ideally we could just take this patch and not worry about having localizers update various different attributes based on
+ localization state, and just rely on them completing all the localization work to make it look decent.
+ In other words, isn't bug 427029 an edge case given the nature of about:robots and it's \"optional\" status for localizers? 
+ Seems like we could just live with it not looking perfect for RTL locales that haven't localized it rather than adding complexity.
+ Well, that depends on how disciplined folks are. 
+ We could make that call per page, like in the case of the robots page, it might make sense to have an open window for not translating it, for neterror pages probably less. 
+ There we could even get extreme and do it per div ;-).
+ I'm adding another screenshot to bug 427029. 
+ Axel, Gavin - You are welcome to comment on that issue right there. 
+ We are not far from 1.9.0.1 deadline. 
+ Please approve1.9.0.1. 
+ Thank you.
+ Please get this landed on mozilla-central before getting approval for 1.9.0.x.
+ (From update of attachment 324147 [details])
+ Please re-request approval after getting this landed on mozilla-central.
+ I'm not really sold on taking this given that it's more \"cosmetic\" than anything else...
+ http://hg.mozilla.org/index.cgi/mozilla-central/rev/d12488eef3f5

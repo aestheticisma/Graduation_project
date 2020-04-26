@@ -1,0 +1,93 @@
+ Version:            (using KDE Devel)
+ Installed from:    Compiled sources
+ identation itself works fine.
+ But:
+ let's see this example:
+ 	hello1
+ 	    hello2
+ 	hello3
+ If you go with the cursor to hello2 and press ctrl-i, hello2 is moved even further to the right.
+ The right (and expected) behaviour is that hello should be moved to the left so it is right under hello1.
+ (compare it with the behaviour of tab in xemacs)
+ In my eyes, this really needs to be fixed.
+ Thanks!!!
+ Martin
+ oh dear, the formatting is lost.
+ Imagine, that hello2 is moved a bit to the right, like a \\t in front of it.
+ Martin
+ Hmm, why would hello2 move left?  
+ Are you saying it should align itself to the 'closest' tab boundary?
+ So if you had a tabspace of 8 characters and you had
+ ........hello
+ ...........hello2
+ Ctrl-I on hello2 should move it left because it's only 3 away from the left boundary but 5 away from the right one?
+ For Kate, ctrl-I semantics have always been to unconditionally insert a 'positive' indent. 
+ Positive meaning to the right.  
+ This is a bug wrt other editors ...
+ hi,
+ hello2 should be moved to the left, because it is not aligned with the line  above.
+ Martin
+ Martin KÃ¶bele  2003-10-25 09:30:53  -------
+ let me try it again:
+ let's say we have the code
+ something 
+ {
+ ........hello1();
+ ...........hello2();
+ ........hello3();
+ }
+ if you go now with the cursor in the line of hello2, hello2 should be moved to the left, because
+ 1.) identation is about +8 spaces in a block, beginning from the opening parentheses (amount of spaces depends on your configuration of course).
+ 2.) hello1 specifies where the block shall be aligned.
+ Martin
+ Right, so you are looking for an 'Align' action. 
+  This is more of a 'wishlist' since Kate doesn't really have this (see below).  
+ It has unconditional indent left and right.
+ If you want hello2 to move left go to Tools and hit 'Unindent' which will move it left to the tab stop. 
+ If you 'Indent' it will move to position 16, the next tab stop to the right.
+ You can alternatively try 'Clean Indentation' and see if that aligns the misaligned blocks of code for you. 
+ It will even out the misaligned blocks of code most of the time if it can. 
+ *** Bug 71479 has been marked as a duplicate of this bug. ***
+ *** Bug 75951 has been marked as a duplicate of this bug. ***
+ This is available in cvs. 
+ Currently it works only if you use the 'cstyle' auto-indenter.  
+ The default shortcut is CTRL + TAB (controlled tab) and will align the current line OR the block of text you select according to normal c/c++ conventions.
+ See also bug 40656 for further information and a warning.
+ How does this work with things inside parenthesis, like parameter lists and conditionals?
+ I'd like to have it as in emacs:
+ if ( foo == 1 &&
+      bar == 2 ) {
+    doit();
+ }
+ In this case the second condition should be aligned with the first one, not according to normal stuff.
+ And parameter list handling like:
+ int foo(
+          int bar,
+          char *baz,
+          struct sizzle *gee
+         )
+ {
+     ...
+ }
+ In this case the closing parenthesis should be aligned with the opening one.
+ Yes, your first example works as expected.
+ Your second example kinda works right now.  
+ Parameter lists are aligned just like you expect but it needs a reference character in the 'int foo (' line to judge what col to align to after that.  
+ Also, closing parenthesis are not aligned with the opening one.  
+ If this is really a problem for you, open up another wishlist item with appropriate examples.
+ great, thanks a lot!!
+ there is one little bug though:
+ .	.	foo();
+ .	.	bar();
+ if your cursor is in the line between foo() and bar(), in the line where no tabs are made yet and you press now the shortcut for the new align, the cursor just won't move under foo().
+ but the rest of it works very nicely!
+ Thanks guys!
+ Maybe re-open this bug since I think the feature is incomplete, but I can open a new bugreport about this.
+ Thanks
+ Martin
+ With regards to the foo-bar problem, this was intentional. 
+ I didn't want to indent empty lines as that would leave quite a bit of useless leading spaces when selecting large regions and hitting Align -- it's also MUCH slower if I do not skip these lines when formatting an entire document. 
+ I guess I could make it so that's only the case when you're aligning a _block_ of text though --
+ I'll see what I can do.  
+ I cannot get this feature work. 
+ Is this working on kde4 beta2?

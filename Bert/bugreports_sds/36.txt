@@ -1,0 +1,59 @@
+ Version:            (using KDE 4.1.2)
+ Installed from:    Compiled From Sources
+ Amarok version 1.94
+ When moving a large amount of files to my collection, amarok2 opens a file dialog for every single file that it moves. 
+ To reproduce:
+ Make a directory where you would like your music collection to be stored. 
+ Go in to amarok2 and set it up so that the new collection area is included. 
+ Then, right-click on local collection, select organise and select the new destination for the files.
+ Even my Core 2 Duo with 2 GB of RAM could not handle 16,000 file dialogs, and crashed my whole system hard, requiring a reboot.
+ Can we please either:
+ 1) move the files sequentially, or
+ 2) not display a file dialog?
+ Sorry, I can't reproduce this. 
+ I just tried, and there is information shown in the progress bar and nowhere else.
+ I'm copying tracks to my local sql collection. 
+ I assume you are doing the same?
+ Are you using Amarok to move the files? 
+ It still opens a file dialog for every file that it is \"organising\"
+ I just checked again.
+ I have the following options ticked on in the Organise files option.
+ Use cover art for folder icons
+ Ignore \"the\" in artist names
+ Group by file type
+ Replace spaces with underscores
+ restrict to ASCII
+ VFAT safe filenames
+ Overwrite destination
+ It might be that one of those options trigger this, or the combination.
+ Weird.
+ Once I started messing around with what is ticked, the problem went away.
+ Now I am also unable to reproduce it. 
+ I have been able to reliably reproduce the bug. 
+ Use the files tab of amarok, then click on the directory that you want to move the files from, select move to collection. 
+ Select the following:
+ Use cover art for folder icons 
+ Ignore \"the\" in artist names 
+ Group by file type 
+ Replace spaces with underscores restrict to ASCII 
+ VFAT safe filenames 
+ Overwrite destination 
+ It makes lots of file transfer windows for me, every time. 
+ -Evert-
+ I still can't reproduce this.
+  Are you using copying using Amarok's filebrowser, or are you organising the collection browser?
+ How did you install amarok (compiled, packages etc) and which platform are you using
+ I am using Amarok's file browser. 
+ I think so, anyways. 
+ I click on the files tab.
+ I have noticed that I only get the lots of file moving dialogs if I have all of those options ticked. 
+ Right now I am moving my files in to my collection with Overwrite destination unticked and I do not get the file dialogs then. 
+ I downloaded the source of amarok 1.94, and compiled it with gcc 4.2.3
+ I am using Sorcerer Linux, so all software on my system is hand-optimized and locally compiled.
+ -Evert-
+ SVN commit 881542 by seb:
+ Fix boolean logic which caused the progress info to be shown when overwriting tracks during a collection copy.
+ BUG: 174533
+  M  +2 -0      ChangeLog  
+  M  +1 -1      src/collection/sqlcollection/SqlCollectionLocation.cpp  
+ WebSVN link: http://websvn.kde.org/?view=rev&revision=881542

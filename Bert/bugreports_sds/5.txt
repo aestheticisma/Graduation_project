@@ -1,0 +1,102 @@
+ Inspired by Martin Oberhuber's mail about his \"lsc\" script for counting lines in a patch[1], I though that it maybe be worthwhile to embed such thing in the Apply Patch wizard itself. 
+ imo using regexp should be enough here, especially due to the fact that we don't want to make any additional dependencies. 
+ So, my proposal is to allow to specify a regexp rule for lines that should be count as a \"real contribution\".
+ This is what first came to my head:
+ /-\\\\+? (\\s*\\S+\\s*)+$
+ which means \"Count only lines starting with single '+' and a space. 
+ The line must also have at least one non-whitespace character\". 
+ I think this is more/less what Martin's script does.
+ All lines that match the above pattern would be sum up and the info would be displayed somewhere on the Apply Patch wizard. 
+ How does it sound? Martin?
+ Again, I think it's a brilliant idea Martin.
+ [1] sent to eclipse.org-committers
+ The info could be also shown in a patch outline view (see bug 190418).
+ Excellent idea! 
+ Having the line counter right in the apply patch wizard would finally give us a standard way of counting lines that everybody could use easily.
+ My script also ignores \"empty comment\" lines of the form
+    /-\\\\+\\s+[#*]+\\s+$
+ but that's really neglectible and I'm fine with your approach of counting any non-empty added line in the patch.
+ Actually, couldn't your regex even be simpler, say
+    /-\\\\+\\s+\\S
+ since you don't need to check till the end of the line?
+ And actually, if the wizard counts added lines, why shouldn't it also count removed lines? 
+ Giving two separate numbers e.g.
+    10 lines added  20 lines removed
+ This sounds familiar to me since I've seen similar numbers in RCS files before.
+ I'd guess that the regex for removed lines could just be the same as for added lines but the + replaced by a -; and, files removed entirely should contribute the entire number of lines they had before (I believe that the old contents is
+ not recorded in the diff, is it?)
+ Created an attachment (id=94358) [details]
+ Patch
+ Fix that matches all lines from a patch against given regexps (one for added lines and one for removed). 
+ Patterns can be changed on General &gt; Compare/Patch pref page. 
+ I decided to leave them blank by default, so I don't need to worry about different diff output formats which are out there. 
+ However, you can easily set it to a value most convenient to you (i.e. '/-\\\\+\\s+\\S').
+ Created an attachment (id=94360) [details]
+ mylyn/context/zip
+ (In reply to comment #4)
+ &gt; I decided to leave them blank by default, so I don't need to worry
+ So this means it won't work out of the box? But then, the compare/patch feature already needs to analyze patches or it cannot apply them, right? 
+ So I don't quite understand why the same patterns that compare/patch already uses aren't the default for the line counting feature.
+ (In reply to comment #6)
+ &gt; So this means it won't work out of the box? 
+ &gt; But then, the compare/patch feature already needs to analyze patches or it cannot apply them, right? 
+ &gt; So I don't &gt; quite understand why the same patterns that compare/patch already uses aren't the default for the line counting feature.
+ I guess you're right Martin, but this will make the patch a little bit more complicated as the current patching mechanism is not very helpful in counting added/removed lines. 
+ I'll just need some extra time to do this.
+ Created an attachment (id=96838) [details]
+ Patch 2
+ Created an attachment (id=96839) [details]
+ mylyn/context/zip
+ The latest patch ensures, that when no regular expressions is provided, the patcher will use internal patterns to distinguish which lines have been added or deleted. 
+ However, this will work only for patches in unified and context diff output format. 
+ As reported in bug 227742, it appears that standard patch format is no longer supported (or it has never been).
+ Moreover, I logged bug 228000 to make sure we add some automated tests to cover this newly added feature.
+ Created an attachment (id=96993) [details]
+ Patch 3
+ Previous patch with some minor adjustments.
+ The latest patch applied to CVS HEAD. 
+ Martin, would you like to try it out and let me know what do you think? 
+ Feel free to open a new bug if there is something I missed.
+ I tested this with I20080422-0800, on the attached patch from bug 227572 attachment 97084 [details]. 
+ Your dialog counts 207 added and 29 removed lines, but my script only counts 151 added lines.
+ It looks like you are also counting empty lines, which doesn't seem overly useful to me.
+ Created an attachment (id=97398) [details]
+ The preference page
+ The \"internal\" mechanism of counting added/removed lines is very simple, it sums up all lines with '+' and '-'. 
+ If you want to use your own patterns/script please take a look at the General &gt; Compare/Patch pref page. 
+ I've added there two fields where you can customize the way this simple mechanism works.
+ It's awsome that this is customizeable, but when I remember right, one reason for putting this enhancement into Eclipse SDK was such that there is a \"common standard\" by which the projects count their lines in a patch.
+ I think that this \"common standard\" should be as good as possible by default.
+ On the other hand, having some magic like removing empty lines from the count going on in the background is perhaps a problem... 
+ would it be possible to keep your current count (\"211 added / 53 removed lines\") but add an additional count without empty lines e.g.
+ Note that I'm only talking about empty lines here, e.g. Regex \"/-\\\\\\s*$\". 
+ I agree that we cannot count empty comments here by default, because comment styles differ by language. 
+ Actually, it might be a good idea to have one additional kind of Regex pattern in the Preferences, which acts as a filter -- suggested tooltip behind //:
+   Added Lines:    /-\\+
+   Removed Lines:  /-\\-
+   Filter:         /-\\[+-]\\s*$     //Filter for lines to not count, e.g. empty lines
+ providing an output such as   \"Patch contains 207 added and 29 removed lines (151 / 27 filtered)\"
+ Martin, I see your point when you're saying that the \"common standard\" should be as good as possible, however I would rather not to filter any lines from a patch when parsing. Here are the approaches so far:
+ 1) Use only given filters, by default no counting will be made. 
+ This is how the patch from comment 4 worked. 
+ Rejected.
+ 2) By default count lines using the simple patterns, which are currently used when parsing a patch (ie \"+\" and \"-\"), this can be modified in the pref page.
+ Patch in comment 13. 
+ In HEAD.
+ 3) By default count lines using more sophisticated patterns like excluding empty lines. 
+ And again, this can be modified in the pref page. 
+ If I understood you correctly this is what you meant in comment 15. 
+ My main concern here is:
+ what if I would like to know total number of lines added in the patch (the filter idea looks to be an answer here but it's a pref value, it's not embedded in the parser itself, right?)
+ 4) By default count lines using both simple and sophisticated patterns at the same time. 
+ The output would be something like this \"Patch contains X added and Y removed lines + Z added lines which are empty\". Again, the user could provide his own patterns... 
+ which makes the whole mechanism overblown and not as intuitive as I would like it to be.
+ Regarding the filter idea: it sounds good to me, but I think we should move the discussion about it to a separate bug.
+ Would you mind opening one?
+ btw, thanks for your feedback Martin.
+ Verified in I20080429-0100. 
+ Martin are you willing to open new bugs to address your concerns?
+ FYI,
+ following regex suppresses lines in the patch from counting, which are empty or only contain non-wordchars (i.e. lines which only contain an } or only contain a * as continuation of an empty Javadoc comment:
+ Added:     /-\\\\+[/-\\+]+[a-zA-Z0-9_!?\"|@~`$%&()+;,.:&lt;&gt;=+-]
+ Removed:   /-\\-[/-\\-]+[a-zA-Z0-9_!?\"|@~`$%&()+;,.:&lt;&gt;=+-]

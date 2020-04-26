@@ -1,0 +1,50 @@
+ Open a new image,
+ create a layer much bigger than the image, and with a different aspect ratio.
+ draw something on the drawable (using some colors)
+ make a selection selecting only some parts of your drawing
+ use the channel mixer.
+ The selection looks wrong in the plugin, and the plugin can even crash.
+ This is due to the fact that the selection mask is taken with gimp_drawable_get_thumbnail_data () in the preview code.
+ So if the layer and the image have different size, they are streched differently.
+ Clearly what it is doing is bad, but what *should* it be doing?  
+ Should the preview follow the shape of the selection bounds, the image, or the drawable?
+ On a big image, use crop tool on right, bottom or right bottom, click on resize.
+ The active picture is then little than the layer.
+ Using any tool with preview give a one pixel (or less ;) ) preview instead of the good one.
+ Compute intersection between layer and active picture could be the solution...
+ As far as I can see, there are two reasonable options, and either of them will require a substantial amount of fixing in the aspect preview code and the plugins that use it.  
+ (1) Show the entire drawable in an aspect preview, and mask changes using the current selection.
+ (2) Show only the part of the drawable lying within the selection bounds. 
+ It isn't clear to me which of them is better.
+ Bumping to 2.4 since this is not likely to get fixed for 2.2
+ Bumping to Future since this is not likely to get fixed for 2.4.
+ Setting back to the 2.4 milestone since it's a crash and should, if possible, be looked at before the 2.4 release.
+ Fixing this might make API changes necessary. 
+ We need to look into this as soon as possible.
+ It would help a lot if someone could attach an example XCF file to this bug report that shows the problem.
+ Created an attachment (id=89354) [details]
+ bug156905.xcf.bz2 - a layer bigger than image
+ Following assertion failed using Channel mixer on the layer.
+ (channel_mixer:6701): LibGimpWidgets-CRITICAL **: gimp_preview_area_mask: assertion `mask != NULL' failed
+ Doesn't channel mixer use GimpZoomPreview (not GimpAspectPreview)?
+ Seems like both GimpZoomPreview and GimpAspectPreview have problems when steps in reporter's comment are taken.
+ This one is nasty to track down.
+ The example image has dimensions 377*233, the selection starts at x=125, y=97 and extends to the lower right corner of the image.
+ The preview code then calls gimp_drawable_get_sub_thumbnail on the selection mask with the following coordinates:
+   src_x: 117, src_y: 89, src_w: 268, src_h: 152
+ which unsurprisingly fails, since src_x+src_w is bigger than the selection mask width.
+ The source coordinates seem wrong to me and originate from gimp_zoom_preview_get_source_area(), but I have not yet tracked this down.
+ Created an attachment (id=117704) [details]
+ GimpZoomPreview handle layer offsets
+ This patch should fix GimpZoomPreview to handle layers with offsets with selections. 
+ Area displayed in preview is intersection of layer and selection.
+ If there are no objections, I could commit the patch.
+ For GimpAspectPreview selection mask has to be applied for thumbnail of the whole drawable (selection can intersect partialy with drawable area).
+ Please commit this. 
+ It doesn't make sense to patch 2 [details].4 at this point. 
+ So please do this in trunk only.
+ 2008-09-02  Aurimas JuÅ¡ka  &lt;aurisj@svn.gnome.org&gt;
+ &gt;-------* libgimp/gimpzoompreview.c (gimp_zoom_preview_draw_buffer),
+ &gt;-------(gimp_zoom_preview_set_drawable): fixed GimpZoomPreview to handle
+ &gt;-------layers with offsets and display intersection of layer and selection
+ &gt;-------in the preview. (bug #156905)

@@ -1,0 +1,85 @@
+ Currently apps use gnome_help functions to show help files, but gnome_help is part of the deprecated gnome_help
+ See also GNOME goal proposal
+ http://live.gnome.org/action/show/GnomeGoals/RemoveGnomeOpenGnomeHelp
+ Created an attachment (id=105668) [details]
+ Patch adding gtk_show_uri and gtk_show_help to GTK+
+ The gtk_show_help function is missing |return ret;|.
+ You forgot to add the new funcs to gtk/gtk.symbols .
+ + * modify it under the terms of the GNU Lesser General Public
+ + * License as published by the Free Software Foundation; either
+ + * version 2 of the License, or (at your option) any later version.
+ There is no \"Lesser GPL version 2\". 
+ It's the Lesser GPL version 2.1 (or the Library GPL version 2).
+ Somehow I feel that gtk_show_help() is too GNOME oriented to be included in this form. 
+ I have been told that gtk_show_uri() will work nicely on the major supported platforms.
+ This is hwoever not the case for gtk_show_help(). 
+ Since the functionality of gtk_show_help() can be easily implemented on top of gtk_show_uri(), it should be sufficient to provide gtk_show_uri() for now.
+ Created an attachment (id=105671) [details]
+ Updated patch. Adding ret and gtk symbols
+ Christian, I copied the license from other files in GTK+.
+ I opened about 5 to 6 files and they are the same. 
+ I guess it's a better idea to change all licenses in one go
+ What's the consensus on this?
+ Can I commit gtkshow.c to gtk+ when I remove gtk_show_help?
+ Update your patch to remove gtk_show_help() to start with.
+ Created an attachment (id=106302) [details]
+ Patch removing gtk_show_help
+ Can one of the maintainers decided what to do with this patch? Thanks
+ gtk_show_uri allows a NULL parent, but that is not multi-head safe.
+ Why not take a mandatory GdkScreen argument since the function couldn't care less about the parent widget beyond its screen?
+ I can make it such that the parent has to be set mandatory.
+ Having a GtkWidget *parent saves calling a gtk_widget_get_screen everytime you do a gtk_show_uri
+ What's the opinion on this of others?
+ I don't think the parent should be mandatory, because there are situations
+ where they may not be a parent at all.
+ A mandatory parent would be bad, as Ross explained in comment #11. 
+ IMO the best solution is to change the function to take a GdkScreen instead of a parent widget. 
+ Shouldn't hurt much to call gtk_widget_get_screen().
+ Created an attachment (id=107888) [details]
+ Updated gtk_show_uri patch now using a GdkScreen as input
+ Thanks for you comments. 
+ Any more comments?
+ Ping. Can above patch be applied?
+ Can one of the maintainers make a decision about this patch.
+ Thanks
+ Some comments: 
+ - Wrt to the parent issue, I think the function should accept NULL there. 
+   Being forced to call gdk_widget_get_screen() is annoyance, when  GdkAppLaunchContext handles unset screen already.
+ - The documentation needs to go in some more detail about what kind of 'uri' this function accepts. 
+ There is no standard for this, unfortunately, and the gnome-vfs-&gt;gio transition has unearthed a number of problems due to this.
+ - I'd be interested in a function that mounts the volume before opening it.
+ This is what e.g. the panel needs (see bug 529243 ). 
+ That could be a separate function, or gtk_uri_show could take flags.
+ Created an attachment (id=109974) [details]
+ Updated patch. GdkScreen can be NULL
+ Matthias, thanks for the review. 
+ I've updated the patch with your first two comments.
+ About the third comment (the auto mounting). 
+ Why would gtk_show_uri need extra flags for this? 
+ We could add code that just tries to mount if this is necessary. 
+ Your patch in bug 529243 uses libgnomeui/gnome-password-dialog.h which can't be used in gtk+
+ What do you want to do? 
+ Commit this patch (quite some apps could reduce their dependency on libgnomeui and friends already) and later on add the mounting part
+ Matthias: being forced to call gdk_widget_get_screen is a good thing as it avoids multiscreen bugs.  
+ If GdkAppLaunchContext handles it, as you say, that sounds like that ought to be fixed too.  
+ There really is no way the gdk/gtk layer can know what screen should be used.
+ OK, this bug report has gotten silly.&lt;/monty-python&gt;
+ In 99% of use cases, the user interacts with some widget, and as a result, the program wants to show a URI on the same screen as that widget.
+ In 99% of the remaining 1% of use cases, the program has no opinion at all about what screen to show the URI on (eg, gnome-open), and so it's going to pass NULL for parent regardless of whether parent is a GtkWidget or a GtkScreen. 
+ (Or in the mandatory GtkScreen case, it would always call gdk_screen_get_default().)
+ Given that this is a 10-line function, it seems silly to make its interface less convenient for 99% of users just so it can cover an additional 0.01% of use cases. 
+ Assuming there actually are programs that need to show URIs on specific screens that do not correspond to any live widget, the developers of those programs can just cut and paste the gtk_show_uri source and change it accordingly.
+ accordingly.
+ Jaap: the way to handle mounting in GTK+ is to use a GtkMountOperation. 
+ I'm not 100% happy with the single-function header gtkshow.h, but I don't really have a better alternative.
+ It is probably ok to commit it in this form now, we'll figure out the mounting later.
+ Thanks for the review. It's now committed
+ 2008-05-25  Jaap A. Haitsma  &lt;jaap@haitsma.org&gt;
+     reviewed by: Matthias Clasen
+     * gtk/Makefile.am:
+     * gtk/gtk.h:
+     * gtk/gtk.symbols:
+     * gtk/gtkshow.c: (gtk_show_uri):
+     * gtk/gtkshow.h:
+     Add gtk_show_uri to make showing uris really easy. 
+ Fixes bug #514396

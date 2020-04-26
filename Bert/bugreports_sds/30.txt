@@ -1,0 +1,50 @@
+ It would be usefull to add a \"Swap\" button to quickly change the aspect ratio between portrait and landscape. 
+ This is needed when extracting a portrait from a landscape photo.
+ Since there is no sign that this is going to happen for 2.4, I am bumping the target to Future.
+ *** Bug 355694 has been marked as a duplicate of this bug. ***
+ I'm going to reset this to 2.4 because I expect to implement this very soon.
+ An easier and much faster user interface: swap between portrait and landscape based on mouse movement.
+ You already have to move the mouse to make your selection. 
+ You'll likely do something that is approximately the right ratio. 
+ If that's closer to portrait, then portrait should get used, otherwise landscape should get used.
+ Another way to explain this:
+ When the user makes the selection, select landscape mode if the horizontal mouse movement is greater than the vertical mouse movement, otherwise select portrait mode.
+ That's one less confusing button occupying screen space.
+ That's one less button to press. 
+ You can work faster, with less hand/finger/wrist pain.
+ Albert, you completely misunderstood this. 
+ The point is being able to flip the aspect ratio after you have created your rectangle selection.
+ Really? I found Alberts comment spot on. 
+ It basically would eliminate the need for this kind of button, since both x and 1/x would work equivalently in the GUI.
+ I don't see much point in being able to flip the aspect *after* the creation of the rectangle. 
+ The placement of the resulting rectangle would need readjusting anyways (what is the fixed point of the rectangle while flipping?) and it sounds much more natural to me to be able to switch the orientation on-the-fly while creating the rectangle.
+ I'm the reporter of the wish. 
+ Sven is right, I meant that it would be usefull to have the swap option after the creation of the rectangle selection. 
+ I do it \"by hand\" often in that case :
+  I've a landscape photo that contains an interesting flower for example. 
+ I want to print a photo that have the same proportions as the original, but in a portrait format, more adapted to my flower.
+  1. I first \"take a shhot of the aspect ratio\" by selecting all the original landscape photo.
+  2. I freeze the aspect ratio (with the appropriate checkbox)
+  3. I shrink the rectangle to permit him to be rotated by 90Â°
+  4. I \"rotate\" him by taking my calculator, and calculating 1/[aspect ratio], and putting it by hand
+  5. I've now a perfect portrait zone wich I can adapt freely to my flower; and I'm happy :)
+  I don't know if adding a toolButton just to do it is a problem, but I really think I'm not the only one to do that sort of cropping on a photo.
+ Thanks for interest !
+ Bruno
+ I agree that Albert's idea makes sense.  
+ Have gimp assume a landscape or portrait orientation automatically depending on whether the rectangular area swept out by the user is wider or higher.  
+ This might only be problematic when the aspect ratio was nearly, but not exactly square, but even here the user could control the proper aspect by exaggerating the motion in the larger of the two directions.
+ If a swap button is maintained as in 2.3.12, then register the initial point used to sweep out the rectangular area and use that as the anchor rather than the upper-left corner as is now used.  
+ It is very likely that the first point selected by the user will be a desired point and this will not be the upper-left corner unless this happens to be where they started.
+ As I stated elsewhere, it would also be great if the aspect ratio was automatically set to the initial aspect of the image being loaded.  
+ You might provide a \"lock\" button to force the current aspect ratio to be retained upon subsequent loading of images for those times when someone wants to crop a series of pictures to the same proportions.  
+ Maybe the current Fix button could be a toggle that switched between \"Lock\" (lock the aspect ratio - current behavior) \"Set\" (automatically set the aspect ratio for each new image and then locks it) \"Auto\"(the Set behavior combined with the behavior suggested by Albert) or \"None\".
+ Having said this, I do appreciate having a toggle button at all.  Thanks.
+ Making this depend on the user's mouse action is not discoverable. 
+ There wouldn't be any way for the user to find out how to swap the aspect ratio. 
+ No way.
+ It might make sense to determine the initial aspect ratio this way. 
+ But there still needs to be a button to swap it. 
+ Comment #7 is exactly the usage scenario for this.
+ This is now implemented in trunk and seems to work reasonably well. 
+ Closing as FIXED.

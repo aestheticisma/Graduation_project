@@ -1,0 +1,46 @@
+ Hi Martin,
+ after installation of Teneo the entry \"Ant Home Entries (Default)\" on the classpath page of Preferences-&gt;Ant-&gt;Runtime is empty (though the child entries of this tree node are visible).
+ In addition to this I get a lot of NullPointerExceptions in the .log with \"Malformed URL\" as Message when I open that preference page. 
+ The stack does not show any participation of teneo.
+ I tested it on a complete new eclipse (RCP version) installation (M20080221-1800 ) with the EMF, GEF and GMF features installed in an empty workspace. 
+ After each installation I looked at the that \"Ant Home Entries\" entry and all was fine. 
+ But after installation of teneo it vanished. 
+ After disabling of the teneo plugin the entry is visible again.
+ gr. Manfred
+ Hi Manfred,
+ This seems strange behavior as installing teneo should not interfere with the rest of the eclipse installation. 
+ Teneo is really just a set of plugins which do not change other plugins.
+ Can you remove .log file and then restart eclipse with the -clean option and then attach the resulting .log file to this bugzilla?
+ In addition which versions of eclipse, emf, etc. are you using?
+ Can you also attach a screendump of the strange thing you see in preferences/ant?
+ Does the plugin/feature information say something special? You can find it here:
+ Help/Software Updates/Manage Configuration
+ note that this view has a button to hide non-loaded features/plugins. 
+ Can you see which plugins fail to load? 
+ Depending on the version of eclipse you can see some more details of why the plugin failed to load.
+ gr. Martin
+ Created an attachment (id=95747) [details]
+ log-file with errors after opening Ant Runtime Preferences
+ Created an attachment (id=95748) [details]
+ Ant Runtime Preferences screenshot
+ Created an attachment (id=95749) [details]
+ Configuration from Software Updates/Mangage Configuration
+ Hi Martin,
+ I have made the complete new configuration today and have added each new feature with the update manager.
+ Perhaps this is a case that belongs to the core team of eclipse? 
+ gr.
+ Manfred
+ Hi Martin,
+ as you see from the .log-file I forgot the -clean flag. 
+ Now I did it, but the .log-file only differs in that this setting is now shown. 
+ All other messages including that curious \"Invalid perference page: Cache\" are the same.
+ gr. Manfred
+ Hi Manfred,
+ Yes I can really not think on how this can be caused by Teneo. 
+ I have moved the issue to the platform project. 
+ Can you post a topic on the platform newsgroup (with a link to this bugzilla)?
+ Maybe they know right away what's wrong.
+ gr. Martin
+ This behaviour did vanish with the teneo version I200805200858. 
+ I believe there had been a consolidation of used libraries.
+ Because of this I set set the resolution to fixed.

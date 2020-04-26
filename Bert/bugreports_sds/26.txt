@@ -1,0 +1,136 @@
+ Version:            (using KDE KDE 3.1KDE 1.2)
+ Installed from:    SuSE RPMsSuSE RPMs
+ Sniff allows to find all locations from where a selected function is called.
+ KDevelop already allows to 'grep foo(' in the context menu of the class treeview. 
+ While this feature doesn't work for me at all it would not do a good job since:
+ 1. It finds calls of the same function name belonging to a different class
+ 2. It doesn't find calls of functions if there are whitespaces between the function name and the left bracket such as foo-&gt;bar ();
+ 3. It doesn't distinguish between overloaded functions
+ It would be nice to know your KDevelop version! 
+  
+ Subject: Re:  find callers of functions         
+ version 2.1.3. Sorry if the feature is in a newer version of KDevelop (3.0) but nothing in the changelog suggests that.
+ -Rudiger
+ --- Amilcar do Carmo Lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+ &gt; ------- You are receiving this mail because: -------
+ &gt; You reported the bug, or are watching the reporter.
+ &gt;      
+ &gt; http://bugs.kde.org/show_bug.cgi?id=61263     
+ &gt; a.lucas@tu-bs.de changed:
+ &gt; 
+ &gt;            What    |Removed                     |Added
+ &gt;
+ ----------------------------------------------------------------------------
+ &gt;           Component|general                     |classview
+ &gt; 
+ &gt; 
+ &gt; 
+ &gt; ------- Additional Comments From a.lucas@tu-bs.de  2003-07-15 10:57
+ &gt; -------
+ &gt; It would be nice to know your KDevelop version!
+ Sorry, KDevelop 2.x is no longer under development.
+ You are strongly advised to update to the latest CVS version of KDevelop3, code name gideon, take a look at:
+ http://www.kdevelop.org/index.html?filename=branches_compiling.html
+ for all the details you need. 
+ If you find a problem or need help please send a mail to the mailing list:
+ http://www.kdevelop.org/index.html?filename=mailinglist.html
+ or drop us a line at the channel #kdevelop on the server irc.kde.org using ksirc, for example.
+ Please use the CVS version and compile it yourself because that way you can easily patch it if a bug is found.
+ KDevelop3 can open Develop2 projects. 
+ To do so, goto the \"Project -&gt; Open Project ... \" and select \"KDevelop 2 Project Files\" in the \"Filter:\".
+ You can have and run KDevelop3 and KDevelop2 at the same time on the same computer without any problems.
+ So migrating is a breeze. :)
+ P.S. : The KDevelop team closed over 452 reported and confirmed bugs since the release of KDevelop2.1.3
+ The bad news is that KDevelop3 currently has 120 reported bugs :(
+ Subject: Re:  find callers of functions         
+ Unfortunatelly I am behind a huge firewall. 
+ Would you be so kind to send a tarball to ruediger.koch@db.com ?
+ Thanks a lot
+ -Rudiger
+ --- Amilcar do Carmo Lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+ &gt; ------- You are receiving this mail because: -------
+ &gt; You reported the bug, or are watching the reporter.
+ &gt;      
+ &gt; http://bugs.kde.org/show_bug.cgi?id=61263     
+ &gt; a.lucas@tu-bs.de changed:
+ &gt; 
+ &gt;            What    |Removed                     |Added
+ &gt;
+ ----------------------------------------------------------------------------
+ &gt;             Version|unspecified                 |2.1.3
+ &gt; 
+ &gt; 
+ &gt; 
+ &gt; ------- Additional Comments From a.lucas@tu-bs.de  2003-07-15 12:01
+ &gt; -------
+ &gt; Sorry, KDevelop 2.x is no longer under development.
+ &gt; 
+ &gt; You are strongly advised to update to the latest CVS version of KDevelop3, code name gideon, take a look at:
+ &gt; http://www.kdevelop.org/index.html?filename=branches_compiling.html
+ &gt; for all the details you need. 
+ &gt; If you find a problem or need help please send a mail to the mailing list:
+ &gt; http://www.kdevelop.org/index.html?filename=mailinglist.html
+ &gt; or drop us a line at the channel #kdevelop on the server irc.kde.org using ksirc, for example.
+ &gt; Please use the CVS version and compile it yourself because that way you can easily patch it if a bug is found.
+ &gt; 
+ &gt; KDevelop3 can open Develop2 projects. 
+ &gt; To do so, goto the \"Project -&gt; Open Project ... \" and select \"KDevelop 2 Project Files\" in the \"Filter:\".
+ &gt; You can have and run KDevelop3 and KDevelop2 at the same time on the same computer without any problems.
+ &gt; So migrating is a breeze. :)
+ &gt; 
+ &gt; P.S. : The KDevelop team closed over 452 reported and confirmed bugs since the release of KDevelop2.1.3
+ &gt; The bad news is that KDevelop3 currently has 120 reported bugs :(
+ ftp://ftp.kde.org/pub/kde/unstable/snapshots/kdevelop.tar.bz2
+ Subject: Re:  find callers of functions         
+ Let me first say, I am really impressed with gideon. 
+ It shows a lot of potential! 
+ Excellent work so far. 
+ I am really looking forward to the stable releases.
+ The specific feature I was looking for is still not present, although the grep works, as long as it is looking for pointers as foo-&gt;doit(); foo.doit() is not found.
+ My coworkers did not all master regular expressions. 
+ For them, a \"find callers\" item that simply does what is requested without intimidating them with a dialog sporting an arcane regex would be close to ideal. 
+ That menu item should be in the class view - the context menu of a function.
+ The regex
+ (\\.|\\-&gt;|::)[\\t ]*\\&lt;%s\\&gt;[\\t ]*\\(
+ is getting close. 
+ It finds the function definition itself and the \"\\fn ClassName::doit(), however - we may filter it out in a second pass.
+ This would also find Bar::doit() even if Bar has nothing to do with Foo, but - nobody is perfect.
+ -Rudiger
+ --- Amilcar do Carmo Lucas &lt;a.lucas@tu-bs.de&gt; wrote:
+ &gt; ------- You are receiving this mail because: -------
+ &gt; You reported the bug, or are watching the reporter.
+ &gt;      
+ &gt; http://bugs.kde.org/show_bug.cgi?id=61263     
+ &gt; 
+ &gt; 
+ &gt; 
+ &gt; 
+ &gt; ------- Additional Comments From a.lucas@tu-bs.de  2003-07-15 17:17
+ &gt; -------
+ &gt; ftp://ftp.kde.org/pub/kde/unstable/snapshots/kdevelop.tar.bz2
+ I guess the feature you are talking about is like a 'Find Usage' feature as it works in IntelliJ IDEA (Java IDE), so, this is good. 
+ I just want to add here, a some behaviour one could add while implelemnting this feature.
+ Along with having a 'Find Usage' feature wich produce a list of places in the project like the 'Grep' do, is would be very nice to have an 'Hightlight Usage' feature wich is just hightlight the usage of a function or a variable in the currect file only and do not produce any windows. 
+ Having binded this to some shortcut is very handy. 
+ Look how it works: 
+  - The user presses Alt+Shift+F7 (e.g.) 
+  - Gideon hightligh the usage of currenlty selected funciton/variable (or one which is under the cursor and not selected) 
+  - User got the response, make his/her mind clear about the usage 
+  - User press Esc and hightligh turned off. 
+ This is comming. 
+ Stay tunned! 
+ Call Tree/Graph Viewer
+ Not only \"Find Usage\" - why can't C users have a \"Function Call Tree\" view - either organised by caller or by callee.
+ This used to be a standard part of IDEs such as Borland, but has been substituted with a Class Viewer - I don't say 'replaced' since a Class Viewer is no replacement for a Call graph view !
+ Forgive me if this is in KDEv 3.0/Gideon ...
+ *** This bug has been confirmed by popular vote. ***
+ Doxygen includes similar information.  
+ It has a call graph but (unfortunately) lacks a called-by graph.
+ It would also be nice if this feature was clever enough to understand C++ scoping rules, e.g. a call within foo::bar() to boo() could be a call to foo::boo() or boo() or a function within a namespace previously specified with \"using namespace\".
+ Grep will not provide enough intelligence to find such matches. 
+ However it's not a bad start if use of a C++ AST is too complex.
+ Just to get all these voters a bit excited: A basic experimental use-highlighter has been implemented in KDevelop4 the last days. 
+ AFAIK it currently highlights only usages of variables, but extending that shouldn't be much of a problem.
+ comming in kdevelop4.
+ This is Fixed in KDevelop4
+ Take a look at \"code navigation\" blog on www.kdevelop.org for details

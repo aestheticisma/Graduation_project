@@ -1,0 +1,104 @@
+ Version:            (using Devel)
+ Installed from:    Compiled sources
+ OS:                Linux
+ from some time ago ctrl+c stops work
+ i have 2.1 konsole (kde 4.0.80+r762060 from trunk)
+ reproduce:
+ sleep 10 and press ctrl+c
+ so now i use ctrl+z; kill %1; fg
+ Same problem here.
+ Another thing which is IMHO releated: the konsole \"window cursor\" does not get anymore the focus (the cursor gets not filled white).
+ This issues has appeared some days ago..
+ Some info: when I use completion, C-c works (i.e. type \"pTABTAB\", while bash is tallying the possible completions, C-c stops the process and returns the prompt).
+ This bug is possibly not in konsole, because yesterday I can't use C-[S-]v to paste in any app (including konsole), or C-l to clear screen (in konsole, gajim and pidgin).
+ Grepping ~/.xssession-errors only yields one \"error\" in the search krunner runner.
+ I get this with new konsole too, it works with some progs like strace, but not with others like ruby (which works fine in a vt).
+ This issue makes working with Konole really hard.. 
+ you always need to kill jobs from another Konsole... 
+ There are a lot of people asking about this issue on IRC.
+ I cannot reproduce here.
+ &gt; I get this with new konsole too, it works with some progs like strace, but not with others like ruby (which works fine in a vt). 
+ That is bizarre.  
+ I cannot think why the behavior might depend on what is running on the terminal.  
+ &gt;  There are a lot of people asking about this issue on IRC. 
+ Are they running Konsole from the KDE 4.0 branch or trunk?
+ &gt; Are they running Konsole from the KDE 4.0 branch or trunk? 
+ You could winding kdebase/apps/konsole back a few revisions to see if the problem disappears.  
+ If you get as far as the KDE 4.0.0 tagging then it is likely somewhere else.
+ Running trunk. Noticing this for some days.
+ Working around that by doing \"Ctrl-Z and kill %1\"...
+ *** Bug 156320 has been marked as a duplicate of this bug. ***
+ &gt; Running trunk. Noticing this for some days.
+ As I cannot reproduce, I need to know which revision introduced the bug.  
+ You can use svn up -r &lt;revision&gt; to change kdebase/apps/konsole/src to an earlier revision.
+ I can confirm this problem. 
+ The first revision where it happens is 760614:
+ http://websvn.kde.org/?view=rev&revision=760614
+ i'm running trunk. 
+ i can ctrl+c svn for example or a compile job. 
+ but i can't ctrl+c dselect (or btdownloadcurses or ...)
+ after i switch to konsole window, cursor doesn't filled and ctrl+c doesn't works, but if i type something then this passes to konsole _and_ cursor became fillled after that i'm able to use ctrl+c
+ ie, switch to konsole
+ press &lt;space&gt; (to get cursor filled)
+ press ctrl+c (will work now)
+ this doesn't always work, cursor became filled, but ctrl+c doesn't work
+ ctrl+c works in bash or read prompt (even with non-filled cursor)
+ Robert, I can confirm what Paolo said: it happens first in 760614 revision (porting to KProcess).
+ I also noticed this warning in Session.cpp's Session::sendSignal() function:
+ #warning \"TODO: Send the right signal here, QProcess::kill() always sends SIGKILL\"
+ I blindly tried to replace _shellProcess-&gt;kill() with _shellProcess-&gt;terminate(), but that did not help, so I gave up :)
+ Maybe this even not that piece of code that causes the problem (although seems quite related).
+ Maybe you'll have some further ideas.
+ And I wasn't able to reproduce this bug on my machine at work, although both home and work machines run Debian/testing (but have different hardware).
+ I'm puzzled what can cause this :)
+ But while it's reproducable here, at home, I can test your ideas if any.
+ &gt; I also noticed this warning in Session.cpp's Session::sendSignal() function: 
+ That is only called at the end of the terminal session to kill the main shell process.  
+ Otherwise Konsole doesn't touch any processes directly - it just sends the key presses you enter to the terminal.
+ &gt; although both home and work machines run Debian/testing
+ In other words, they have the same versions of all common software?
+ &gt; (but have different hardware)
+ Do they use the same type of CPU?  
+ I don't suppose it could be a 32bit / 64bit difference?
+ Ah, no, seems unrelated :)
+ How about this:
+ void Pty::lockPty(bool lock)
+ {
+ #warning \"TODO: Support for locking the Pty\"
+   //if (lock)
+     //suspend();
+   //else
+     //resume();
+ }
+ Not sure if this is it too...
+ &gt; In other words, they have the same versions of all common software?
+ Well, currently not, because I forgot that I updated home machine to debian/sid, but I recall that I was seeing this bug before I upgraded.
+ Mmmm... not 100% sure though. 90% ;)
+ &gt; Do they use the same type of CPU?  
+ &gt; I don't suppose it could be a 32bit / 64bit difference? 
+ Yep. 
+ Both use intel core duo
+ &gt; Not sure if this is it too... 
+ No, that is called when Ctrl+S or Ctrl+Q is pressed.
+ Can you try changing the interrupt key sequence to something else and see if it makes any difference.
+ For example, change the interrupt key to Ctrl+Y
+ stty intr /-\\Y
+ Then try strace, sleep, make etc. but use Ctrl+Y instead of Ctrl+C to kill them.
+ Chatting with ossi bringed up another very interesting usecase:
+ Fact: ctrl-c doesn't work in konsole
+ Next step: launch xterm and launch  strace -ttt -o konsole.trace konsole --nofork
+ Now in that started konsole app, 'make' breaks just ok!
+ Wonders :)
+ strace fixes things :)
+ After changing /-\\C to be /-\\Y situation is the same for /-\\Y as it was for /-\\C:
+ e.g. /-\\Y breaks 'strace', but not 'make'
+ &gt; strace fixes things :) 
+ You're doing two things there though, running Konsole with strace and also with the --nofork argument.  
+ To be sure which was making a difference, you'd need to:
+ 1.  Run \"konsole --nofork\" (without strace) and see if the problem is still there.
+ 2.  Start Konsole normally (with no arguments), then attach to it with strace (using strace -ttt -p &lt;pid of konsole&gt;) and see if the problem is still there.
+ The problem disappears for me with both 1 and 2, while changing the interrupt sequence has no effect just like Dmitry reported.
+ Any idea where to look in the code, where to set breakpoints, etc...?
+ Fixed by SVN commit #771570.
+ \"Fix Ctrl+C not killing applications on some users' systems.  
+ Reset all signal handlers to the default (SIG_DFL) in the child process after forking\"

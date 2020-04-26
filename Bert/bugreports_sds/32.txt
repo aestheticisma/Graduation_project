@@ -1,0 +1,58 @@
+ User-Agent:       Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7b)Gecko/20040316
+ Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.6)Gecko/20040206 Firefox/0.8
+ There needs to be a way to open sidebar resources, such as the history and bookmarks, in their own window. 
+ It's more convenient to have a single history window that doesn't take up screen real estate than having to open the history in whichever window I'm currently browsing. 
+ I like the CTRL-B and CTRL-H features of Mozilla and would like that carried over. 
+ I know bug 178199 discusses CTRL-B (WONTFIX but perhaps CTRL-SHIFT-B) in particular but I'm talking about depending on the side bar at all. 
+ I really hate sidebars and would want to be able to disable them in place of these windows before I would migrate to Firefox.
+ Since the roadmap is now to focus on the standalone apps with \"a conservative,sustaining engineering fashion\" type of support for Mozilla/SeaMonkey, I think a \"SeaMonkey Parity\" of some form should be established.
+ Thanks.
+ Reproducible: Always
+ Steps to Reproduce:
+ A bookmark manager window already exists, and bug 178199 covers giving it a better keyboard shortcut than Alt,B,M.
+ I don't see a bug for adding a history window.
+ how about something like about:history?
+ similar to about:config - just a full page tree with a search/filter field at the top.  
+ you wouldn't really need a menu or toolbar buttons like with the bookmarks manager.  
+ but like the bm and unlike the sidebar, it would have all the sortable columns: name, url, last visited, first visited, number of visits, etc.
+ it would be the \"power-user\" supplement to the simple history sidebar.  
+ sure, the sidebar needs a few things fixed like searching urls, but other than that, i think it's fine for most uses - exactly what sidebars are for - a quick way to access something without leaving/obscuring the current page.  
+ and an about:history page would nicely fill in the gap left on the advanced end.  
+ a whole new history window is probably overkill, and a page could just as easily be opened in its own window or in a tab.  
+ while i'm brainstorming, you could probably even add a search shortcut ability so you could type something like
+ about:history?extensions to open the history page and filter pages with \"extensions.\"
+ compare:
+ chrome://browser/content/history/history-panel.xul
+ chrome://browser/content/bookmarks/bookmarksPanel.xul
+ chrome://browser/content/bookmarks/bookmarksManager.xul
+ about:config
+ reporter,
+ not sure if you're asking for a whole new history window, or just the ability to open the sidebar history in its own window.  
+ if the latter is the case, then just open the above chrome url in a new window.
+ the component and other fields probably need to be updated.
+ I'm really looking for two things:
+ 1. A separate window so I can keep going back to the same window and open multiple windows from this window.
+ chrome://browser/content/history/history-panel.xul would meet this need.
+ 2. Being able to see and sort the history. 
+ Seamonkey offers tabs for Title, Location, Last Visited, First Visited, Hostname, Referrer, and Visit Count. 
+ Not all of this is needed but at least the first four are helpful.
+ Plus, I'd like to be able to open this easily, such as with /-\\H.
+ Please add the Mozilla history window in Firefox! 
+ I think this is just one of the things that's missing in inferior browsers like Microsoft Internet Explorer.
+ The Mozilla history window is just perfect!
+ (In reply to comment #3)
+ &gt; I'm really looking for two things:
+ &gt; 
+ &gt; 1. A separate window so I can keep going back to the same window and open multiple windows from this window.
+ &gt; chrome://browser/content/history/history-panel.xul would meet this need.
+ &gt; 
+ &gt; 2. Being able to see and sort the history. Seamonkey offers tabs for Title, Location, Last Visited, First Visited, Hostname, Referrer, and Visit Count. 
+ &gt; Not all of this is needed but at least the first four are helpful.
+ Firefox sure doesn't seem like a total product with a decent history.  
+ EHM, Enhanced History Manager, is an extension that does it nicely.
+ http://forums.mozillazine.org/viewtopic.php?p=1749502#1749502
+ I agree that the firefox history is limited at best. 
+ I'm amazed that there is no way of knowing what the url or date of a history entry is. 
+ Mozilla history was excellent since you could re-trace your browsing using the timestamp and find collections of pages you'd visited.
+  History (in life and browsing) is more useful when there is a context.
+ Shouldn't there be an option to see when and what order a page was visited?

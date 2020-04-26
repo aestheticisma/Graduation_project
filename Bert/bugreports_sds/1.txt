@@ -1,0 +1,31 @@
+ MattN noticed a problem with the WIP patch from bug 469443 applied.
+ When typing in the search box, sometimes search-suggestion entries would be displayed above the divider (where entries for previous matching searches are).
+ The problem here is that nsSearchSuggestions.js is passing the wrong previousResult to form history.
+ Instead of it being the previous form history search result, it's the SuggestAutoCompleteResult result (which contains the union of the form-history and search-suggest entries).
+ So, when form history refines its results as you time, it can actually add *more* entries as data leaks from the suggestions result into form history result, and it thus looks like the divider is being drawn in the wrong place.
+ This bug wasn't visible before 469443, because nsFormFillController::StartSearch tries to QI the provided result to a nsIAutoCompleteSimpleResult. 
+ The search-suggestion result is only implements nsIAutoCompletResult (no \"Simple\"), so the QI fails, historyResult nee previousResult becomes null, and thus Satchel was doing a new search every time.
+ EG:
+ 1) type \"b\" in the search field.
+ 2) form history finds 1 entry (\"blah\"), search-suggestions finds \"baaa\", \"bloop\", \"bzzz\", the autocompete menu shows these in order with a divider between \"blah\" and \"baaa\".
+ 3) type an \"l\" in the search field (\"bl\")
+ 4) startHistorySearch()'s previous result contains [\"blah\", \"baaa\", \"bloop\", \"bzzz\"], Satchel filters this down to [\"blah\", \"bloop\"] to match the new \"bl\" search string
+ 5) nsSearchSuggestions's onReadyState() change is called with updated search suggestions, builds up a new list of results, but sees that the form history result now has *two* entries.
+ Created an attachment (id=380567) [details] Patch v.1 (WIP)
+ This fixes the problem, but isn't quite correct...
+ If you type \"a&lt;backspace&gt;b\", satchel trying to use the results from the \"a\" search for the \"b\" search, and so nothing is found. 
+ I suspect nsSearchSuggestions needs to throw away the old form history result when the search string changes like this, but I'm not entirely sure it's responsible for doing so, maybe satchel should be smarter about throwing away a previous result when the previous result's search string doesn't have a common prefix.
+ [That seems to be handled somewhere else for normal form field entries, oddly enough.]
+ Created an attachment (id=383211) [details] Patch v.2
+ Ah. So, there's a ._formHistoryResult in the SuggestAutoCompleteResult wrapper (used to combine form history with search suggestions), and also a ._formHistoryResult in SuggestAutoComplete (the service itself, used to hold onto a form history result until a search suggestion is available).
+ The simple fix it to just discard the service's form history result copy when startSearch() is called with a null previous result.
+ Otherwise it's trying to use a old form history result that no longer applies for the search string.
+ (From update of attachment 383211 [details])
+ Perhaps we should rename one of them to _fhResult just to reduce confusion?
+ (In reply to comment #3)
+ &gt; (From update of attachment 383211 [details] [details])
+ &gt; Perhaps we should rename one of them to _fhResult just to reduce confusion?
+ Good point.
+ I renamed the one in the wrapper to _formHistResult. 
+ fhResult seemed maybe a bit too short.
+ Pushed http://hg.mozilla.org/mozilla-central/rev/097598383614

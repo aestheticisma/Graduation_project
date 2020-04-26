@@ -1,0 +1,194 @@
+ User-Agent:       Mozilla/5.0 (X11; U; Linux x86_64; fr-FR; rv:1.8.1.13) Gecko/20080311 Iceweasel/2.0.0.13 (Debian-2.0.0.13-1)
+ Build Identifier: 0.8 (2008033118)
+ When a calendar to which I am subscribed no longer exists, Lightning will try indefinitely to reach it and use 100% of my CPU. This, despite the 404 results it receives.
+ Reproducible: Always
+ Steps to Reproduce:
+ 1. create a calendar on your server
+ 2. subscribe to it via Lightning
+ 3. quit Thunderbird
+ 4. erase the calendar from your server
+ 5. relaunch Thunderbird
+ Actual Results:  
+ A propfind is executed on the resource, resulting in a 404 error code. 
+ An OPTION on the parent directory occurs, with a 200 result. 
+ Then the loop continues with a new propfind...
+ Expected Results:  
+ I would expect Lightning to stop trying to reach the calendar collection as
+ soon as it receives the 404 result.
+ Here is a trace of what happens (obtained with tcpflow):
+ PROPFIND /SOGo/dav/wsourdeau/Calendar/1D52AE6B-8564-0001-6A40-17B089902560/
+ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ Host: localhost
+ User-Agent: Mozilla/5.0 (X11; U; Linux i686 (x86_64); fr; rv:1.8.1.12)
+ Gecko/20080213 Lightning/0.8 Thunderbird/2.0.0.12
+ Accept: text/xml
+ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+ Accept-Encoding: gzip
+ ,deflate
+ Accept-Charset: utf-8,*;q=0.1
+ Keep-Alive: 300
+ Connection: keep-alive
+ Content-Length: 86
+ Content-Type: text/xml; charset=utf-8
+ Depth: 0
+ &lt;D:propfind xmlns:D=\"DAV:\"&gt;
+   &lt;D:prop&gt;
+     &lt;D:resourcetype/&gt;
+   &lt;/D:prop&gt;
+ &lt;/D:propfind&gt;
+ HTTP/1.0 401 Authorization Required
+ content-length: 0
+ www-authenticate: basic realm=\"SOGo-0.9\"
+ PROPFIND /SOGo/dav/wsourdeau/Calendar/1D52AE6B-8564-0001-6A40-17B089902560/
+ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ Host: localhost
+ User-Agent: Mozilla/5.0 (X11; U; Linux i686 (x86_64); fr; rv:1.8.1.12)
+ Gecko/20080213 Lightning/0.8 Thunderbird/2.0.0.12
+ Accept: text/xml
+ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+ Accept-Encoding: gzip
+ ,deflate
+ Accept-Charset: utf-8,*;q=0.1
+ Keep-Alive: 300
+ Connection: keep-alive
+ Content-Length: 86
+ Content-Type: text/xml; charset=utf-8
+ Depth: 0
+ Authorization: Basic hidden
+ &lt;D:propfind xmlns:D=\"DAV:\"&gt;
+   &lt;D:prop&gt;
+     &lt;D:resourcetype/&gt;
+   &lt;/D:prop&gt;
+ &lt;/D:propfind&gt;
+ HTTP/1.0 404 Not found
+ content-length: 85
+ content-type: text/html
+ object not found: wsourdeau =&gt; Calendar =&gt;
+ 1D52AE6B-8564-0001-6A40-17B089902560
+ PROPFIND /SOGo/dav/wsourdeau/Calendar/1D52AE6B-8564-0001-6A40-17B089902560/
+ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ Host: localhost
+ User-Agent: Mozilla/5.0 (X11; U; Linux i686 (x86_64); fr; rv:1.8.1.12)
+ Gecko/20080213 Lightning/0.8 Thunderbird/2.0.0.12
+ Accept: text/xml
+ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+ Accept-Encoding: gzip
+ ,deflate
+ Accept-Charset: utf-8,*;q=0.1
+ Keep-Alive: 300
+ Connection: keep-alive
+ Content-Length: 86
+ Content-Type: text/xml; charset=utf-8
+ Depth: 0
+ Authorization: Basic hidden
+ &lt;D:propfind xmlns:D=\"DAV:\"&gt;
+   &lt;D:prop&gt;
+     &lt;D:resourcetype/&gt;
+   &lt;/D:prop&gt;
+ &lt;/D:propfind&gt;
+ OPTIONS /SOGo/dav/wsourdeau/Calendar/ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ Host: localhost
+ User-Agent: Mozilla/5.0 (X11; U; Linux i686 (x86_64); fr; rv:1.8.1.12)
+ Gecko/20080213 Lightning/0.8 Thunderbird/2.0.0.12
+ Accept: text/xml
+ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+ Accept-Encoding: gzip,deflate
+ Accept-Charset: utf-8,*;q=0.
+ 1
+ Keep-Alive: 300
+ Connection: keep-alive
+ HTTP/1.0 404 Not found
+ content-length: 85
+ content-type: text/html
+ object not found: wsourdeau =&gt; Calendar =&gt;
+ 1D52AE6B-8564-0001-6A40-17B089902560
+ HTTP/1.0 401 Authorization Required
+ content-length: 0
+ www-authenticate: basic realm=\"SOGo-0.9\"
+ OPTIONS /SOGo/dav/wsourdeau/Calendar/ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ Host: localhost
+ User-Agent: Mozilla/5.0 (X11; U; Linux i686 (x86_64); fr; rv:1.8.1.12)
+ Gecko/20080213 Lightning/0.8 Thunderbird/2.0.0.12
+ Accept: text/xml
+ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+ Accept-Encoding: gzip,deflate
+ Accept-Charset: utf-8,*;q=0.
+ 1
+ Keep-Alive: 300
+ Connection: keep-alive
+ OPTIONS /SOGo/dav/wsourdeau/Calendar/ HTTP/1.1
+ x-webobjects-server-protocol: HTTP/1.1
+ x-webobjects-remote-addr: 127.0.0.1
+ x-webobjects-remote-host: 127.0.0.1
+ x-webobjects-server-name: localhost
+ x-webobjects-server-url: http://localhost
+ ....
+ [ad finitum]
+ When using the display of source and destination ip/port in tcpflow, I notice the Lightning side always has a different port, which leads me to think that many connections are occuring at the same time.
+ The problem occurs when safeRefresh() is called from calDavCalendar.js.
+ In there, we have the following condition:
+     if (!this.mCtag || !this.mFirstRefreshDone) {
+             var refreshEvent = this.prepRefresh();
+         this.getUpdatedItems(refreshEvent, aChangeLogListener);
+             return;
+         }
+ this.mFirstRefreshDone is false because since the calendar was removed, we never got a chance to complete the call to getCalendarData() nor checkDavResourceType() (see https://bugzilla.mozilla.org/show_bug.cgi?id=463961 for that one...).
+ So, we'll enter into an infinite loop because getUpdatedItems() calls right at the beginning checkDavResourceType() since the calendar was marked as disabled.
+ But, checkDavResourceType() doesn't check for the 404 error code. 
+ We have:
+            var str = convertByteArray(aResult, aResultLength);
+             if (!str) {
+                 dump(\"CalDAV: Failed to determine resource type\");
+                 thisCalendar.completeCheckServerInfo(aChangeLogListener, 
+                                                     
+ Components.interfaces.calIErrors.DAV_NOT_DAV);
+                 return;
+             } else if (thisCalendar.verboseLogging()) {
+                 dump(\"CalDAV: recv: \" + str);
+             }
+ and we should rather have something like:
+            var str = convertByteArray(aResult, aResultLength);
+             if (!str || aContext.responseStatus == 404) {
+                 dump(\"CalDAV: Failed to determine resource type\");
+                 thisCalendar.completeCheckServerInfo(aChangeLogListener, 
+                                                     
+ Components.interfaces.calIErrors.DAV_NOT_DAV);
+                 return;
+             } else if (thisCalendar.verboseLogging()) {
+                 dump(\"CalDAV: recv: \" + str);
+             }
+ This cause checkDavResourceType() to (incorrectly) continue its processing, which will cause a call to completeCheckServerInfo() with a success code and then again, a call to safeRefresh(), creating an infite loop for cached calendars.
+ Created an attachment (id=363577) [details]
+ Proposed fix
+ This bug is critical in order to avoid an endless loop and also in order to avoid generating _tons_ of HTTP requests to the CalDAV server (up to 10-20 per second).
+ (From update of attachment 363577 [details])
+ Looks good, r=philipp.
+ I've added another completeCheckServerInfo further above since calling request.responseStatus if there was some sort of request error causes it to throw. 
+ This is caught further above, but if we use it again here then we should break out earlier.
+ Pushed to comm-central &lt;http://hg.mozilla.org/comm-central/rev/7e4da21b2924&gt;
+ -&gt; FIXED

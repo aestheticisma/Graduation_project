@@ -1,0 +1,44 @@
+ Problem:
+ The method FolderDescription#createExistentResourceFromHandle(IResource,IProgressMonitor) checks if the folder already exists and returns immediately if so.
+ In cases where the FolderDescription has members which are not existing at that moment, that members will not be created.
+ Use case:
+ Assume you want to create a folder and a file in that folder and use two operations for this. 
+ I know it is not necessary to use two operations but my configuration is more complex than this example code.
+ IFolder folder = ... // must not exist
+ CreateFolderOperation op1 = new CreateFolderOperation(folder,...);
+ IFile file = folder.getFile(...); // must not exist
+ CreateFileOperation op1 = new CreateFileOperation(file,...);
+ op1.execute(...);
+ op2.execute(...);
+ The execution of the op2 does not create the file because as stated above createExistentResourceFromHandle returns immediately because the parent folder of the file was created by op1.
+ IMHO createExistentResourceFromHandle must check if members of a FolderDescription should be created.
+ I checked the code in the ganymede release and the problem should exist there too.
+ Is there any reason you cannot execute op1 before creating op2?
+ The basic problem is that the workspace file structure has changed since you first created the operation, so the change described by the operation is no longer valid.
+ &gt;Is there any reason you cannot execute op1 before creating op2?
+ No there is not.
+ In the meantime I found a workaround in my code but I think it's very inconvenient that someone must know that op2 have to be created after the execution of op1. 
+ The API gave me no hint that I have to do so!
+ Maybe the build of the FolderDescription could be delayed until the execution of op2.
+ Think about cases where the to ops have nothing in common e.g. created and executed in different plug-ins.
+ I'll mark this one for M4.
+ I think what needs to happen is that the javadoc better describes the lifecycle of these operations, and the isValid() method is tightened up so that the operation becomes invalid when the workspace changes to no longer match its recorded state.  
+ It is not the intention of these classes to stay in synch with workspace changes that happen independently of a shared, sequential workspace history.
+ Moving target as M6 has shipped.
+ Fixed in HEAD &gt;20090416.
+ In order to understand better what the ramifications might be of actually fixing this bug vs. better documenting the limitations and usage, I started by implementing a trial fix for the problem as reported.
+ It is pretty straightforward to rearrange the code to create the child resources (the file) even if the parent exists since the operation was created.
+ However, the problems occur later when you try to undo such an operation. 
+ Since the operation \"remembered\" that the folder didn't exist when it was first created, the undo of the create file operation tries to also delete the folder.  
+ This means that to truly fix the bug, we'd have to change the operations so that the resource descriptions were constantly updated to deal with changes that occurred.
+ So I still believe it's better to document more clearly what the intentions of the API are.  
+ I've updated the javadoc for AbstractResourcesOperation, CreateFileOperation, and CreateFolderOperation.  
+ In addition, I created a stricter validity check on CreateFileOperation so that the operation will return an invalid status if portions of the resource tree already exist.  
+ Created WorkspaceOperationsTest.test250125() to simulate this condition.  
+ The CreateFileOperation is valid until the CreateFolderOperation is run, at which time the file operation knows it is invalid.
+ &gt; In addition, I created a stricter validity check on CreateFileOperation so that the operation will return an invalid status if portions of the resource tree already exist. 
+ What I meant to say is...
+ I created a stricter validity check on CreateFileOperation so that the operation will return an invalid status if portions of the resource tree *that did not exist when the operation was created* already exist at the time of execution.  
+ It is expected/allowed that the containment tree already exists when the op is executed, as long they also existed when the op was created.
+ verified via automated test cases that run on each build.
+ Also verified through source inspection

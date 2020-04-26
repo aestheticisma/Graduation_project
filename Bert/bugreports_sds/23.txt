@@ -1,0 +1,65 @@
+ For some time (2 months? more?, i don't remember) i have this problem:
+ --&gt; if i drag and drop a folder from a location to an other, cpu use for thunderbird process is more than 50%.
+ --&gt; Even if the folder is empty
+ --&gt; It occurs with subfolder move inside Local Folders
+ --&gt; It occurs with folder move inside a pop account (for example moving Inbox-&gt;test to Draft-&gt;test
+ --&gt; It DOESN'T occurs when moving a folder from a pop account to an other (for example moving AccoutA --&gt; Inbox --&gt; test to AccountB --&gt; Inbox --&gt;test ... Butin this case, by design, folder is copied, not moved --&gt; it seems that this is
+ the delete which is the problem
+ Other Facts
+ ============
+ - Memory doesn't change during the move time ... only a high level of cpu use
+ - Delete key or Right-click delete (so move to trash) got the same bad result
+ - Renaming a folder take a long time too
+ - Checking pop account take more resources than before ... 10 to 20\" of high cpu resource for checking mail, slowing a lot of windows applications
+ - Same thing for RSS folders ...
+ Hardware and Software information
+ =================================
+ Computer: Dell Latitude D820 laptop, Core 2 Duo 2GHz, 2Go Ram, 100Go HD 7200rpm
+ OS: Windows Vista Business
+ Thunderbird: TB nightly 2.0.0.10pre (2007111403) ... but problem occurs since long time
+ Profile: profile.ini modified to have the profile files on D:\\Thunderbird\\JMR.profil. 
+ All emails account store on D:\\Thunderbird\\ (13 pop account + 69 RSS feeds)
+ D:\\Thunderbird: 2.3Go
+ Bigger file: 384Mo
+ Configuration: each pop has its own folder (inbox, etc ...) but rules filters lot of mails to subfolder in local folder directory
+ I've check bugzilla for similar bug, event Mozillazine forum, but never seen something like this
+ Additional information: Running in safe mode: same problem
+   ohoh ... thus bug seems related to my 10000 temp files in temp folder: tmprules-xxx.dat
+ I've deleted all of them --&gt; filters works again AND this bug seems solved by removing them
+ bad news: new tmprules begin to appairs ...
+ So, this bug is a dup of bug 362539
+ *** This bug has been marked as a duplicate of bug 362539 ***
+ I guess the really low perf behaviour was coming that TB parsed all 10000 rules files for all received mail ...
+ same thing when moving a folder, it parsed the 10000 rules files to see if these have to be updated after the move
+ (In reply to comment #2)
+ &gt; ohoh ... thus bug seems related to my 10000 temp files in temp folder: tmprules-xxx.dat
+ &gt; 
+ &gt; I've deleted all of them --&gt; filters works again  AND this bug seems solved by removing them
+ &gt; 
+ &gt; bad news: new tmprules begin to appairs ...
+ &gt; 
+ &gt; So, this bug is a dup of bug 362539
+ &gt; 
+ &gt; *** This bug has been marked as a duplicate of bug 362539 ***
+ &gt; 
+ This bug is not a duplicate of bug 362539.
+ Reason:
+ 1) Although the underlying cause may be the same, the symptoms of the two bugs are very different.
+ 2) Since the description attached to bug 362539 does not include the symptoms of this bug, it does not properly include this reported problem.
+ 3) When users search for this problem, now that this bug is closed, they probably will not find this description. 
+ Nor will they find bug 362539 since it does not include these symptoms at the top level. 
+ Hence they will not find the circumvention.
+ 4) Therefore, please re-open this bug report.
+ 5) Please do not attempt to amend the description of bug 362539. 
+ Please leave that decision, as well as that of closure, to one of the Bugzilla 'monitors'
+ who will know whether that is appropriate and, if so, how to do it cleanly, without obscuring user access to information.
+ you're right ... 
+ this bug depends of 362539 and not a dupe
+ (In reply to comment #5)
+ &gt; you're right ... this bug depends of 362539 and not a dupe
+ &gt; 
+ Thank you.
+ Adding \"tmprules-N.dat\" in bug summary, for ease of search & understanding bug.
+ (It looks to be too long. Please modify to appropriate one.)
+ Resolved fixed as bug 375292 is fixed on branch 1.8 and trunk
+ *** Bug 410739 has been marked as a duplicate of this bug. ***

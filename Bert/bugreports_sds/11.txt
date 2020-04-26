@@ -1,0 +1,41 @@
+ When images are rescaled now the GIMP always defaults to linear scaling.
+ Sometimes I want to do a bunch of images with cubic scaling. 
+ It would be handy that the scale dialog just remembered the last setting and always present that one.
+ The default interpolation routine can be choosen in the Preferences dialog.
+ I just thought it would be easier if it just remembered the last setting, that way a newbie does not have to search trough the preferences, and it is handy if you want to scale a set of images in a different way as normally
+ Jaap is right. 
+ I didn't know about the preferences setting until I saw this bug report.
+ This applies in general to options that the user can set without going into the preferences dialog: just remember the last setting, and there is no need for an entry in the preferences dialog.
+ We would need an entry whether to save the last used setting, for the users who don't want this.
+ Michael, I don't agree with having an extra entry whether to save the setting yes or no. 
+ This would clutter the interface even more. 
+ Because you then still need an entry in preferences and you need an extra entry in the scale dialog whether to save the last used setting. 
+ Just always remembering the last setting is conceptually by far the easiest for new users. 
+ Furthermore I think it's not really a problem if you have to change the setting now and then (In your case you also have to click once more to not save the setting). 
+ And most of the times you will not change this setting.
+ I agree that it is convenient to be able to set a default value from the place it is used (e.g., the Image-&gt;Scale dialog) instead of having to open the Preferences and find the corresponding option.
+ This is very useful for those who are not familiar with all options available in the Preferences.
+ However, I disagree with the proposal that the last setting should automatically become the default: I have set the default to Cubic (I might change it to Lanczos soon) and I expect it to be used all the time. 
+ But from time to time, I scale up a bitmap image without interpolation.
+ I don't want this to become the new default and give me bad results when I scale up another image two days later.
+ So if there is a way to change the default from the Scale dialog (which is probably a good idea), then it should require an explicit action from the user.
+ This could be a button like \"set default\" or a checkbox \"remember this setting\" next to the \"Interpolation type\" dropdown list.
+ &gt;&gt;Jaap is right. I didn't know about the preferences setting until I saw this bug report.
+ LOL, me too.
+ I think the suggestion for a \"set as defaults\" button here is a good all-round solution that satisfies both camps.
+ See this bug for request to deal with scaling units (percent/pixel) in the same way.
+ http://bugzilla.gnome.org/show_bug.cgi?id=357424
+ I think a \"set as defaults\" button would clutter the UI. 
+ This change remember the settings across dialog invocations.
+ Closing as FIXED.
+ (Please reopen if you strongly disagree, but please not without a non-ugly suggestion for a GUI)
+ 2006-10-14  Michael Natterer  &lt;mitch@gimp.org&gt;
+     Remember the settings in the scale and resize dialogs for images and layers. 
+ Fixes bug #164995, bug #316392, and bug #357424.
+     * app/dialogs/scale-dialog.h: removed GimpScaleCallback typedef.
+     * app/dialogs/dialogs-types.h: added it here.
+     * app/dialogs/image-scale-dialog.[ch]: made the ImageScaleDialog struct private, return a GtkWidget* from image_scale_dialog_new() and use a GimpScaleCallback in the public API.
+     * app/actions/actions-types.h: #include \"dialogs/dialogs-types.h\"
+     * app/actions/image-commands.c: changed according to image scale dialog changes. Remember the scale dialog's unit (if it is \"percent\") and interpolation type across dialog invocations.
+  Also remember the resize dialog's unit (if it is \"percent\").
+     * app/actions/layers-commands.c: remember scale and resize dialog stuff as in image-commands.c

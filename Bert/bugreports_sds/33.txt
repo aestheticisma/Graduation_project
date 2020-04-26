@@ -1,0 +1,85 @@
+ Version:           svn (using Devel)
+ Compiler:          gcc 4.3.2 gentoo
+ OS:                Linux
+ Installed from:    Compiled sources
+ If you navigate, using the file browser, to a song in the collection and select \"move to collection\", and ensure that the new file name is the same as the old file name, the song is renamed to itself (not renamed), then deleted.
+  The fix for this it to make sure that songs moved into the collection are not removed during the \"move to collection\" operation. 
+ A patch is below.
+ Created an attachment (id=28078) [details]
+ bug fix
+ Patch by Jason A. Donenfeld &lt;Jason@zx2c4.com&gt;
+ This patch fixes the bug by checking if the song is in a collection before removing it after the move operation. 
+ A potential problem is that it may fail to remove it from a collection when moving a track from one collection to another.  
+ Just for the record, this patch is incorrect and shouldn't be applied.
+ Created an attachment (id=28083) [details]
+ semi correct patch
+ Patch by Jason A. Donenfeld &lt;Jason@zx2c4.com&gt;
+ This patch fixes the problems of the above patch and gets to the heart of the issue: \"KIO::file_copy\"ing with the src and dest the same will erase the file.
+ This patch checks to see if the KURLs are identical before attempting to copy.
+ This is the same logic as used elsewhere in the modified file, so it was chosen to keep convention.
+ However, it still suffers from a problem: if the KURLs point at the same location but have different string paths, for example /home/user/music/artist/song.mp3 and /home/user/music/artist//song.mp3, the test will fail. Therefore, this patch needs only a fix for this comparison problem, and then it should be ready to be applied.
+ Jason, you can use KUrl::cleanPath() to fix this.
+  See here:
+ http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classKUrl.html#05eaea3296e3778f04014bd943ac894a
+ Created an attachment (id=28087) [details]
+ fixed final flaw
+ Mark - thanks for the suggestion. 
+ This patch solves the above patch's problems.
+ Patch by Jason A. Donenfeld &lt;Jason@zx2c4.com&gt;
+ \"KIO::file_copy\"ing with the src and dest the same will erase the file, so this patch checks to see if the KUrls are identical, after cleaning the urls, before attempting to copy. 
+ Since Max is the author who wrote the Collection code (including copying/moving), I'm going to wait for his approval to this patch before committing, lest we make an oversight.
+ Sebr - sounds good. 
+ I can commit it myself, hopefully, because I should have svn commit access soon enough. 
+ (sysadmins are usually pretty fast, no?)
+ I can't test this at the moment, but I've got a couple of comments after reading the bug report and the patch:
+ I didn't look up the api documentation, but using KIO::file_copy with the same source and destination url sounds like a bug in kdelibs. 
+ And I don't think that that is actually happening.
+ Because you are moving from the filebrowser, SqlCollectionLocation doesn't notice that it's dealing with a file already in the collection, and therefore doesn't use the special code that stops it from removing files from the source collection.
+ I am a bit surprised that the patch even works (does it?). 
+ CollectionLocation should be removing the source files (because you are *moving* files) after the copy operation, which is probably when your files actually are deleted.
+ Max,
+ This was my initial thought too... 
+ that really the problem was that it was removing the source after moving.
+ But then I fully mapped the flow, and I saw that that section never even gets called if sourceLocation = 0 (if it's coming
+ from a file and not another collection). 
+ The logic for that part works fine, with m_tracksRemovedByDestination being correctly populated and processed. 
+ The thing is that removal code is never called when sourceLocation = 0. 
+ Generally copying or moving a file into itself will delete the file; I've seen this behavior in other languages and commands, and kio doesn't appear to be an exception.
+ The patch does in fact work.
+ Something still may be suspicious, though.
+ Jason, are you sure that FileCollectionLocation::removeTrack does not get called?
+ I just checked the code which starts the move operation in the filebrowser, and it creates a FileColelctionLocation.
+  
+ Therefore sourceLocation will always be 0, the file will be copied (and deleting a file whehn copying or moving it onto itself *is* a bug), and *CollectionLocation* will call removeTrack on the source location as part of its workflow.
+ Aaaaa hah! With job never being assigned, slotJobFinished is never called, and if slotJobFinished is never called,  slotCopyOperationFinished is never called, and if slotCopyOperationFinished is never called, slotFinishCopy is never
+ called, and if slotFinishCopy is never called, removeSourceTracks is never called, and if removeSourceTracks is never called, remove is never called, and if remove is never called, QFile::remove is never called.
+ This shouldn't happen though. 
+ While this works, you're right: there is something screwy going on. 
+ Why doesn't slotCopyOperationFinished get called independently of slotJobFinished? Or is it supposed to work this way?
+ no, slotCopyOperationFinished should be called if we don't actually have to copy any tracks.
+  That's a bug.
+ Ok. I see how it all works now. 
+ New patch coming soon.
+ Created an attachment (id=28094) [details]
+ adds movedByDestination to CollectionLocation
+ ignoredDestinations was removed, as this was no longer pertinent, since it was only used in the flow from a job event.
+ movedByDestination was added to collectionLocation, since this is something all collectionlocations will potentially need to account for. 
+ slotCopyOperationFinished is now called if no job is created. 
+ Since m_removeSources is now protected and part of CollectionLocation, collections that cannot move but only copy will just set m_removeSources to false in their constructor. 
+ If you like this, I'm able to commit myself now. 
+ But I'm guessing you'll have suggestions.
+ I should probably make the map private and just add another protected accessor function. 
+ If we go this route, I should also make the protected accessor functions virtual and add proper comment documentation. 
+ SVN commit 876841 by jdonenfeld:
+ This prevents deleting a song when moving it or organizing it into its original path name by making sure the source and 
+ destination are different before [re]moving. 
+ This functionality is also potentially extended to all CollectionLocations, as now the base class has public functions to keep track of such things. 
+ This also cleans up the logic and flow quite a bit.
+ BUG: 173341
+  M  +29 -2     CollectionLocation.cpp  
+  M  +18 -3     CollectionLocation.h  
+  M  +27 -44    sqlcollection/SqlCollectionLocation.cpp  
+  M  +1 -6      sqlcollection/SqlCollectionLocation.h  
+  M  +5 -5      support/FileCollectionLocation.cpp  
+  M  +0 -5      support/FileCollectionLocation.h  
+ WebSVN link: http://websvn.kde.org/?view=rev&revision=876841

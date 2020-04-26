@@ -1,0 +1,50 @@
+ Please describe the problem:
+ When going to File-&gt;Acquire-&gt;Screenshot in the Windows port of the development build GIMP 2.3.11, firstly there are two different entries \"Screen Shot\" and \"Screenshot\" and secondly, functionality to grab only a portion of the screen is broken.
+ There is no option to \"Select a Region to Grab\" when the user chooses \"Screen Shot.\"
+ However, this option exists in the dialogue box that appears after the user selects :Screenshot.\" 
+ However, the functionality does not work, even after selecting a long delay period.
+ Instead, the whole screen is captured each time.  
+ I was expecting the mouse cursor onscreen to change to \"crosshairs\" or something similar to allow me to select the region I required.
+ Steps to reproduce:
+ 1. Launch GIMP 2.3.11 Development for Windows on a Windows 2000 platform.
+ 2. Got o File-&gt;Acquire-&gt;Screenshot.  (Note the two different entries for \"Screen Shot\" and \"Screenshot\".)
+ 3. Tick \"Select a Region to Grab.\"  
+ 4.  Set the delay.
+ 5.  Click \"Grab.\"
+ Actual results:
+ The whole screen is captured each time.
+ Expected results:
+ The ability to select a portion of the screen would be available, probably via mouse click-and-drag functionality.
+ Does this happen every time?
+ Yes.
+ Other information:
+ (I presume the two entries for screenshots under the submenu are there in order to test old and new code, by the way but I just noted it in case there was an issue.)
+ D. Le Sage
+ APF
+ Hobart, Tasmania
+ We know that the port of the screenshot plug-in for Windows is incomplete.
+ What's this bug-report about? 
+ Do you want to contribute the missing bits or do you want us to disable the plug-in for the Windows platform? 
+ We are waiting for a volunteer to implement the missing functionality for more than a year now.
+ Perhaps it's about time to drop support for the Win32 platform completely.
+ Sven,
+ The bug report was to alert you in case you did not know it was broken.  
+ You are obviously aware it is incomplete.  
+ Perhaps you should disable it to prevent more questions from users.
+ I am not a programmer so I cannot implement the functionality.  
+ I am trying to do my part by reporting issues for you.
+ You have complained before about how short of volunteers you are.  
+ If this is the case, perhaps it is a very good idea to drop support for Win32 and consolidate on making sure the *Nix implementation is as good as possible. 
+ Supporting Win32 is probably just draining more resources away.
+ IIRC Tor is working on this.
+ apf, you are using a development version. 
+ Of course there are incomplete and even broken features in there. 
+ If you are just a user, you should be using the stable release.
+ Tor said that it is impossible to implement the look and feel of the X11 screenshot plug-in on the Windows platform. 
+ He suggested that we stick with Winsnap for the Win32.
+ 2006-10-27  Sven Neumann  &lt;sven@gimp.org&gt;
+     * configure.in
+     * plug-ins/common/plugin-defs.pl
+     * plug-ins/common/Makefile.am: reverted changes from 2006-04-06 and build screenshot plug-in optionally again. 
+ Fixes bug #364852.
+     * plug-ins/common/mkgen.pl: reverted addition of 'extralibs' parameter that was introduced for the screenshot plug-in only.

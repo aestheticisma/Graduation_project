@@ -1,0 +1,39 @@
+ community has voted for. \r\nExamples include double-click-drag to select multiple words, triple-click, extensible hyperlink support and spell checking. \r\nWe should also improve the current search/replace dialog. \r\n[Platform Text, Platform UI,SWT]
+ &gt;We should also improve the current search/replace dialog.
+ Those will be minimal improvements like being able to resize the dialog. 
+ We won't completely redesign the dialog e.g. to provide Firefox-like search unless it is contributed by a patch.
+ Here is few things to look at:
+ -- Ctrl-Backspace don't work in all text editor widgets (try fields in search dialog or text fields in plugin.xml editor)
+ -- support for seaching multiline text and alow to replace into multiline text
+ -- improve usability of search dialog. 
+ Namely, replace direction radio buttons with additional buttons like \"Find previous\", \"Replace previous\". 
+ This would make getting back to accidentally skipped search match much easier.
+ &gt;-- Ctrl-Backspace don't work in all text editor widgets (try fields in search dialog or text fields in plugin.xml editor)
+ Please file separate bug reports, e.g. we do not control the PDE editor - thanks.
+ &gt;-- Ctrl-Backspace don't work in all text editor widgets (try fields in search
+ The problem here is that JDT UI started to map the text editor's editing commands onto the text, combo and other widgets using TextFieldNavigationHandler.
+ It would be possible push parts of TextFieldNavigationHandler down to Platform Text to provide this for dialogs around the editor but I think this is a more general issue since users then also expect the navigation commands to work in
+ wizards, Ctrl+H search pages etc. 
+ But this can't be adopted by JFace because they don't depend on the text editor plug-ins.
+ To solve this, JFace will have to adopt/define editing commands that can be used along with widgets and would have to provide the navigation handler(s).
+ Can you file a bug report against Platform UI and describe the problematic.
+ Please add myself to the cc-list. Thanks.
+ (In reply to comment #0)
+ &gt; extensible hyperlink support
+ I would prefer if extensive hyperlink support is much lower (ideally at the StyledText widget but if not, at the JFace level). 
+ UI Forms would like to port from FormText to StyledText. 
+ StyledText has added many key features in 3.2 time frame with hyperlink support being the last one we need in order to port.
+ Dejan, you're not allone ;-) 
+ Feel free to add your comments to bug 156219. 
+ The one in text land is bug 88293.
+ I'd like to throw in bug 145959 (forgive me if this doesn't apply to text editors):
+ On Windows, multi-line text boxes as used e.g. in the Run-&gt;Arguments dialog should support Return key in two ways:
+ [Return]: add CR/LF to current text box
+ [Ctrl-Return]: send Return key to parent dialog (similiar to executing the default action).
+  &gt;I'd like to throw in bug 145959 (forgive me if this doesn't apply to text editors):
+ Nothing to forgive just to ignore ;-) 
+ This plan item covers Platform Text. 
+ You have to place your feature with Platform SWT.
+ Completed as of I20070327-0800.
+ Some were hoping to drag source code is 3.2, perhaps they'll get it 3.3. 
+ And of course, it should be optional for those who would have a man run ahead of a horseless carriage with a red flag.

@@ -1,0 +1,46 @@
+ Created an attachment (id=87317) [details]
+ the error report
+ I'm using the SWT library, ran the \"Hello World\" example:
+ import org.eclipse.swt.widgets.*;
+ public class SWTExperiment {
+         public static void main (String [] args) {
+                 Display display = new Display ();
+                 Shell shell = new Shell(display);
+                 shell.open ();
+                 while (!shell.isDisposed ()) {
+                         if (!display.readAndDispatch ()) display.sleep ();
+                 }
+                 display.dispose ();
+         }
+ }
+ and SWT fails to load, it always exits with java has exited due to signal 4 (SIGILL).
+ I see the window flash open, then immediately it crashes.
+ There is nothing in the logs.
+ when i open the resulting jar with the jar launcher I get the crash report which I attached.
+ also, I ditched the new version and tried 3.2.2 and it worked
+ On my Mac, running OS X 10.5.2, I successfully ran the hello world example, from the command line, using the SWT from R3.4 M6. 
+ Can you try that version and see if it fails for you? 
+ Also, can you run     java -version   and let us know what it prints?
+ this is the output from java -version
+ java version \"1.5.0_13\"
+ Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_13-b05-241)
+ Java HotSpot(TM) Client VM (build 1.5.0_13-121, mixed mode, sharing)
+ I'm running Mac OS X 10.4.11, so still on Tiger.
+ I ran it again with the R3.4 M6 (including swt-debug.jar) and i'm getting the same issue, seeing the frame and then crashing with SIGILL.
+ Adding Steve to increase the visibility.
+ How are you launching your app? 
+ If you are launch from the command line, are you using the -XstartOnFirstThread option? 
+ (http://www.eclipse.org/swt/faq.php#carbonapp)
+ I'm running on leopard w/o any problems. 
+ I'll try Tiger.
+ Sorry, I could not reproduce this on Tiger either. 
+ I tried running in Eclipse, from command line, and exporting a project as a runnable jar from Eclipse. 
+ No crashes.
+ Please provide detailed instructions on how you are creating your project and running you code.
+ I created it using xcode 2.5 on tiger.  
+ I tried using eclipse but it would not build from source for some reason, so thats how i ended up on xcode.  
+ There are no command line arguments except -cp SWTexperiment.jar SWTexperiment, which doesn't pertain to this.  
+ I just tried adding the -XstartOnFirstThread option and everything worked fine.
+  No crashing, everything is wonderful. 
+  what does this option do?
+ http://www.eclipse.org/swt/faq.php#carbonapp

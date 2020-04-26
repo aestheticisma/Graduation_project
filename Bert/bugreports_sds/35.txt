@@ -1,0 +1,52 @@
+ Version:            (using Devel)
+ Installed from:    Compiled sources
+ OS:                Linux
+ Using nightly builds from project Neon,  kdebase version 20080617+svn821478-0neon1
+ There seem to be some problems with the zoom out view.  
+ It doesn't layout the activities properly.
+ Steps to reproduce:
+ 1. Zoom out.
+ 2. Add Activity.
+ Now only the newly added activity is shown, in the top left corner of the screen.
+ 3. Zoom in.
+ 4. Zoom out.
+ Now both the activities are shown, but not in the order they were added, and there is some whitespace around them.
+ If another activity is added, this happens again, and have to zoom in and out twice to get all 3 activities to show.
+ Same here at openSUSE, KDE 4.1 beta 2.
+ I'm using NVidia binary drivers btw, have an NVidia Geforce 6600 GT.
+ Just found out that the \"offset\" of the activity overview changes when you double click on the second activity. 
+ The same probably happens too when adding an activity.
+ At this point, it's not possible anymore to use drag&drop to move to the first activity. 
+ Only zooming out, selecting the first, and zooming in fixes it.
+ yeah, that regression crept in a while ago, and it's been bugging me a lot.
+ we've actually got multiple bugs in this report, it'd be nice to separate them out (but I have to leave in a minute).
+ 1) adding/switching activity makes the view jump suddenly to another place (it's trying to make sure the activity is visible, and being stupid about it)
+ 2) dragging the view around to see other activities no longer works (regression! it worked before woc)
+ Actually, dragging around the view does work here *except right after adding an activity*.  
+ I just didn't know about that functionality when I filed this report.
+ Adding an activity makes the view jump to another place, and also the placement of the new activity seems arbitrary.
+ Bug = Add activity focuses view on the new activity until zoom level changes
+ well then, let's make the title a bit clearer
+ I think add activity option (and zoom out) should be removed in the 4.1 final.
+ This bug is quite big, plus there's no clear way to delete an activity. 
+ Also,performance when zoomed out is slow as hell.
+ I didn't report this issues because some of them are already reported and I thought others are pretty obvious.
+ Don't get me wrong, it's a great idea, but it's current status makes it confusing, useless and buggy :S
+ performace is fine for me. 
+ are you using nvidia?
+ there are already people making use of multiple activities, we're not going to take that away from them.
+ it'd be really really nice if this bug could be fixed somehow, though.
+ &gt; This bug is quite big
+ so huge it crashes your machine, loses dat, etc, right? 
+ this is a molehill, stop making it into a mountain.
+ &gt; but it's current status makes it confusing, useless and buggy
+ so don't use it. 
+ we have gotten many reports of people who DO like it and are using it for day to day work. 
+ i suppose your desire to see this set of problems hidden overrides their productivity?
+ and if we'd taken this approach in 4.0 we'd be even further behind.
+ SVN commit 838477 by chani:
+ when a new activity is added, don't move more than necessary to show it this seems to fix dragging the view around too :)
+ BUG: 164545
+ please backport.
+  M  +7 -1      view.cpp  
+ WebSVN link: http://websvn.kde.org/?view=rev&revision=838477

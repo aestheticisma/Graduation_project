@@ -1,0 +1,98 @@
+ Using the current gvfs svn and nautilus 2.22.0, when doing a dnd from a directory on a proftpd server nautilus returns a file not available error. 
+ It does the same when trying to delete the directory. 
+ Copying the same directory using mirror in lftp works correctly
+ i get this too.
+ yup me too
+ *** Bug 524421 has been marked as a duplicate of this bug. ***
+ We're getting this in openSUSE too, and it seems to happen with all kinds of FTP servers.
+ The openSUES bug is
+ https://bugzilla.novell.com/show_bug.cgi?id=382360
+ This is caused by broken backends. 
+ Any attempts to open or copy/move a directory should fail with G_IO_ERROR_IS_DIRECTORY. 
+ GIO functions and Nautilus rely on that.
+ Fix for gvfs-smb is now in trunk and gnome-2-22 branch. 
+ Working on FTP fix right now.
+ Created an attachment (id=111807) [details]
+ gvfs-ftp-read-directory.patch
+ Proposed patch. 
+ Introducing new system of handling error 550 messages based on Benjamin's idea. 
+ So far only simple check if the target is directory has been implemented.
+ Please review the patch, I especially don't like keeping references to GVfsBackendFtp and processed file in the FtpConnection object but it is the easiest way to do it.
+ The patch gets the gist of what I want, but it looks ugly in places. 
+ Here's what I think on how to solve those:
+ My idea was that the error handlers should be implemented with simple ftp_connection_send() commands, that set errors automatically. 
+ So the is_directory handler would look something like this:
+ static void
+ error_550_is_directory (FtpConnection *conn, const FtpFile *file)
+ {
+   guint response = ftp_connection_send (conn,  RESPONSE_PASS_500, \"cwd %s\", file);
+   if (response == 550)
+     {
+       g_set_error (&conn-&gt;error, G_IO_ERROR,  G_IO_ERROR_IS_DIRECTORY, _(\"File is a directory\"));
+     }
+   else if (STATUS_GROUP (response) == 5)
+     {
+       ftp_connection_set_error_from_response (conn, response);
+     }
+ }
+ So we'd have a bunch of error handlers named error_550_$ERROR_WE_CHECK() like error_550_not_found or  error_550_permission_denied that do some ftp sending magic to figure out specific things.
+ While writing the above code, it occured to me that we might want to have a new flag \"RESPONSE_PASS_550\" just for the 550 error code, which would help in quite some cases and make the above function look like this:
+ static void
+ error_550_check_directory (FtpConnection *conn, const FtpFile *file)
+ {
+   guint response = ftp_connection_send (conn,  RESPONSE_PASS_550, \"cwd %s\", file);
+   if (response == 550)
+     {
+       g_set_error (&conn-&gt;error, G_IO_ERROR,  G_IO_ERROR_IS_DIRECTORY, _(\"File is a directory\"));
+     }
+ }
+ I also think that we want a seperate ftp_connection_send_and_check function, that does the job of doing special 550 checks, as there's a lot of cases where those aren't needed. 
+ The code would roughly look like this:
+ typedef void (* Ftp550Handler) (FtpConnection *conn, const FtpFile *file);
+ static void
+ ftp_connection_check_file (FtpConnection *conn,  const Ftp550Handler *handlers, const FtpFile *file)
+ {
+   while (*handlers && !ftp_connection_in_error (conn))
+     {
+       handlers (conn, file);
+       handlers++;
+     }
+ }
+ static guint
+ ftp_connection_send_and_check (FtpConnection *conn, ResponseFlags flags, const Ftp550Handler *handlers, const FtpFile *file,  const char *format, ...) G_GNUC_PRINTF (5, 6)
+ {
+   va_list varargs;
+   guint response;
+   /* check that there's no 550 handling used - don't allow bad use of API */
+   g_return_val_if_fail (flags & | == 0, 0);
+   g_return_val_if_fail (handlers != NULL, 0);
+   g_return_val_if_fail (file != NULL, 0);
+   va_start (varargs, format);
+   response = ftp_connection_sendv (conn,
+                    flags | RESPONSE_PASS_550, format, varargs);
+   va_end (varargs);
+   if (response == 550)
+     {
+       ftp_connection_check_file (conn, handlers, file);
+       response = 0;
+     }
+   return response;
+ }
+ This also solves the problem of having our 550 handling move into the response codes, which looks a bit unfortunate API wise.
+ And we get rid of adding more members to the FtpConnection struct, especially those that don't belong there.
+ Some smaller things:
+ - The function was called \"error_550_check_directory\". 
+ That's a somewhat bad choice for a name, as I don't know if it checks whether the file is or is not a directory.
+ - Please change the default error code for 550 to G_IO_ERROR_FAILED. 
+ \"Operation failed\" sounds much better than \"File unavailable\". 
+ And it tells us where we miss 550 checks: Whenever we get \"FAILED\" :)
+ - Your patch includes the \"LIST -a\" change for bad directory listings.
+ Created an attachment (id=112474) [details]
+ gvfs-ftp-read-directory-2.patch
+ Modified patch, fixing all issues noted in the previous comment.
+ From a quick review the patch looks pretty much like I imagined it. 
+ And before I forget it: error_550_is_directory() checks for 250, not 550.
+ Commited slightly modified patch to trunk and stable 2.22 branch. 
+ This fixes recursive copy of directory structure in Nautilus.
+ The delete issue reported in the first post might be related to bug #528347, where client apps using GIO/GVFS are unable see dot-files which are blocking directory removal as it's not empty. 
+ Otherwise deleting whole directory structure works fine in Nautilus and backend reports G_IO_ERROR_NOT_EMPTY correctly.

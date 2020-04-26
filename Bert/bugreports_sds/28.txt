@@ -1,0 +1,25 @@
+ Version:           0.9.0 (using KDE 3.3.0, Gentoo)
+ Compiler:          gcc version 3.3.3 20040412 (Gentoo Linux 3.3.3-r6, ssp-3.3.2-2, pie-8.7.6)
+ OS:                Linux (i686) release 2.6.8-gentoo-r3
+ Since Kopete is a multimessenger and has the idea of metacontacts etc I don't think it's neccessary to display on which network the contact is online (because it doesn't matter), this makes even more sense if you have people who have several different accounts and irc nicks and keeping track of all of them can quite clutter the contact list, so I would simply like an option to turn of the displaying of the tiny icq/irc/etc icons right (or wherever you choose them to be) of the display name, hope this will be done any time soon, thanks for kopete it's such a great app!
+ I'd like an option to do exactly the OPPOSITE ! :-) 
+ In fact, the contact list is organised as [KopeteStatusIcon][ContactName][ProtocolIcon]. 
+ Well, I'd like a way to tell Kopete to display only [ProtocolIcon][ContactName].
+ In fact, the best way would be to allow a CSS customisation of the contact list, just as we can have in message windows :-)
+ I am already considering adding that feature for the next version of Kopete; there are no technical or technological problems preventing it. 
+ However, there may not be time to implement it before KDE3.4.
+ On September 29, 2004 04:07 pm, Richard Smith wrote:
+ &gt; ------- I am already considering adding that feature for the next version of Kopete; there are no technical or technological problems preventing it.
+ &gt; However, there may not be time to implement it before KDE3.4.
+ Richard, are you hinting that you are going to render the list view inside a  KHTML widget?
+ That would be hella cool, but also hella complicated.
+ On Wednesday 29 September 2004 9:13 pm, Jason Keirstead wrote:
+ &gt; Richard, are you hinting that you are going to render the list view inside a KHTML widget?
+ It's an option I'm considering, for sure. 
+ But the current contact list code is quite flexible - flexible enough to allow me to throw together a drag-and-drop style editor for it, at least. 
+ This needs more discussion before anything gets coded.
+ Richard
+ Something to think about for 4.1
+ I think many people would be interested in showing this. 
+ Maybe an option could be added (if enought demand) to disable it.
+ Fixed in trunk (SVN commit 946606) will be in KDE 4.3, in trunk user can define contact list layout so you can hide the icons or change order.

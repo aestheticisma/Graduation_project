@@ -1,0 +1,69 @@
+ According to Havoc:
+   If you need struct fields in any widget, please file a bug report,  they should never be required to use a widget.
+ Accordingly, I took a look at the places where the latest PyGtk wrappers directly access widget data attributes to provide needed functionality.  
+ I found 43 examples, identified in the table below.  
+ (Of course, there may be more that PyGtk doesn't use or expose.)  
+ Most of these data attributes are accessed directly to provide them to the Python programmer.  
+ I assume that means they would also have to be accessed directly by the C programmer.
+     GTK_ADJUSTMENT                  lower
+     GTK_ADJUSTMENT                  page_increment
+     GTK_ADJUSTMENT                  page_size
+     GTK_ADJUSTMENT                  step_increment
+     GTK_ADJUSTMENT                  upper
+     GTK_ADJUSTMENT                  value
+     GTK_BIN                         child
+     GTK_CHECK_MENU_ITEM             active
+     GTK_CLIST                       columns
+     GTK_CLIST                       focus_row
+     GTK_CLIST                       row_list
+     GTK_CLIST                       rows
+     GTK_CLIST                       selection
+     GTK_COLOR_SELECTION_DIALOG      cancel_button
+     GTK_COLOR_SELECTION_DIALOG      colorsel
+     GTK_COLOR_SELECTION_DIALOG      help_button
+     GTK_COLOR_SELECTION_DIALOG      ok_button
+     GTK_COMBO                       entry
+     GTK_COMBO                       list
+     GTK_CURVE                       num_points
+     GTK_DIALOG                      action_area
+     GTK_DIALOG                      vbox
+     GTK_FONT_SELECTION_DIALOG       action_area
+     GTK_FONT_SELECTION_DIALOG       apply_button
+     GTK_FONT_SELECTION_DIALOG       cancel_button
+     GTK_FONT_SELECTION_DIALOG       fontsel
+     GTK_FONT_SELECTION_DIALOG       main_vbox
+     GTK_FONT_SELECTION_DIALOG       ok_button
+     GTK_GAMMA_CURVE                 curve
+     GTK_GAMMA_CURVE                 gamma
+     GTK_GAMMA_CURVE                 gamma_dialog
+     GTK_GAMMA_CURVE                 gamma_text
+     GTK_GAMMA_CURVE                 table
+     GTK_LIST                        selection
+     GTK_NOTEBOOK                    tab_pos
+     GTK_STYLE                       black
+     GTK_STYLE                       white
+     GTK_TEXT_BUFFER                 tag_table
+     GTK_TOGGLE_BUTTON               draw_indicator
+     GTK_WIDGET                      allocation
+     GTK_WIDGET                      parent
+     GTK_WIDGET                      style
+     GTK_WIDGET                      window
+ Thanks, this is helpful. 
+ Some of them are bogus and already  have accessor functions, I believe:
+ GTK_BIN                         child
+ GTK_CHECK_MENU_ITEM             active
+ GTK_TEXT_BUFFER                 tag_table
+ Also, most of them are for deprecated widgets. 
+ But there are many there we should probably have functions for.
+ Adding API keyword, but putting on future milestone.
+ When considering accessor functions, you might also want to consider raising the API up to a bit higher level.  
+ For example, the Combo widget should probably have its own value-changed signal and direct access to the underlying entry and list widgets should be deprecated with some higher level functions written for the Combo widget to get at necessary functionality.  
+ Since the GtkList widget is already deprecated, this stuff is going to break in applications someday anyway.
+ No kidding about the breakability in the combo box: this is already pretty much broken in GTK-- (C++ binding), where they use a different implementation for the (deprecated) list, which basically makes it impossible to access list data. 
+ A change in the GTK+ API to allow access to the list items through a function would make this a whole lot more usable.
+ Suggestion:
+ Make the list in the combo a GList. 
+ This would also make working with the combo easier... 
+ Not sure if there's a good way of handling arbitary  widgets with associated text without creating some sort of ListItem
+ (deprecated) replacement...
+ The ongoing gseal work is finally taking care of this.

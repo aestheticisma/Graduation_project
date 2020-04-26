@@ -1,0 +1,52 @@
+ Please describe the problem:
+ When I try to export reports that contain graphs gnuCash just creates an empty html file.
+ Also it is not clear that the export can only do html files. 
+ The first time I ran export I triped to save as .jpg and it created a html file named foo.jpg
+ Steps to reproduce:
+ 1. In gnuCash go on reports and create any report that contains a graph
+ 2. In the report window click on Export 
+ 3. Save export to \"foo.html\"
+ Actual results:
+ An empty HTML file is saved
+ Expected results:
+ A HTML file with a nice graph 
+ Does this happen every time?
+ Yes
+ Other information:
+ Yes, that's true -- the current graphing code, which uses the graphical library \"Guppi\" which is a dead project, can only produce the on-screen diagrams *and* print these to postscript, but it cannot export these diagrams into pictures that are embedded in a HTML-file. 
+ In other words, you can only print the diagrams to postscript but not export them to HTML. 
+ This is not going to change before the gnome2 port is completed, because we need to switch to a different graphical library before anything related to this can be changed. 
+ See http://gnomesupport.org/wiki/index.php/GnuCashPortingStatus for the porting status.
+ Definitely keep it as a reminder.
+ We should be able to coax anything into giving us a PNG; GOG supports SVG export, too.  
+ But it looks like gtkhtml doesn't support saving &lt;object /&gt; data.
+ Because it sucks ass.
+ This is still valid for me with version 2.0.4 on opensuse 10.2. 
+ This is a real problem not to be able to export these reports. 
+ This shouldn't be tagged 'enhancement' anymore, but brought up higher.
+ What's the status on this? 
+ Thank you.
+ (In reply to comment #4)
+ &gt; This is still valid for me with version 2.0.4 on opensuse 10.2. 
+ &gt; This is a real &gt; problem not to be able to export these reports. 
+ &gt; This shouldn't be tagged 'enhancement' anymore, but brought up higher.
+ &gt; What's the status on this? 
+ There's no change on this.
+ I wonder if the more recent gtkhtml supports getting at &lt;object /&gt;s, or if the more recent GOG makes it trivial to create a PNG.
+ In any case, I hesitate to do so, but I've raised the severity to Normal -- a minor part of the component (Reports, export, graphs) does not work.
+ (FWIW, Fred, it's not going to get fixed any faster at Normal than at Enhancement.)
+ I can confirm this using GnuCash 2.0.5 on Ubuntu 7.04, feisty fawn...and I can confirm that it's frustrating....
+ 2.2.8, still doesn't have this needed feature... Frustration also confirmed.
+ GtkHtml provides a callback when it encounters a &lt;object&gt; tag, and gnc-html then calls gog to create the image as a GdkPixbuf and then embed it in the web page.  
+ For the webkit port, there is no &lt;object&gt; callback.  
+ Therefore, gnc-html-webkit pre-parses the html string, finds the &lt;object&gt; tag, calls gog with the parameter values from the &lt;object&gt; to create a GdkPixbuf, then converts the pixels to png/base64 and embeds the html &lt;img&gt; in the original
+ where the &lt;object&gt; was.  
+ Result is a graph that displays in webkit.  
+ In addition, gnc-html-webkit saves the html passed to webkit and handles the export itself by writing that html to a file.
+ This fix is targetted for 2.4.  
+ I can also convert gnc-html-gtkhtml to use these two features (convert graph to embedded &lt;img&gt; and do the export rather
+ than getting gtkhtml to do it) for those who can't build 2.4 with webkit.
+ It turns out that gtkhtml (at least the version I have on Ubuntu 9.04) doesn't support inline images.  
+ Therefore, this will only be possible using webkit.
+ The gnucash-1.8.x series is no longer developed. 
+ We may keep this enhancement request as a reminder, though.

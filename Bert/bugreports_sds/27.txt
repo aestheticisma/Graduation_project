@@ -1,0 +1,55 @@
+ version:           svn (using Devel)
+ OS:                Linux
+ Installed from:    Compiled sources
+ In amarok2-svn I like the the new contextview , but I found the new bottom bar for managing applets annoying , as it covers parts of other applets sometimes , like lyrics one , so that you miss a part of it. 
+ Could be handy to have it appear and desappear onmouseover.
+ thanks
+ The real solution is to make it not cover applets, not make it appear/disappear on mouse over.
+ i dont understand your point, dan... how do we make it not cover applets?
+ Thats your problem to solve :)
+ The toolbar should be like the panel in kde, it gets it's own area to draw in (a strut in window manager terms). 
+ The applets should not consider the space the toolbar takes up to be theirs to play in, but rather end at the top of it.
+ well if i move a window on my desktop down, the panel does cover it. 
+ so i still don't understand...
+ right, but new windows placed on the desktop do not get placed under the panel, and maximizing windows doesn't put them under the panel either.  
+ You need to explicitely place the window under the panel, and I considder it a bug that it's possible (but that's not what this debate is about).]
+ The panel should not obfuscate applets by default.
+ I fully agree with Dan here, and I also fully admit that I don't have the slightest clue on how to implement this technically :)
+ But I really think that what he wrote makes a lot of sense, if feasible.
+ Created an attachment (id=32462) [details]
+ amarok-svn toolbar overlap
+ Me and Dan are meaning this.. a screen is better then words sometimes :-)
+ i know what it looks like, 've been staring at it all day. btw, that screenshot is outdated now :)
+ i still don't see how else you guys plan to visualize it. 
+ do you just want a border for the applet area, so instead of hitting the panel directly, it ends at the border? 
+ i mean, applets *will* be logically under the location of the panel---all the applets that a user can  have will not fit on the screen at the same time---so how else to show it?
+ The applet should end where the toolbar begins.  
+ Applets should not be larger than the viewable area, if there's an applet above it, then the lower applet should get a smaller sizehint, and resize if necessary when it's the active applet (and therefore the only one on the screen)
+ Basically, no applet should continue on off the screen, it should end at the panel.
+ i disagree :) what you are describing is a very different use-case of the CV in general, and distinctly different from what the original idea that was developed. 
+ in fact, i think there is another bug where we've already had this discussion (with mark), and this has come up on IRC. 
+ anyway, this is not something to be fixed, but rather a change that needs to be discussed with people like e.g. leinir.
+ regardless of all of this, the problem of \"applets falling off the end of the screen\" should be mitigated when we are able to resize applets.
+ You can't tell me that the screenshot attached to this bug is intended.
+ There is no way to see the final line or two in the lyrics applet.  
+ This is a major bug.
+ The bug that is being shown here is the fact that you cannot yet resize your applets, and as such we also don't set default sizes sanely. 
+ You are reporting a bug on a non-completed feature ;)
+ infact it was a wish! ;-)
+ Of course :) Just thought i should point out that the feature is not yet completed - the polish that's gone into it Ù…ately could seem like an indication of feature completion, and as such it would seem the prudent course to inform you Ùhat that is not the case :)
+ I don't think that this should be dependent on being able to resize freely at all...
+ Most of the time, the sizegrip for resizing ends up in the bottom right corner, and as such, would be inaccessable reguardless of whether it was free sizing or not.
+ The bug isn't that the applet can't be made smaller, but that part of the applet is completely inaccesible.
+ I fully agree with Dan aswell. 
+ I don't understand the confusion as it doesnt matter at all if an applet is resizable or not.
+ To quote Dan:
+ \"The applet should end where the toolbar begins.
+ Applets should not be larger than the viewable area, if there's an applet above it, then the lower applet should get a smaller sizehint, and resize if necessary when it's the active applet (and therefore the only one on the screen)\"
+ That's the expected behaviour and what is used in the playlist aswell. 
+ Track items dont overlap the lower toolbar, do they?
+ *** Bug 174221 has been marked as a duplicate of this bug. ***
+ will be fixed in 2.1.1, done locally.
+ I found it probably fixed in trunk :-) 
+ can Leo confirm that? 
+ we could close this....
+ yep, sorry forgot to close when i pushed.

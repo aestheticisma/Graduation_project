@@ -1,0 +1,82 @@
+ Here is the JavaDoc for IAdapterManager.computeClassOrder(Class):
+ Returns the class search order for a given class. 
+ The search order from a class with the definition class X extends Y implements A, B is as follows:
+ - the target's class: X 
+ - X's superclasses in order to Object 
+ - a breadth-first traversal of the target class's interfaces in the order returned by getInterfaces (in the example, A and its superinterfaces then B and its superinterfaces) 
+ This comment is not perfectly clear. 
+ In particular, it does not complete the example by explicitly listing the exact order the example classes and interfaces are returned.
+ I came up with a slightly richer example:
+     interface A extends M, N
+     interface B extends O
+     class Y implements C, D
+     class X extends Y implements A, B
+ [The declarations for interfaces C, D, M, N, and O are trivial.] 
+ The order of classes and interfaces returned by AdapterManager.computeClassOrder(X) is:
+     class X
+     interface A
+     interface B
+     interface M
+     interface N
+     interface O
+     class Y
+     interface C
+     interface D
+     class java.lang.Object
+ This conflicts with the JavaDoc. The class X is the first thing returned, but it is *not* followed by \"X's superclasses in order to Object\". 
+ It is followed by a breadth-first list of X's interface hierarchy\", *then* followed by X's superclass Y, which is then followed by a breadth-first list of Y's interface hierarchy; and so on, up to  java.lang.Object.
+ Also, the JavaDoc has what reads to me as a contradiction:
+     a breadth-first traversal of the target class's interfaces in the order returned by getInterfaces
+ vs. 
+     in the example, A and its superinterfaces then B and its superinterfaces
+ What actually happens *does* feel like a \"breadth-first\" search; 
+ but that would not be accurately described as \"A and its superinterfaces then B and its superinterfaces\". 
+ But maybe I'm reading it wrong....
+ It might be worth discussing which is the \"preferred\" behavior: the behavior described by the JavaDoc or the behavior implemented in AdapterManager. 
+ In some ways having all the classes first, followed by the interfaces might make more sense than the current implementation.... 
+ But, then you have the whole \"backward-compatibility\" thing to worry about....
+ You are right on both counts. 
+ The implementation doesn't match the spec, and there is a contradiction in the spec itself. 
+ Now the question is what do we do about it.
+  - For the contradiction, I think we should stick with the breadth-first search, and delete the parenthetic comment about the example (\"A and its superinterfaces then B and its superinterfaces\")
+  - For the spec not matching the behaviour, my instinct is to \"fix\" the spec to match the implementation, to avoid the risk of breaking clients. 
+ This would be a very subtle change that could affect clients in unpredictable ways. 
+ On the other hand if there are really compelling reasons to change the implementation to match the spec, I'd be curious to hear them.
+ I did some research and found that the implementation did match the spec until Febuary 20, 2004, when I change the implementation. 
+ At that time the spec wasn't part of the API. 
+ The spec was later added to the API (IAdapterManager#computeClassOrder) without checking that the implementation still matched. 
+ I'm going to do some more archeology to see if I can figure out why I changed the lookup order.
+ It would be interesting to know what triggered the change in behavior.
+ I guess the question is whether superclasses take precedence over interfaces defined lower in the hierarchy, i.e. does the implementation take precedence over the specification? 
+ I can see arguments for either way; but I guess I would probably come down on the side of giving specification precedence. 
+ So, I guess you argue further that all the interfaces could precede all the classes?
+ Argh...why did I even ask? :-)
+ Anyway, I don't have any use cases at the moment to argue one way or the other.
+ It's just that my curiosity got the better of me, after years of wondering, \"Just how does the Platform resolve which adapter to return?\" :-)
+ It looks like this change was made inadvertently during a large batch of changes to add support for the adapters extension point (bug 32498). 
+ I think since this change was introduced accidentally, and this is a clear violation of a long-standing specification, I'm leaning towards fixing the implementation. 
+ I noticed the spec also doesn't mention the interfaces of the target class' superclasses. 
+ I think the corrected spec should read:
+          * &lt;ul&gt;
+          * &lt;li&gt;the target's class: X
+          * &lt;li&gt;X's superclasses in order to &lt;code&gt;Object&lt;/code&gt;
+          * &lt;li&gt;a breadth-first traversal of the target class's interfaces in the order returned by &lt;code&gt;getInterfaces&lt;/code&gt; (in the example, X and its superinterfaces then Y and its superinterfaces) &lt;/li&gt;
+          * &lt;/ul&gt;
+ Note that the comment changed to \"X and its superinterfaces then Y...\" as opposed to \"A and its superinterfaces then B...\". 
+ Thus this clarifies how the interfaces of superclasses are considered, while fixing the contradiction in the specification of interface search order.
+ Created an attachment (id=122293) [details]
+ Fix v01
+ Created an attachment (id=122297) [details]
+ Test case
+ This is a test case using your richer example
+ Fix and tests released to HEAD.
+ Sounds reasonable.
+ One tiny nit-pick though. 
+ The last entry in the bullet list now reads:
+     a breadth-first traversal of each class's interfaces in the order returned by &lt;code&gt;getInterfaces&lt;/code&gt; (in the example, X and its superinterfaces then Y and its superinterfaces) &lt;/li&gt;
+ It might be more accurate to say:
+     a breadth-first traversal of each class's interfaces in the order returned by &lt;code&gt;getInterfaces&lt;/code&gt; (in the example, X's superinterfaces then Y's superinterfaces)
+ Since X and Y are not actually included in the \"traversal\".
+ Thanks.
+ Good point, I have released this clarification to HEAD. 
+ Thanks again.

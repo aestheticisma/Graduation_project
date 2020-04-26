@@ -1,0 +1,60 @@
+ While using Alt+Tab for switching between applications works fine in my KDE4 post RC1 version, when I try to use Alt+Shift+Tab shortcut the keyboard did not respond anymore and I don't know how to get it back.
+ However the mouse it is still working properlly, so I can logout with the mouse and I when I log back the keyboard it also works.
+ I just hit this bug as well. 
+ But unfortunately I can't re-trigger it at the moment. 
+ While alt-shift-tab doesn't do anything here, the keyboard is still accessible.
+ This is really a serious problem. 
+ It seems that if I hit Alt+Shift+tab directly I always get the problem. 
+ And if I just hit Alt+Tab and then Alt+Shift+tab and release I get it as well, so I have to make sure I always hit Alt+Tab as last thing.
+ In KDE 3, Alt+Shift+Tab is one of the possible shortcuts used for switching keyboard layouts (keyboard layout kcm -&gt; xkb options -&gt; layout switching tree item). 
+ Even though I don't have that box ticked, it still persists in changing the layout with that shortcut. 
+ Perhaps, the shortcut is being sent to the same place but is causing a crash due to some bitrot?
+ While editing kglobalaccelsrc to change the shortcut does help, killing kxkb doesn't help at all and thus I don't think its kxkb causing the problem.
+ *** Bug 153495 has been marked as a duplicate of this bug. ***
+ I confirm. 
+ I had to reboot. 
+ Note that the mouse was behaving has if the Shift key was pressed: it was extending the selection when clicking with the left button. 
+ The problem is in KGlobalAccel, it doesn't release the grab when a shortcut is set that isn't triggered. 
+ Which is the case for Alt+Shift+Tab, the shortcut that is actually send by X11 is Alt+Shift+Backtab. 
+ Re-Assigning.
+ *** Bug 153754 has been marked as a duplicate of this bug. ***
+ SVN commit 747205 by apaku:
+ Add a hotfix for Bug #153211, also ungrab the keyboard when Alt+Shift+Backtab was hit CCBUG:153211
+  M  +5 -1      kglobalaccel_x11.cpp  
+ WebSVN link: http://websvn.kde.org/?view=rev&revision=747205
+ Thanks, your hotfix fixed this problem, however on the past KrushDay someone mentioned a similar issue pressing Alt+PrintScr which is still present for me.
+ I don't know if this is related with the original issue, but if not you can close this bug.
+ It could be, I'll check later today. 
+ IIRC Alt+Print Screen is some snapshot function right? 
+ You can easily check wether its the same issue by doing the following:
+ Open $HOME/.kde4/share/config/kglobalshortcutsrc and find the action there.
+ Then open any shortcut dialog in any application and change one of the shortcuts. 
+ When you're asked for pressing the new keyboard combination press the Alt+Print keys and check wether the label of the shortcut button is now the same as that in the rc-file. 
+ If they differ its the same problem and that means we need a different fix for this problem, than the hotfix I comitted.
+ In kglobalshortcutsrc I have assigned Alt+Print to kwin, and also Alt+Shift+Tab to kwin. 
+ But if in one application like Konqueror or Konsole I assing a new shortcurt to Alt+Print it get's changed automatically to Alt+Shift+Print, so I can't assign another Alt+Print shortcut.
+ However I can assign Alt+Shift+Tab shortcut, but besides it is still showing it in shortcut settings it doesn't work, and also it doesn't appear in kglobalshortcutsrc apart from the old one already existing and assigned to kwin.
+ Also I don't know if is my setup but in 'kcmshell4 keys' I can't modify any shortcut, in fact, it doesn't show any, but that can be another bug.
+ Ok  as far as I can see this is the same problem, namely that the keys Alt+Print don't produce the X11 keysequence that is expected. 
+ In particular Alt+Shift+Tab creates a Qt key sequence of Alt+Shift+Backtab and seemingly Alt+Print creates Alt+Shift+Print in Qt key sequence. 
+ So this is indeed the same problem.
+ Regarding the keys kcm: Thats \"expected\", the kcm hasn't been properly ported.
+ I've already posted a patch for a minimal port to the kde-core list. 
+ That one will get comitted next monday, unless I get objections.
+ I discovered another similar shortcut which is Ctrl+PrintScrn but this doesn't suffer this problem and works as expected.
+ To my knowledge, only Alt+Shift+Print and Alt+Print are triggered by this bug.
+ *** Bug 154692 has been marked as a duplicate of this bug. ***
+ *** Bug 156069 has been marked as a duplicate of this bug. ***
+ SVN commit 763132 by lunakl:
+ Since calling directly Xlib's XGrabKeyboard() is very unlikely and even probably undesired in kded, make KGlobalAccel again ungrab when there's no Qt caused grab.
+ BUG: 153211
+  M  +0 -7      kdedglobalaccel.cpp  
+  M  +1 -4      kdedglobalaccel.h  
+  M  +11 -11    kglobalaccel_x11.cpp  
+ WebSVN link: http://websvn.kde.org/?view=rev&revision=763132
+ *** Bug 156434 has been marked as a duplicate of this bug. ***
+ this bug should still be open. 
+ I am running 4.2 beta 2 and this problem is still there.
+ I've found this bug in KDE 4.2 too. 
+ I don't know if there is any specific key-combination that triggers it, but KWin acts as if I'm holding down the ALT-key, moving windows when I click and drag in them.
+ (Kubuntu 8.10 (intrepid) packages from kubuntu-experimental)

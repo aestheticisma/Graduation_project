@@ -1,0 +1,31 @@
+ According to the javaDoc in Platform.getResourceString(Bundle,String), this method has been deprecated and one should use the NLS class or the BundleFinder.find(). 
+ I was able to find the NLS class but I didn't find the BundleFinder class. 
+ Is the javaDoc correct? 
+ if it is a hint on where to find the BundleFinder class would help.
+ The NLS class doesn't seem to provide me with the same functionality that Platform.getResourceString does, so I am assuming that BundleFinder would do the job that I need.
+ Please provide me with more information on where to find the BundleFinder and improve the javaDoc.
+ I don't think that replacement functionality was ever implemented.
+ Pascal, you added bunch of comments like that to the Platform ver. 1.92. 
+ As there are no current plans to act on them (and there has been no actions done in the last 2 years) I think we need to remove those comments - they make a rather confusing Javadoc.
+ There are 21 \"XXX\" comments that should be removed from Javadoc or acted upon.
+ Adding M7 as a milestone to remind to remove those comments.
+ (In reply to comment #1)
+ &gt; I don't think that replacement functionality was ever implemented. 
+ &gt; Pascal, you added bunch of comments like that to the Platform ver. 1.92. 
+ &gt; As there are no current plans to act on them (and there has been no actions done &gt; in the last 2 years) I think we need to remove those comments - they make a rather confusing Javadoc.
+ &gt; There are 21 \"XXX\" comments that should be removed from Javadoc or acted upon.
+  
+ So are you saying that the support for using getResourceString has just been droppped, and that no replacement will be available? 
+ that concerns me because WTP has a code that uses this method, and I am sure that there is plenty of adopters that are currently using that function as well.
+ The method Platform.getResourceString(Bundle,String) is not deprecated at this time; 
+ the comments should have been added to the implementation code or to a bug report, not to the Javadoc of the Platform class. 
+ Please adjust the target milestone, so it does not point at a closed milestone in the past.
+ From bug 247983 other tagged methods:
+ -getResourceBundle(Bundle)
+ -getResourceString(Bundle, String)
+ -getResourceString(Bundle, String, ResourceBundle)
+ *** Bug 247983 has been marked as a duplicate of this bug. ***
+ Removed incorrect comments from the Platform class.
+ We collided, I just made the same changes. 
+ The only difference is that I moved the comments to InternalPlatform. 
+ Also I deprecated Platform#endSplash since this has been replaced with IApplicationContext#applicationRunning().

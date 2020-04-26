@@ -1,0 +1,90 @@
+ User-Agent:       Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US;rv:1.8b2) Gecko/20050528 Firefox/1.0+
+ Build Identifier: Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US;rv:1.8b2) Gecko/20050528 Firefox/1.0+
+ The folders pane in Thunderbird that lists my e-mail accounts and local folders does not allow me to select several folders at once. 
+ For instance I should be able to click on my James folder to select it, shift-click on my John folder to select it without deselecting the James folder, and then drag them *both* into my Friends folder. 
+ Currently I have to do this one at a time.
+ Reproducible: Always
+ Steps to Reproduce:
+ 1. Click on a local folder
+ 2. Shift-click on a different local folder
+ Actual Results:  
+ The first folder is deselected. 
+ Expected Results:  
+ Kept both selected. 
+ Possibly there's a difference here between shift and command-clicking (on a Mac). 
+ Shift click should perhaps select everything between the clicked folder and the currently selected folder. 
+ Command-clicking normally selects only the folders you explicitly click on. 
+ Possibly there are other conventions on other platforms for multiple selections. 
+ But multiple selections should be possible,
+ This is an automated message, with ID \"auto-resolve01\".
+ This bug has had no comments for a long time. 
+ Statistically, we have found that bug reports that have not been confirmed by a second user after three months are
+ highly unlikely to be the source of a fix to the code.
+ While your input is very important to us, our resources are limited and so we are asking for your help in focussing our efforts. 
+ If you can still reproduce this problem in the latest version of the product (see below for how to obtain a copy) or, for feature requests, if it's not present in the latest version and you still believe we should implement it, please visit the URL of this bug (given at the top of this mail) and add a comment to that effect, giving more reproduction information if you have it.
+ If it is not a problem any longer, you need take no action. 
+ If this bug is not changed in any way in the next two weeks, it will be automatically resolved.
+ Thank you for your help in this matter.
+ The latest beta releases can be obtained from:
+ Firefox:     http://www.mozilla.org/projects/firefox/
+ Thunderbird: http://www.mozilla.org/products/thunderbird/releases/1.5beta1.html
+ Seamonkey:   http://www.mozilla.org/projects/seamonkey/
+ *** Bug 310352 has been marked as a duplicate of this bug. ***
+ Suite bug 50767.
+ This is highly-desirable in my opinion. 
+ I would like to see this implemented for easier management of RSS subscriptions.
+ *** Bug 366757 has been marked as a duplicate of this bug. ***
+ I would love to see this closed, and also dragging up and down the folder pane much faster.
+ *** Bug 398712 has been marked as a duplicate of this bug. ***
+ This is pretty basic stuff. 
+ It's been a bit of a showstopper when migrating Outlook users over to Thunderbird since heavy users often have tons of folders to organise their emails. 
+ Importing their mail just dumps these folders into Local Folders and then they can't be re-organised in their inbox without going through them all one-by-one, which is just silly.
+ On latest trunk multiple folders can be selected but there is completely no benefit of it: on drag and drop only 1 folder is moved, CM shows only 3 entries (open, open in new tab, properties) and even they are useless ;) (nothing happens / empty tab).
+ Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1b2pre) Gecko/20081030 Lightning/1.0pre Shredder/3.0b1pre
+ blockingâ€‘thunderbird3 ?
+ Multiple selection should be either useful or not possible at all.
+ Adjusting description.
+ Marking as regression as in 2.0 you couldn't select more than one folder at a time.
+ Would be great if someone went through and made context commands work where it should, but at the very least we should make commands unavailable when they won't work anyway. 
+ blocking-tb3+ to at least get the minimal fix in.
+ Magnus, care to own this bug?
+ Sure, though if someone want's to take it on it's up for grabs.
+ *** Bug 481159 has been marked as a duplicate of this bug. ***
+ I'll put this up for m5 since it's not active right now
+ Created an attachment (id=374607) [details]
+ proposed fix
+ The items that I think make sense for multi select:
+ Get Messages
+  o if only servers, or it's only newsgroups/feeds 
+ Open 
+  o though I question that we should have this item *at all*
+ Open in new Tab
+ Unsubscribe
+  o if it's newsgroups only
+ Delete 
+  o would have been useful, but the confirmation dialogs are not in js, we have multiple delete models etc so i gave up and just disabled it for multi selection
+ Compact
+ Mark Folder/s Read
+ Mark Newsgroup/s Read
+ ---
+ Other notes:
+  - hitting delete on ng to unsubscribe was broken (confirmUnsubscribe vs ConfirmUnsubscribe)
+  - new saved search wasn't enabled for news - but you can create one
+  - moving away from GetSelectedMsgFolders() to gFolderTreeView.getSelectedFolders()
+ Still to do (maybe in another bug...):
+  - fix tools menu folder commands
+  - drag'n'drop (disable for multi?)
+ ---
+ Phil: got bandwidth for this?
+ (From update of attachment 374607 [details])
+ Looks good to me, except
+ &gt;+   * Compacts either or all folders for accounts that the given folders belong to, or for accounts of the currently selected folders.
+ That's hard enough to parse even without the stray or in \"either or\" ;)
+ (From update of attachment 374607 [details])
+ sounds good from the description
+ I was going to add the checkin-needed keyword but you probably want to fix the nits first
+ changeset:   2593:2f6ef8daa83e
+ http://hg.mozilla.org/comm-central/rev/2f6ef8daa83e
+ -&gt;FIXED
+ Note to testers: now that this landed the commands of the folder context menu should work for multiple folders, if the are shown (and enabled). 
+ There's a lot of different possible combinations of folders/servers of different kinds possible so it would be good if people could make sure all cases work as they should for them.
