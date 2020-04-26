@@ -41,7 +41,7 @@
 * 预训练的glove_100d (这个我忘记从哪下载的了 hxd对8起)
 * 预训练的wiki_word2vec_100d [下载地址](https://wikipedia2vec.github.io/wikipedia2vec/pretrained/)
 * 基于SDS数据集训练的fasttext_100d
-* 通过`Bert-as-service`获取的Bert_768d词嵌入 使用同[上一级页面的Bert句向量获取](../Bert/)
+* 通过`Bert-as-service`获取的Bert_768d词嵌入 使用同上一级页面的[Bert句向量获取](../Bert#调用bert-as-service获取句向量)
 
 通过`main.py`中的options进行选择。
 
