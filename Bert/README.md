@@ -22,6 +22,7 @@ pip install bert-serving-client
 ```bash
 bert-serving-start -model_dir /tmp/english_L-12_H-768_A-12/ -num_worker=4
 ```
+
 具体参数请看[介绍](https://github.com/hanxiao/bert-as-service#2-start-the-bert-service)
 
 4. 模型定义均置于`main.py`(除Attention层定义外)
