@@ -15,10 +15,15 @@
 pip install bert-serving-server
 pip install bert-serving-client
 ```
+
 2. 下载Bert预训练模型
+
 可以到[这里](https://github.com/google-research/bert#pre-trained-models)查看所有预训练模型。
+
 我用的是`BERT-Base, Uncased`
+
 3. 启动服务端程序
+
 ```bash
 bert-serving-start -model_dir /tmp/english_L-12_H-768_A-12/ -num_worker=4
 ```
