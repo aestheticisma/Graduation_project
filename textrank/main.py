@@ -4,7 +4,7 @@ import eval
 
 
 def main():
-    filename = './origin_data/bugreports.xml'
+    filename = './origin_data/bugreports_sds.xml'
     path = './bug_reports'
     bugslist = utils.read_xml(filename)
     # print(bugslist)

@@ -1,6 +1,6 @@
 from keras import Model
 from keras.layers import Embedding, Dense, Conv1D, GlobalMaxPooling1D, Concatenate, Dropout, Input
-from model_define import AttentionLayer
+from Attention_define import AttentionLayer
 
 def create_textcnn(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM, embeddings_matrix, trainable):
     kernel_sizes=[3, 4, 5]

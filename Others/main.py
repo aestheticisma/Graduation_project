@@ -83,6 +83,19 @@ def cal_count(index):
         count[i] += 1
     return count
 
+def count_word(sentences, count):
+    word_num = []
+    for i in range(len(count)-1):
+        word_count = []
+        report = sentences[sum(count[:i+1]) : sum(count[:i+2])]
+        sentence_length = [len(sentence) for sentence in report]
+        word_length = sum(sentence_length)
+        word_count.append(word_length)
+        word_count += sentence_length
+        word_num.append(word_count)
+    return word_num
+
+
 # 6个报告作为测试集、30个报告作为训练集   i为6个报告一组的第一个下标，step=6
 def get_data(X, label, count, i, step):
     test_X = X[sum(count[:i+1]) : sum(count[:i+step+1])]
@@ -91,7 +104,26 @@ def get_data(X, label, count, i, step):
     train_Y = np.vstack((label[ : sum(count[:i+1])], label[sum(count[:i+step+1]) : ]))
     return train_X, train_Y, test_X, test_Y
 
-def eval(test_X, test_Y, temp_list, model):
+def get_summary_label(predict_y, word_num_temp):
+    report_length = word_num_temp[0]
+    summary_length = 0.25*report_length
+    word_count = 0
+    predict_fin_y = []
+    predict_label = []
+    for id in predict_y:
+        if word_count + word_num_temp[id[1]+1] < summary_length:
+            predict_fin_y.append(id[1])
+            word_count += word_num_temp[id[1]+1]
+        else:
+            break
+    for i in range(len(predict_y)):
+        if i in predict_fin_y:
+            predict_label.append(1)
+        else:
+            predict_label.append(0)
+    return predict_label
+
+def eval(test_X, test_Y, temp_list, model, word_num_temp):
     # predict_test = model.predict(test_X)
     # predict_test = np.argmax(predict_test, axis=1)
     # Y = np.argmax(test_Y, axis=1)
@@ -102,15 +134,21 @@ def eval(test_X, test_Y, temp_list, model):
         test_X_temp = test_X[sum(temp_list[:num+1]) : sum(temp_list[:num+2])]
         test_Y_temp = test_Y[sum(temp_list[:num+1]) : sum(temp_list[:num+2])]
         predict_temp = model.predict(test_X_temp)
-        predict_temp = np.argmax(predict_temp, axis=1)
+        # predict_temp = np.argmax(predict_temp, axis=1)
+        predict_y = []
+        for index, result in enumerate(predict_temp):
+            predict_y.append((result[1], index))
+        predict_y = sorted(predict_y, key=lambda x: x[0], reverse=True)
+        predict_label = get_summary_label(predict_y, word_num_temp[num])
+
         Y_temp = np.argmax(test_Y_temp, axis=1)
 
-        for index in range(len(predict_temp)):
-            if predict_temp[index]==Y_temp[index]:
+        for index in range(len(predict_label)):
+            if predict_label[index]==Y_temp[index]:
                 num_acc += 1
-            if predict_temp[index]==1 and Y_temp[index]==1:
+            if predict_label[index]==1 and Y_temp[index]==1:
                 tp += 1
-            if predict_temp[index]==1:
+            if predict_label[index]==1:
                 num_pr += 1
             if Y_temp[index] == 1:
                 num_re += 1
@@ -146,11 +184,11 @@ def scheduler(epoch):
     return K.get_value(model.optimizer.lr)
 
 if __name__ == "__main__":
-    word2vec_path = ['./word2vec_model', '../glove+LSTM/glove.6B.100d.txt', 'enwiki_20180420_100d.txt.bz2', './fasttext2word2vec.txt']
-    options = 4
+    word2vec_path = ['./word2vecmodel', '../glove+LSTM/glove.6B.100d.txt', 'enwiki_20180420_100d.txt.bz2', './fasttext2word2vec.txt']
+    options = 1
     sentences, index, ids, label = preprocess('./data.csv')
-    # word_index, embeddings_matrix, word_vector = load_word2vec(sentences, word2vec_path[options-1], options)
-    word_index, embeddings_matrix, word_vector = load_bert_vectors(sentences)
+    word_index, embeddings_matrix, word_vector = load_word2vec(sentences, word2vec_path[options-1], options)
+    # word_index, embeddings_matrix, word_vector = load_bert_vectors(sentences)
     # 定义参数
     MAX_SEQUENCE_LENGTH = 50
     MAX_NB_WORDS = len(embeddings_matrix)
@@ -169,6 +207,7 @@ if __name__ == "__main__":
     f1_list_all = []
 
     count = cal_count(index)
+    word_num = count_word(sentences, count)
     # padding sentence为相同长度 返回index array
     X = tokenizer(sentences, word_index, MAX_SEQUENCE_LENGTH)
     # 生成label
@@ -177,6 +216,7 @@ if __name__ == "__main__":
     label = to_categorical(label)
     num = 0
     for i in range(0, 36, step):
+        word_num_temp = word_num[i:i+step]
         num += 1
         #划分数据集
         train_X, train_Y, test_X, test_Y = get_data(X, label, count, i, step)
@@ -195,7 +235,7 @@ if __name__ == "__main__":
                 temp_list.append(0)
             else:
                 temp_list.append(count[i+j])
-        acc, precision, recall, f1score = eval(test_X, test_Y, temp_list, model)
+        acc, precision, recall, f1score = eval(test_X, test_Y, temp_list, model, word_num_temp)
         print(num, acc, precision, recall, f1score)
         acc_list_all.append(acc)
         pre_list_all.append(precision)

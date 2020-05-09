@@ -1,5 +1,5 @@
 import utils
-import os 
+import os
 import pandas as pd
 
 data_file = 'bugreports.xml'

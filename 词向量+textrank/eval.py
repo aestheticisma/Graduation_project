@@ -45,7 +45,7 @@ from word2vec_train import preprocess
 
 def bugsum(id_socre_length):
     id_socre_length = sorted(id_socre_length, key=lambda x: x[1], reverse=True)
-    extra_word = sum([i[2] for i in id_socre_length])*0.32
+    extra_word = sum([i[2] for i in id_socre_length])*0.25
     num = 0
     extra_num = 0
     for data in id_socre_length:
@@ -73,6 +73,8 @@ if __name__ == "__main__":
     report_result = []
 
     count = [0 for i in range(37)]
+    # count = [0 for i in range(97)]
+
     acc_list = []
     pr_list = []
     re_list = []
@@ -92,6 +94,7 @@ if __name__ == "__main__":
     for i in index:
         count[i] += 1
     for i in range(36):
+    # for i in range(96):
         ids_list.append(ids[sum(count[:i+1]):count[i+1]+sum(count[:i+1])])
         score_list.append(score[sum(count[:i+1]):count[i+1]+sum(count[:i+1])])
         label_list.append(label[sum(count[:i+1]):count[i+1]+sum(count[:i+1])])

@@ -1,5 +1,5 @@
 from xml.dom import minidom
-import os 
+import os
 from nltk.corpus import stopwords
 import re
 
@@ -57,7 +57,7 @@ def read_label(filename):
 def get_content(bugslist):
     samples = []
     ids = []
-    # stop_words = stopwords.words('english')
+    stop_words = stopwords.words('english')
     for bugreport in bugslist:
         titles = []
         id = []
@@ -66,7 +66,7 @@ def get_content(bugslist):
         for turn in bugreport['Content']:
             for id_sentence, sentence in turn['Text']:
                 # sentence = ' '.join(sentence.replace("[^a-zA-Z]", " ").strip().lower().split())
-                # sen_new = ' '.join(i for i in sentence.split() if i not in stop_words)
+                # sentence = ' '.join(i for i in sentence.split() if i not in stop_words)
                 sentence = sentence.strip().lower()
                 sentence = sentence.replace('&gt', '')
                 sentence = re.split(r'[\s\-\.\(\),\*:"\d\\_\[\];\?=#\+/&\$@!%~}{|]', sentence)

@@ -108,6 +108,7 @@ if __name__ == "__main__":
     num_list = [len(i) for i in text]
     scores = []
     count = [0 for i in range(37)]
+    # count = [0 for i in range(97)]
     print(type(index[0]))
     for i in index:
         count[i] += 1
@@ -118,7 +119,13 @@ if __name__ == "__main__":
     sents = filter_model(model, text)
     sents = filter_model(model, text)
     sents = filter_model(model, text)
+    sents = filter_model(model, text)
+    sents = filter_model(model, text)
+    sents = filter_model(model, text)
+    sents = filter_model(model, text)
+    sents = filter_model(model, text)
     for i in range(36):
+    # for i in range(96):
         graph = create_graph(model, text[sum(count[:i]):count[i+1]+sum(count[:i])])     # 传入句子链表  返回句子之间相似度的图
         score = weight_sentences_rank(graph)
         for j in score:
